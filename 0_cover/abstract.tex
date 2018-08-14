@@ -1,0 +1,11 @@
+\chapter*{Resumo}
+\thispagestyle{empty}
+
+Este trabalho descreve uma nova abordagem para localizar falhas em programas concorrentes, a qual é baseada em técnicas de verificação de modelos limitada e sequencialização. A principal novidade dessa abordagem é a ideia de reproduzir um comportamento defeituoso em uma versão sequencial do programa concorrente. De forma a apontar linhas defeituosas, analizam-se os contraexemplos gerados por um verificador de modelos para o programa sequencial instrumentado e procura-se um valor para uma variável de diagnóstico, o qual corresponde a linhas reais no programa original. Essa abordagem é útil para aperfeiçoar o processo de depuração para programas concorrentes, já que ela diz qual linha deve ser corrigida e quais valores levam a uma execução bem-sucedida. Essa abordagem foi implementada como uma transformação código-a-código de um programa concorrente para um não-determinístico sequencial, o qual é então usado como entrada para ferramentas de verificação existentes. Resultados experimentais mostram que a abordagem descrita é eficaz e é capaz de localizar falhas na maioria dos casos de teste utilizados, extraídos da suíte da {\it International Competition on Software Verification} $2015$.
+
+\vspace*{\stretch{1}}
+
+\noindent \textsf{Palavras-chave:} Verificação de Modelos, Localização de Falhas, Sequencialização, Depuração.
+%}
+
+\cleardoublepage

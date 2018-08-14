@@ -1,0 +1,228 @@
+\chapter{Fundamentação Teórica}\label{chap_background}
+
+Neste capítulo, são apresentados os conceitos básicos utilizados durante o desenvolvimento desta dissertação. Primeiramente serão apresentados alguns conceitos importante sobre a verificação de modelos. Em seguida, o uso de técnicas de verificação de modelos para auxiliar no processo de localização de falhas será discutido, como também um método proposto para localizar falhas em programas sequenciais será demonstrado. Por fim, um resumo do capítulo é dado, para sintetizar o conteúdo do capítulo.
+
+\section{Verificação de Modelos}\label{sec:model-checking}
+
+\subsection{Teoria dos Módulos da Satisfiabilidade (SMT)}\label{sec:smt}
+
+SMT (\textit{Satisfiability Modulo Theories}) verifica a satisfatibilidade de fórmulas de primeira ordem a partir de uma ou mais teorias de fundamentação, que são compostas por um conjunto de sentenças. De modo formal, $\sigma$ -- \textit{theory} é uma coleção de sentenças sobre a assinatura $\sigma$. Dada uma teoria $T$, diz-se que $\varphi$ é um módulo satisfatível de $T$ se $T \subset {\phi}$. Em outra definição, pode-se dizer que uma teoria $T$ é definida como uma classe de estruturas e $\varphi$ é um módulo satisfatível se existe uma estrutura $M$ em $T$ que satisfaz $\varphi$ (\textit{i.e.}, $M \models \varphi$)~\cite{Moura:2009}.
+
+Solucionadores SMT como o Z3~\cite{Moura:2008} e Boolector~\cite{Brummayer:2009} suportam diferentes tipos de teorias, de modo que o seu desempenho pode variar conforme a sua implementação.
+
+\begin{table}[htb]
+	\renewcommand{\arraystretch}{1.0}
+	\caption{Exemplos de teorias suportadas.}
+	\label{table:smt}
+	\centering
+	\begin{tabular}{c|c}
+		\hline \bfseries Teoria & \bfseries Exemplo\\
+		\hline Igualdade & $x_1 = x_2 \wedge \neg (x_2 = x_3) \Rightarrow \neg (x_1 = x_3)$\\
+		\hline Aritmética Linear & $(7y_1 + y_2 \geq 5) \vee (y_2 + y_3 \leq 2)$\\
+		\hline Vetores de $bit$ & $(b \gg i) \& 1 = 1$\\
+		\hline Arranjos & $store(a, j, 5) \Rightarrow a[j] = 5$\\
+		\hline Teorias Combinadas & $(j \leq k \wedge a[j] = 2) \Rightarrow a[i] < 3$\\
+		\hline
+	\end{tabular}
+\end{table}
+
+A Tabela~\ref{table:smt} mostra algumas das teorias suportadas pelos solucionadores SMT utilizados neste trabalho. A teoria de igualdade permite verificações de igualdade e desigualdade entre predicados utilizando os operadores ($=$) ($\leq$) ($<$). A teoria da aritmética linear é responsável apenas pelas funções aritméticas (adição, subtração, multiplicação e divisão) entre variáveis e constantes numéricas. A teoria de vetores de $bit$ permite operações $bit$ a $bit$ considerando diferentes arquiteturas (\textit{e.g.}, $32$ e $64$ $bits$), nela estão presentes os operadores: e ($\&$), ou ($\mid$), ou-exclusivo ($\bigoplus$), complemento ($\sim$), deslocamento para a direita ($\gg$) e deslocamento para a esquerda ($\ll$). Além disso, a teoria de arranjos permite a manipulação de operadores como $select$ e $store$.
+
+Em contraste com as fórmulas geradas na satisfação booleana, que são apenas compostas por variáveis booleanas, as quais podem assumir valores verdadeiro e falso e conectivos lógicos, as fórmulas de primeira ordem são formadas por conectivos lógicos, variáveis, quantificadores, funções e símbolos de predicado~\cite{Moura:2009}. De modo geral, as teorias do módulo da satisfatibilidade tem sido aplicadas em diversos cenários~\cite{Moura:2018}, apresentando resultados mais promissores (se comparados à satisfação booleana), incluindo o suporte a diferentes teorias de decisão~\cite{Moura:2008, Moura:2009}.
+
+\subsection{\textit{Efficient SMT-based Context-Bounded Model Checker}}\label{sec:esbmc}
+
+O ESBMC é um verificador de modelos limitado ao contexto baseados nas teorias de módulo da satisfiabilidade (SMT), o qual é usado para verificar programas ANSI-C~\cite{Cordeiro:2012,DBLP:conf/tacas/MorseRCN014}. O ESBMC pode verificar tanto programas sequenciais quanto concorrentes e verifica propriedades relacionadas a estouro aritmético, divisão por zero, acesso ilegal a posições em memória, segurança de ponteiros, bloqueios fatais e corrida de dados. Esse processo é totalmente automático e não requer interação de usuário para anotar programas com pré- e/ou pós-condições.
+
+No ESBMC, o programa a ser verificado é modelado como um sistema de transição de estados $M = (S, R, s_0)$, 
+que é extraído de um gráfico de fluxo de controle (GFC). $S$ representa o conjunto de estados, $R \subseteq S \times S$ representa o conjunto de transições ({\it i.e.}, pares de estados que especificam como o sistema pode navegar de um estado para outro) e $s_0 \subseteq S$ representa o conjunto de estadaos iniciais. Um estado $s \in S$ consiste de um valor do contador de programa $pc$ e os valores de todas as variáveis do programa. Um estado inicial $s_0$ atribui a localização inicial do programa do GFC para o $pc$. Cada transição $\gamma = (s_i, s_{i+1}) \in R$ entre dois estados $s_i$ and $s_{i+1}$ é identificada como uma fórmula lógica $\gamma (s_i,s_{i+1})$ que captura as restrições nos valores do contador de programa e das variáveis do programa correspondentes.
+
+Dado um sistema de transição $M$, uma propriedade de segurança $\phi$, um limite de contexto $C$ e um limite $k$, o ESBMC constrói uma árvore de alcançabilidade (AA) que representa o desdobramento do programa para $C$, $k$ e $\phi$. Ele então deriva uma condição de verificação (CV)$\psi^{\pi}_k$, para cada intercalação (ou caminho de computação) dada $\pi = \{v_1,...,v_k\}$, que é dada pela seguinte fórmula lógica:
+
+\begin{equation}
+\label{eq:bounded-model-checking}
+    \psi^{\pi}_{k} =
+    \overbrace{I(s_{0}) \wedge \bigvee_{i=0}^{k} \bigwedge_{j=0}^{i-1} \gamma(s_j,s_{j+1})}^{\textrm{restrições}}
+    \wedge \overbrace{\neg \phi(s_i)}^{\textrm{propriedade}}
+\end{equation}
+
+Aqui, $I$ caracteriza o conjunto de estados iniciais $M$ e $\gamma(s_j,s_{j+1})$ é a relação de $M$ entre passos de tempo $j$ e $j+1$. Consequentemente, $I(s_0) \wedge \bigvee_{j=0}^{i-1} \gamma (s_j,s_{j+1})$ representa a executação de $M$ de largura $i$ e $\psi^{\pi}_{k}$ pode ser satisfatível se e somente se para algum $i \leq k$ existe um estado alcançável ao longo de $\pi$ em um passo de tempo $i$ no qual $\phi$ é violada. $\psi^{\pi}_{k}$ é uma fórmula livre de quantificadores em um subconjunto de lógica de primeira ordem decidível, o qual sua satisfiabilidade é verificada por um solucionador SMT. Se $\psi^{\pi}_{k}$ é satisfatível, então $\phi$ é violada ao longo de $\pi$ e o solucionador SMT fornece uma atribuição satisfatória, da qual pode-se extrair valores para variáveis do programa e construir um contraexemplo. Um contraexemplo para uma propriedade $\phi$ é uma sequência de estados $s_0,s_1,...,s_k$ com $s_0 \in S_0$, $s_k \in S$, e $\gamma (s_i, s_{i+1})$ para $0 \leq i < k$. Se $\psi^{\pi}_{k}$ não é satisfatível, pode-se concluir que nenhum estado de erro é alcançável em $k$ passos ou menos ao longo de $\pi$. Finalmente, pode-se definir $\psi_{k} = \bigwedge_{\pi} \psi_{k}^{\pi}$ e usá-la para verificar todos os caminhos.
+
+No entanto, o ESBMC combina verificação de modelos simbólica com a exploração explícita do espaço de estados; em particular, ele explicitamente explora todas as possíveis intercalações (até o limite de contexto dado) enquanto ele trata cada intercalação em si simbolicamente. O ESBMC implementa diferentes variações dessa abordagem, que diferem no modo que elas são exploradas na AA. A variação mais eficaz simplesmente percore a AA em profundidade e chama o procedimento BMC sequencial para cada intercalação quando ela atinge um nodo folha da AA. Ele pára ou quando encontra erro ou sistematicamente explorou todas as possíveis intercalações da AA.
+
+O modelo de memória do ESBMC usa análise estática de ponteiros, preenchimentos em estruturas, com o objetivo de alinhar todos os campos aos limites de palavra, forçamento de regras de alinhamento de acesso de memória e alocação de vetores de bytes, quando o tipo de alocação de memória não é claro, para que a fórmula SMT não seja tão extensa e suscetível a erros.
+
+O ESBMC também implementa a prova por indução~\cite{MorseCNF13,Gadelha:2017} para verificar propriedades em programas, \textit{i.e.}, utilizar uma abordagem iterativa de aprofundamento para checar se uma propriedade de segurança $\phi$ é satisfeita em cada passo $k$. O ESBMC usa um algoritmo \textit{k-induction}, que consiste de três casos diferentes: caso base, condição adiante e passo indutivo. No caso base tenta-se encontrar um contraexemplo em até $k$ desdobramentos de laço; na condição adiante verifica-se se os laços foram completamente desdobrados e que $\phi$ é válida em todos os estados alcançáveis dentro de $k$ passos; no passo indutivo assegura-se que sempre que $\phi$ é válida para $k$ desdobramentos, ela também é válida após o próximo desdobramento do sistema.
+
+Uma outra aplicação do ESBMC é a verificação de programas concorrentes para a plataforma CUDA~\cite{PereiraAMSCCSF16,Pereira:2016}. Utilizando um modelo operacional, \textit{i.e.}, uma representação abstrata das bibliotecas CUDA padrões que aproxima de forma conservadora as suas semânticas, o ESBMC é capaz de verificar propriedades de segurança em programas CUDA. Além disso, o ESBMC implementa a redução parcial de ordem e a análise de duas \textit{threads} para minimizar a exploração de espaço de estados.
+
+\section{Localização de Falhas e Verificação de Modelos}\label{sec:fault-localization-and-model-checking}
+
+\subsection{Uso de Contraexemplos para Localizar Falhas}\label{sec:using-counterexamples}
+
+Em verificação de modelos, a atividade mais essencial, em relação à localização de falhas, é a de geração de um contraexemplo, o qual é produzido quando um programa não satisfaz uma dada especificação. Um contraexemplo não provê unicamente informações sobre a relação causa-efeito de uma dada violação, mas ele também pode auxiliar na localização de falhas, como Clarke {\it et al.}~\cite{Clarke:2003,Clarke:1995} citam. Mas, visto que uma grande massa de informação é obtida em um contraexemplo, as linhas de fato defeituosas não são facilmente identificadas.
+
+Alguns métodos foram propostos, com o objetivo de localizar possíveis causas de falha, usando contraexemplos. Ball {\it et al.}~\cite{Ball:2003} propuseram uma abordagem que tenta isolar possíveis causas de contraexemplos, gerados pelo verificador de modelos SLAM~\cite{Ball:2001}. A ideia é que potenciais linhas defeituosas podem ser isoladas através de uma comparação entre as transições obtidas em contraexemplos e execuções bem-sucedidas, visto que transições não presentes em rastreamentos bem-sucedidos são potenciais causas de erros. Groce {\it et al.}~\cite{Groce:2003} afirmam que se um contraexemplo existe, um caminho similar mas não-defeituoso também existe e pode ser obtido usando técnicas de BMC. Elementos de programa relacionados a uma dada violação são sugeridos pelas diferenças entre tal contraexemplo e um caminho bem-sucedido. Tal abordagem é implementada no verificador de modelos {\it Java PathFinder}~\cite{JPF} e também pode porver caminhos de execução que levam a estados errôneos, com relação a programasa concorrentes ({\it e.g.}, corrida de dados). O conceito chave da abordagem descrita por Groce {\it et al.}~\cite{Groce:2006} é similar ao anterior e usa alinhamento de restrições para associar estados, em um contraexemplo, com os estados correspondentes em uma execução não-defeituosa, os quais são gerados por um solucionador de restrições. Os estados mencionados são estados abstratos sobre predicados, os quais representam estados concretos em uma execução. Usando propriedades de métricas de distância, restrições podem ser aplicadas para representar execuções do programa, e restrições sem correspondentes que representam estados concretos possivelmente levam a falhas. E ainda, se uma propriedade de métricas de distânica não é satisfeita, um contraexemplo é gerado pelo verificador de modelos~\cite{Groce:2006}.
+
+\subsection{Localização de Falhas em Programas Sequenciais}\label{sec:sequential-fault-localization}
+
+Griesmayer {\it et al.}~\cite{Griesmayer:2007} propuseram um método baseado em técnicas de BMC que pode diretamente identificar potenciais falhas em programas. Em particular, o método usa variáveis numéricas adicionais, {\it e.g.} \texttt{diag}, para apontar linhas defeituosas em um dado programa.
+
+Cada linha do programa, representando uma declaração \texttt{S}, é transformada em uma versão lógica de tal declaração. Logo, o valor atribuído a \texttt{S} é ou não-deterministicamente escolhido pelo verificador de modelos (se o valor de \texttt{diag} for o mesmo que o representado pela linha relacionada à declaração \texttt{S}) ou o especificado originalmente. Os valores de \texttt{diag} obtidos pelo verificador de modelos representam linhas do programa e estão estritamente ligados à falha obtida, visto que, corrigindo essa linha no programa original, a falha em questão pode ser evitada. No caso de múltiplos valores de \texttt{diag}, corrigindo tais linhas levam a uma execução bem sucedida do programa. Com o intuito de encontrar o conjunto inteiro de linhas que causam o comportamento defeituoso no programa, uma nova especificação no comando de verificação\footnote{\texttt{assume(diag != a)}} pode ser adicionada ao código-fonte, o qual então é executado novamente pelo verificador de modelos. Esse processo é executado repetidamente até que não sejam obtidos novos valores para \texttt{diag}, {\it i.e.}, a execução não falha~\cite{Griesmayer:2007_2}.
+
+Para ilustrar o funcionamento do método em questão, toma-se como exemplo um controlador digital baseado na fórmula da função horária do movimento retilíneo uniformemente variado (MRUV)~\cite{Ohanian:2006} (veja Equação~\ref{equation:space-equation}). A equação do controlador é definida na Equação~\ref{equation:controller-equation} (os valores foram atribuídos arbritariamente).
+
+\begin{gather}
+  s(t) = at^2/2+v_0t+s_0 \label{equation:space-equation}
+\end{gather}
+
+\begin{gather}
+  c(t) = t^2-3t+2 \label{equation:controller-equation}
+\end{gather}
+
+Um modelo na linguagem C do controlador é modelado como na Figura~\ref{figure:sequential-code}.
+
+\begin{figure}[ht]
+\centering
+\begin{minipage}{0.65\textwidth}
+\begin{lstlisting}
+#include <stdio.h>
+#include <assert.h>
+
+const int A = 1;
+const int B = -2;
+const int C = 2;
+
+int controller(int input) {
+  int output = A * input * input + B * input + C;
+  return output;
+}
+
+int main() {
+  assert(controller(0) == 2 && controller(1) == 0 && controller(2) == 0 && controller(3) == 2);
+  return 0;
+}
+\end{lstlisting}
+\end{minipage}
+\caption{Código sequencial de um controlador qualquer.}
+\label{figure:sequential-code}
+\end{figure}
+
+Pode-se observar que o modelo não está em conformidade com a equação dada, no caso o termo $B$ está com o valor $-2$ ao invés de $-3$. Dessa forma, espera-se que a assertiva falhe ao executar o programa em um verificador de modelos, como pode ser observado no trecho da Figura~\ref{figure:counterexample-model} (o contraexemplo completo está disponível no Apêndice~\ref{appendix:counterexample-1}).
+
+\begin{figure}[ht]
+\centering
+\begin{minipage}{0.65\textwidth}
+\begin{lstlisting}
+...
+Violated property:
+  file model.c line 14 function main
+  assertion 
+  FALSE
+
+VERIFICATION FAILED
+\end{lstlisting}
+\end{minipage}
+\caption{Trecho do contraexemplo para o modelo.}
+\label{figure:counterexample-model}
+\end{figure}
+
+Usando o ESMBC como verificador de modelos, o código instrumentado não-determinístico obtido é como na Figura~\ref{figure:griesmayer-method-applied-code}.
+
+\begin{figure}[ht]
+\centering
+\begin{minipage}{0.65\textwidth}
+\begin{lstlisting}
+#include <stdio.h>
+#include <assert.h>
+const int A = 1;
+const int B = -2;
+const int C = 2;
+int nondet(int i) {
+  int ret;
+  __ESBMC_assume(ret != i);
+  return ret;
+}
+int controller(int input) {
+  int diag = nondet(0);
+  int ta = (diag == 1 ? nondet(A) : A) * input * input;
+  int tb = (diag == 2 ? nondet(B) : B) * input;
+  int tc = (diag == 3 ? nondet(C) : C);
+  int output = ta + tb + tc;
+  return output;
+}
+int main() {
+  __ESBMC_assume(controller(0) == 2 && controller(1) == 0 && controller(2) == 0 && controller(3) == 2);
+  assert(0);
+  return 0;
+}
+\end{lstlisting}
+\end{minipage}
+\caption{Código sequencial instrumentado com o método descrito aplicado.}
+\label{figure:griesmayer-method-applied-code}
+\end{figure}
+
+Ao executar o código da Figura~\ref{figure:griesmayer-method-applied-code} no ESBMC sucessivamente, \textit{i.e.}, até que não sejam encontrados novos valores para $diag$, obtém-se os valores presentes na Figura~\ref{figure:faulty-lines-griesmayer} (o contraexemplo completo está disponível no Apêndice~\ref{appendix:counterexample-2}).
+
+\begin{figure}[ht]
+\centering
+\begin{minipage}{0.65\textwidth}
+\begin{lstlisting}
+griesmayer::controller::1::diag=-2012462479 (-2012462479)
+griesmayer::controller::1::diag=2 (2)
+griesmayer::controller::1::diag=2 (2)
+griesmayer::controller::1::diag=2 (2)
+\end{lstlisting}
+\end{minipage}
+\caption{Linhas defeituosas obtidas pela execução do código~\ref{figure:griesmayer-method-applied-code}.}
+\label{figure:faulty-lines-griesmayer}
+\end{figure}
+
+Segundo o contraexemplo obtido com o ESBMC, pode-se observar que o valor de $diag$ é $2$ em três casos e um inteiro negativo em um caso. Logo, o problema está no cálculo do segundo termo, como esperado. O contraexemplo completo mostra que o valor para corrigir tal falha é $-3$. Assim, pode-se corrigir a falha apontada e reexecutar o código no verificador de modelos.
+
+\begin{figure}[ht]
+\centering
+\begin{minipage}{0.65\textwidth}
+\begin{lstlisting}
+#include <stdio.h>
+#include <assert.h>
+const int A = 1;
+const int B = -3;
+const int C = 2;
+int controller(int input) {
+  int output = A * input * input + B * input + C;
+  return output;
+}
+int main() {
+  assert(controller(0) == 2 && controller(1) == 0 && controller(2) == 0 && controller(3) == 2);
+  return 0;
+}
+\end{lstlisting}
+\end{minipage}
+\caption{Código sequencial corrigido.}
+\label{figure:corrected-sequential-code}
+\end{figure}
+
+Após a correção do problema apontado, executa-se o código corrigido~\ref{figure:corrected-sequential-code} no ESBMC e obtém-se as linhas presentes na Figura~\ref{figure:correct-faulty-lines-griesmayer} (o contraexemplo completo está disponível no Apêndice~\ref{appendix:counterexample-3}). Em controladores digitais, é importante que os modelos sejam precisamente especificados para evitar falhas durante o funcionamento em ambiente real, visto que podem levar ao mal-funcionamento do equipamento e até danos, aumentando o custo do mesmo.
+
+\begin{figure}[ht]
+\centering
+\begin{minipage}{0.65\textwidth}
+\begin{lstlisting}
+griesmayer::controller::1::diag=-934770697 (-934770697)
+griesmayer::controller::1::diag=-1 (-1)
+griesmayer::controller::1::diag=-1 (-1)
+griesmayer::controller::1::diag=-1 (-1)
+\end{lstlisting}
+\end{minipage}
+\caption{Linhas defeituosas obtidas pela execução do código~\ref{figure:corrected-sequential-code}.}
+\label{figure:correct-faulty-lines-griesmayer}
+\end{figure}
+
+Dessa forma, foi possível observar o método proposto por Griesmayer {\it et al.}~\cite{Griesmayer:2007} aplicado em um programa sequencial.
+
+Este método foi escolhido para ser utilizado neste trabalho, pois além de ser simples a sua implementação, ele aponta não só linhas que contém defeitos, como também possíveis valores que levam a uma execução bem-sucedida do programa original.
+
+\section{Resumo}\label{sec:chap-2-summary}
+
+Neste capítulo, foram introduzidos os conceitos básicos para o entendimento desta dissertação, relacionadas à verificação de modelos. Mais especificamente, explicou-se o conceito de verificação de modelos limitada usando teorias de módulo da satisfiabilidade (SMT) com o verificador de modelos ESBMC ({\it Efficient SMT-based Context-Bounded Model Checker}), que verifica propriedades de programas sequenciais e concorrentes. Também foram mostradas discussões sobre o uso de contraexemplos para auxiliar no processo de localização de falhas. Por fim, foi apresentado um método para localizar falhas em programas sequenciais, usando não-determinismo para instrumentar atribuições, de forma que o verificador de modelos escolhe o valor para cada variável do programa para que propriedade (em forma de assertiva) presente no código seja satisfeita. Como resultado, o contéudo deste capítulo fornece todo o embasamento necessário para compreensão do trabalho desenvolvido, que será descrito nas seções subsequentes.

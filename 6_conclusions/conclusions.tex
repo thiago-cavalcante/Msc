@@ -1,0 +1,49 @@
+\chapter{Conclusões}\label{chap_conclusion}
+
+\section{Considerações Finais}
+
+Nesta dissertação foi apresentado um método para localizar falhas em programas concorrentes em C, usando regras de sequencialização e técnicas de verificação de modelos limitada. Este trabalho consistiu na transformação linha a linha do código original concorrente com o intuito de simular o mesmo comportamento presente no último, e então aplicar o méteodo proposto por Griesmayer {\it et al.}~\cite{Griesmayer:2007} para obter as linhas que levam a uma violação de uma dada propriedade do programa, representando linhas existentes no programa concorrente.
+
+Com relação aos resultados experimentais, a metodologia proposta foi capaz de identificar potenciais falhas em software concorrente, em $84$.$21$\% dos benchmarks escolhidos, enquanto falhou em obter linhas defeituosas úteis em três dos benchmarks adotados. De fato, um deles apresentou um bloqueio fatal e os outros dois falham devido a problemas de sincronização de \textit{threads}, o que necessita de uma investigação mais a fundo, de forma a prover aprimoramentos relacionados às abordagens de modelagem das primitivas de sincronização do C. No entanto, o método é útil para avaliar programas concorrentes que apresentam falhas relacionadas a assertivas mal-formuladas e bloqueios fatais, o que o torna interessante para auxiliar desenvolvedores a encontrar atribuições que levem a execuções bem-sucedidas de programas e, consequentemente, minimiza o esforço em depuração de código.
+
+Ao ser comparado com outras abordagens, o método proposto é capaz de localizar falhas em programas concorrentes usando apenas o código-fonte do programa, ao invés de um caminho mal-sucedido e uma suíte de teste. Ele também é capaz de não somente apontar as linhas defeituosas, como também prover possíveis consertos para produzir execuções bem-sucedidas do programa.
+
+Durante o desenvolvimento deste trabalho foram identificados pontos que diminuem a eficiência do método proposto. Dentre esses pontos, também observados na avaliação experimental, pode-se destacar a necessidade de um contraexemplo para a posterior aplicação do método, dependendo inteiramente da capacidade do verificador de modelos de encontrar violações no programa original. Este problema está relacionado diretamente à tarefa de custo mais elevado no método proposto, que é a definição do vetor \texttt{cs}. Uma definição arbritária, por meio de uso de técnicas de BMC, pode ser estudado em trabalhos posteriores.
+
+Outro ponto a se considerar é a modelagem de estruturas da biblioteca {\it pthread}. Internamente, o ESBMC implementa um modelo para as primitivas de sincronização da biblioteca, e neste trabalho define-se uma modelagem em um nível anterior à tradução interna do ESBMC. Deve-se também investigar qual das duas modelagens deve ser adotada com o objetivo de melhorar os resultados obtidos.
+
+Apesar dos pontos descritos anteriormente, quando se trata do método proposto para localizar falhas, o tempo de verificação é curto (geralmente menor que $1$ segundo) para o programa sequencial instrumentado não-determinístico, possibilitando um diagnóstico rápido para o mesmo.
+
+De maneira geral, pode-se concluir que os objetivos específicos desta dissertação também foram atingidos.
+
+Em uma empresa de desenvolvimento de software é comum o uso de programação concorrente para prover soluções com tempo menor de resposta. Porém, esta classe de programas está sujeita a erros mais difíceis de serem corrigidos, e por consequência, erros que levem mais tempo para serem encontrados. O uso de um método para localizar falhas em tais programas reduziria drasticamente o tempo associado a esta tarefa, melhorando o processo de desenvolvimento de software concorrente. O método proposto nesta dissertação visa ser uma alternativa para depuração comum, usando uma técnica também em ascensão para busca por defeitos, a verificação de modelos.
+
+\section{Propostas para Trabalhos Futuros}
+
+Nesta seção serão apresentadas algumas propostas para desenvolvimentos futuros relacionados ao método proposto descrito nesta dissertação. Estas propostas podem ser dividas em duas categorias. Na primeira, é considerado o problema de sequencialização e modelagem de código, e, na segunda, serão apresentadas propostas que visam melhorar a aplicabilidade do método em geral.
+
+Quanto ao problema de sequencialização e modelagem de código:
+
+\begin{itemize}
+
+\item Novas regras para transformação devem ser adicionadas para que seja possível representar melhor o programa original em relação às intercalações entre as {\it threads} existentes.
+
+\item Melhorias na gramática para que seja possível diagnosticar melhor problemas relacionados a declarações relacionadas à biblioteca {\it pthread}.
+
+\item O uso de desdobramento de laços para melhor representação de laços existentes em programas concorrentes, onde também podem existir trocas de contexto.
+
+\end{itemize}
+
+Quanto ao problema de aplicabilidade do método em geral:
+
+\begin{itemize}
+
+\item Um {\it plugin} deve ser desenvolvido em um ambiente de desenvolvimento, como o {\it Eclipse}, de forma a automatizar o processo de localização de falhas.
+
+\item Propor uma estratégia para simular todas as intercalações possíveis, retirando o processo de definição do escalonamento definido em código do verificador de modelos.
+
+\item Incorporar a abordagem proposta por Gadelha {\it et al.}~\cite{Nicole:2017} para minimizar o esforço necessário para encontrar um contraexemplo para um programa concorrente defeituoso.
+
+\item Aplicar o método em outros seguimentos de programas, {\it e.g.}, programas concorrentes em Qt~\cite{Monteiro:2017}.
+
+\end{itemize}

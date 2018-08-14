@@ -1,0 +1,50 @@
+\chapter{Introdução}\label{chap-introduction}
+
+Recentemente, tem sido mais comum o uso da tecnologia para lidar com diversas tarefas do dia-a-dia, cada uma com uma complexidade associada. Assegurar que sistemas funcionem apropriadamente implica diretamente em redução de custos e, em alguns casos, até em segurança de vidas~\cite{Ariane5}. Quando se trata de software, descobrir erros em software é uma atividade que precisa ser executada nos primeiros estágios do processo de desenvolvimento, fazendo da depuração de programas uma tarefa merecedora de bastante atenção. A depuração de programas é uma tarefa muito importante, mas também consumidora de bastante tempo, pois necessita de uma análise minuciosa para que erros sejam encontrados. Ela pode ser dividida em três passos: detecção de falhas, localização de falhas e correção de falhas. No entanto, é possível reduzir o tempo associado a essa tarefa drasticamente se métodos automáticos forem aplicados nesses passos. Vários métodos já foram propostos com o objetivo de encontrar erros em software, como o teste de software~\cite{Myers:2011} e métodos baseados em modelos~\cite{Mayer:2008,Tip:1995,Offutt:1996,He:2004,Cleve:2005,Friedrich:1996,Chaki:2004}. Mais precisamente, quando um erro é encontrado, a causa do mesmo deve ser rastreada dentro do código-fonte~\cite{Zeller:2009,RochaBCN12}.
+
+Programas concorrentes tem sido amplamente usados na área de sistemas embarcados devido ao menor tempo de resposta associado e o uso otimizado dos recursos computacionais disponíveis. No entanto, quando se trata de assegurar a corretude de tais programas, torna-se uma tarefa complexa, visto que o número de possíveis intercalações pode crescer exponencialmente com o número de {\it threads} e linhas de código. Desta forma, o processo de depuração nesta classe de programas torna-se uma tarefa exaustiva para desenvolvedores, ao ponto de até não serem descobertos defeitos no código~\cite{Godefroid:2008}.
+
+Em relação à detecção de falhas em programas concorrentes, a verificação de modelos vem se mostrando uma técnica eficaz. Devido à sua abordagem, a partir de um modelo de um sistema, {\it i.e.}, o código-fonte, ela gera um sistema de transição de estados e procura por um caminho que leve a uma violação de uma propriedade especificada. Com o intuito de explorar o sistema de transição de estados do modelo sem estourar os recursos computacionais disponíveis, o uso da verificação de modelos limitada (do inglês {\it bounded model checking}), tem sido usada para procurar por violações em códigos concorrentes, procurando por contraexemplos em uma profundidade $k$, produzindo uma fórmula mais simples de ser solucionada.
+
+Qadeer {\it et. al.}~\cite{Qadeer:2004} propuseram o uso de sequencialização, {\it i.e.}, transformações de código formulada com regras específicas, para simplificar a verificação de modelos de programas concorrentes, evitando o problema de crescimento exponencial da complexidade associada a esta tarefa. Desta forma, ao criar um programa sequencializado que representa o programa original com relação a uma determinada intercalação diminui o peso sobre o verificador de modelos na hora de buscar violações de propriedades a uma profundidade $k$. Apesar de não relatar falso-positivos, a técnica pode não encontrar alguns erros. Todavia, uma importante observação desta técnica foi que erros de concorrência geralmente se manifestam em poucas trocas de contexto~\cite{Qadeer:2004}.
+
+Em relação à etapa de localização de  linhas defeituosas, {\it i.e.}, que levam à uma execução mal-sucedida do código, a verificação de modelos por si só não é capaz de apontá-las diretamente, pois o contraexemplo mostra a sequência de estados do programa que levam à violação, sendo necessário uma análise precisa para tentar isolar essas linhas, nem sempre sendo possível. Porém, Clarke {\it et. al.}~\cite{Clarke:2003,Clarke:1995} e Rocha {\it et. al.}~\cite{RochaBCN12} citam que os contraexemplos contém de fato informações relevantes à localização de falhas.
+
+Griesmayer {\it et. al.}~\cite{Griesmayer:2007} discutem o uso de técnicas de verificação de modelos para produzir contraexemplos que informem não somente a existência de falhas mas também as suas respectivas localizações em códigos sequenciais, a ideia é instrumentar o código original e fazendo uso do não-determinismo para atribuir valores às variáveis do programa. Esta abordagem, no entanto, funciona apenas para programas sequenciais.
+
+Assim, quando se trata de localização de falhas em programas concorrentes, \textit{i.e.}, apontar as linhas envolvidas em execuções mal-sucedidas de um programa, os itens descritos anteriormente isolados não são capazes de abordar este problema de forma sistemática. Ao elaborar uma metodologia para abordar este problema com tais técnicas, reduz-se o tempo de depuração de programas concorrentes, auxiliando desenvolvedores de software na fase de implementação a encontrar defeitos complexos de forma menos exaustiva.
+
+\section{Descrição do Problema}
+
+Este trabalho visa resolver o problema da localização de falhas em programas concorrentes utilizando técnicas de verificação de modelos limitada de forma automática. Para tanto, utilizaram-se as seguintes abordagens: ($1$) aplicação de uma gramática e regras de transformação para possibilitar a sequencialização de programas concorrentes e ($2$) uso de contraexemplos obtidos por um verificador de modelos para localizar falhas em tais programas.
+
+A primeira abordagem deriva do fato de programas concorrentes serem mais difíceis de serem verificados, devido ao problema de explosão de estados (o número de estados possíveis cresce exponencialmente de acordo com o número de {\it threads} e trocas de contexto possíveis). A segunda consiste em usar a verificação de modelos limitada para obter um contraexemplo para um programa sequencial não-determinístico instrumentado, com o objetivo de extrair do mesmo as linhas que levam a uma execução defeituosa do programa original.
+
+Assim, o método proposto utiliza técnicas de sequencialização de programas concorrentes, técnicas de verificação de modelos limitada e contraexemplos obtidos por um verificador para obter linhas defeituosas de um programa concorrente.
+
+\section{Objetivos}
+
+O principal objetivo deste trabalho é propor um método para localizar falhas em programas concorrentes utilizando técnicas de verificação de modelos limitada.
+
+Os objetivos específicos são:
+
+\begin{itemize}
+
+\item Propor uma gramática de transformação de instruções de programa concorrente para uma versão sequencial, de modo que essa nova instrução tenha a mesma funcionalidade que a original.
+
+\item Propor uma regra de transformação de modelo concorrente de programas para um modelo sequencial, que simule o comportamento original do programa, \textit{i.e.}, a mesma sequência de execução, gerando um programa sequencial não-determinístico.
+
+\item Aplicar um método de localização de falhas utilizando verificação de modelos limitada para obter, a partir do programa sequencial não-determinístico, as linhas do programa original que levam à falha e também extrair os valores a serem atribuidos às variáveis do programa para produzir uma execução bem-sucedida do mesmo.
+
+\item Avaliar experimentalmente o método proposto utilizando programas de uma suíte de teste extraída da {\it International Competition on Software Verification} $2015$.
+
+\end{itemize}
+
+\section{Contribuições}
+
+Este trabalho tem três principais contribuições. Primeiro, um estudo para localização de falhas em programas concorrentes utilizando técnicas de BMC, sequencialização de programas e não-determinismo. Segundo, uma abordagem para propor correções de forma a obter uma versão do programa original que não apresente o comportamento defeituoso previamente encontrado. Terceiro, de acordo com os conhecimentos obtidos neste trabalho e os resultados obtidos, o método apresentado é capaz de assistir desenvolvedores a localizar e corrigir defeitos em programas concorrentes de forma mais rápida, independentemente do seu conhecimento prévio sobre o programa em questão.
+
+\section{Organização da Dissertação}
+
+A dissertação está organizada da seguinte maneira: no Capítulo~\ref{chap_background} são apresentados os conceitos básicos de verificação de modelos limitada e programas concorrentes e ao fim do capítulo é feita uma descrição do uso de contraexemplos para localização de falhas e sua aplicação em programas sequenciais; o Capítulo~\ref{chap_related_work} apresenta um resumo dos trabalhos relacionados à verificação de modelos limitada aplicada à programas concorrentes e à localização de falhas em programas e no fim do capítulo, os trabalhos são comparados, salientando as principais diferenças entre a abordagem proposta neste trabalho em relação às existentes; o Capítulo~\ref{chap_methodology} descreve o método proposto para sequencializar programas concorrentes, juntamente da abordagem para localizar as falhas existentes em tais programas, baseando-se em contraexemplos obtidos através de um verificador de modelos; no Capítulo~\ref{chap_results} são apresentados os resultados de localização de falhas nos programas extraídos da suíte de teste e também é feita uma discussão dos resultados obtidos; e por fim o Capítulo~\ref{chap_conclusion} apresenta as conclusões do trabalho, além de apresentar sugestões para trabalhos futuros.
+

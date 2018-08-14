@@ -1,0 +1,62 @@
+% Template para Artigos Publicados em Anais de Congressos ==================================
+@inproceedings{,
+	title 		= "{{}}",
+	author 		= {},
+ 	booktitle 	= {},
+	location 	= {local (país)},
+ 	pages 		= { -- },
+	month		= {},
+ 	year 		= {},
+ 	publisher	= {},
+ 	address		= {}
+}
+
+% Template para Artigos Publicados em Revistas ==================================
+@article{,
+	title 		= "{{}}",
+	author 		= {},
+ 	journal 	= {},
+	volume		= {},
+	number		= {2},
+ 	pages 		= { -- },
+	month		= {},
+ 	year 		= {}
+}
+
+% Template para Livros ==================================
+@book{,
+ 	title 		= "{{}}",
+	author 		= {},
+  	publisher   = {},
+  	address     = {},
+  	year        = {},
+  	pages       = {}
+}
+
+% Template para Links da Iternet ==================================
+@misc{,
+  title        = "{{\emph{}}}",
+  author       = {},
+  year         = {},
+  note         = {Disponível em: <http://>. Acesso em: 16 nov. 2009.}
+}
+ 
+% Template para Normas ==================================
+@manual{ITU-T:2001,
+	title 		= "{{Perceptual evaluation of speech quality (PEAQ): an objective method for end-to-end speech quality assessment of narrow-band telephone networks and speech codecs}}",
+	standard	= "{{ITU-T Recommendation P.862}}",
+  	author 		= {INTERNATIONAL TELECOMMUNICATIONS UNION -- ITU-T},
+  	address		= {Geneva},
+  	year 		= {2001},
+  	pages		= {30}
+}
+
+% Template para capítulo de livro ==================================
+@inbook{Derbel:2011,
+  	chapter 	= "{{A Utility-Based Autonomic Architecture to Support QoE Quantification in IP Networks}}",
+  	author 		= {Derbel, Hajer and Agoulmine, Nazim and Lehtihet, Elyes and Salaun, Mikael},
+  	title 		= "{{Autonomic Network Management Principles: From Concepts to Applications}}",
+  	publisher 	= {Elsevier},
+  	year 		= {2011},
+  	pages       = {67 -- 99}
+}

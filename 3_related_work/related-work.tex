@@ -1,0 +1,98 @@
+\chapter{Trabalhos Relacionados}\label{chap_related_work}
+
+Neste capítulo, serão descritos oito trabalhos relacionados que direta ou indiretamente abordam localização de falhas em programas concorrentes. Apesar de existirem outros estudos relacionados ao tema, foram selecionados apenas os que se assemelham a este trabalho.
+
+Cada trabalho relacionado será descrito de acordo com suas características mais relevantes. Ao final de cada subseção serão destacados os melhores aspectos e os pontos fracos de cada um. Por fim, será feito um paralelo das características que são importantes para os objetivos propostos neste trabalho, que servirá como base de comparação.
+
+\section{\textit{Visualization of Test Information to Assist Fault Localization}}\label{sec:related-work-1}
+
+Jones {\it et al.}~\cite{Jones:2002} apresentam uma abordagem para auxiliar na localização de falhas usando visualização de informação de testes. A ideia é executar uma suíte de testes e colorir declarações do programa relacionadas tanto a casos de teste bem-sucedidos quanto aos que falharam, de forma a apresentar dados visuais para que desenvolvedores sejam capazes de inspecionar execuções do programa, argumentar declarações associadas a comportamentos defeituosos e possivelmente identificar falhas. Os autores também descrevem a ferramenta desenvolvida, denominada \textsc{Tarantula}, que faz uso da técnica de visualização.
+
+O trabalho mostra que a técnica é útil para auxiliar na depuração de programas, dando uma visão global ao invés de uma apenas local, como o depurador padrão oferece, e o espaço de busca por falhas dentro do programa é reduzido. No entanto, essa abordagem não é completamente automatizada, visto que ainda é necessário a execução iterativa do programa e seus respectivos casos de teste pelo usuário; linhas defeituosas podem ser marcadas como seguras dependendo do caso de teste; e a ferramenta não é tão eficaz quando um programa apresenta múltiplas falhas.
+
+\section{\textit{Locating Causes of Program Failures}}\label{sec:related-work-2}
+
+Cleve {\it et al.}~\cite{Cleve:2005} discutem uma abordagem para localizar falhas em programas através de buscas em espaço ({\it i.e.}, estados do programa) e em tempo {\it i.e.}, transições de causa, que são instantes de tempo onde uma variável deixa de ser a causa de uma falha e uma outra varíavel passa a ser a causa. A comparação dos estados do programa de execuções bem-sucedidas e defeituosas é fundamental para que se possam encontrar os pontos em que transições de causa ocorrem, visto que esses pontos não são apenas bons locais para reparos, mas também apontam os defeitos que causam a falha.
+
+Os autores apresentam uma abordagem eficaz para localizar causas de falhas, de forma que é possível apontar trechos de código que resultam em problemas. Essa técnica foi aplicada dentro de uma ferramenta de depuração de código de código aberto, \textsc{AskIgor}~\cite{Zeller:2006} e, segundo os resultados apresentados no trabalho, se mostrou mais eficaz que outras técnicas estudadas à epoca. Apesar desses bons aspectos, ainda é necessária uma suíte de teste com alta cobertura de código, já que a técnica depende dessas entradas para encontrar falhas, e também é necessário escolher precisamente o espaço de busca no espaço e tempo para que a falha seja de fato encontrada.
+
+\section{\textit{Fast Model-based Fault Localisation with Test Suites}}\label{sec:related-work-3}
+
+Birch {\it et al.}~\cite{Birch:2015} mostram um algoritmo para localização de falhas rápida baseada em modelos. Ele executa uma suíte de testes e, com o uso de métodos de execução simbólica, automaticamente identifica um pequeno subconjunto de locais do programa onde reparos são necessários, baseados nos casos de teste malsucedidos. O algoritmo usa limites de tempo para aperfeiçoar a sua velocidade, de forma que se um caso de teste levar mais que o esperado para ser verificado, a execução atual é adiada e uma outra toma o seu lugar. Esse processo melhora o desempenho geral da técnica, pois uma lista de possíveis locais onde reparos são necessários é mantida e o adiamento da análise para um determinado caso de teste pode posteriormente ser produtiva, uma vez que mais informações sobre o programa pode ser obtidas por meio da análise de outros casos de teste.
+
+O algoritmo apresentado nesse trabalho se mostrou eficiente e otimizado para lidar com suítes de teste unitário extensas, já que ele consegue adiar a procura por falhas baseada em um determinado caso de teste, caso ela demore mais que o esperado. Para a execução simbólica do modelo do programa original, os autores utilizaram as ferramentas \textsc{Klee}~\cite{Cadar:2008} e ESBMC~\cite{Cordeiro:2012}. Apesar de esta abordagem estreitar o espaço de busca por falhas, ela ainda depende inteiramente de uma suíte de testes bem elaborada, visto que caso tal suíte não consiga cobrir a parte do código com problemas, essas falhas não serão encontradas pela técnica.
+
+\section{\textit{Verifying Concurrent Programs by Memory Unwinding}}\label{sec:related-work-4}
+
+Tomasco {\it et al.}~\cite{Tomasco:2015} relatam uma abordagem que usa uma técnica chamada {\it desenrolamento de memória} (MU), a qual significa que operações são escritas em uma memória compartilhada, para simbolicamente verificar programas concorrentes que fazem uso de memória compartilhada e criação dinâmica de {\it threads}. Primeiramente uma possível MU é definida arbitariamente e então todas as execuções do programa que são compatíveis com essa definição são simuladas. Para cada simulação, a ideia é sequencializar programas concorrentes, em relação às regras de MU, e então usar a verificação de modelos no novo código, limitada ao número total de operações de escrita na memória compartilhada, usando uma ferramenta de verificação sequencial já existente. Caso um erro não seja encontrado para essa MU definida, uma nova é gerada e o processo de simulação é feito novamente, até que um erro seja encontrado ou todas as possibilidades tenham sido exploradas.
+
+A abordagem descrita pelos autores é eficaz para verificar o modelo de programas concorrentes, usando um algoritmo de sequencialização que opera de forma gulosa~\cite{Cormen:2009}, a qual emprega a noção de desenrolamento de memória. A modelagem das primitivas da biblioteca {\it Pthread}~\cite{Butenhof:1997} é feita por completo, porém a alocação dinâmica de memória ainda é limitada. Apesar dos resultados do trabalho mostrarem que o algoritmo implementado na ferramenta MU-CSeq foi capaz de encontrar todos os defeitos da suíte de concorrência da {\it International Competition on Software Verification} $2015$, ele consegue apenas assegurar se um erro existe ou não, sem localizar as linhas que precisam ser consertadas.
+
+\section{\textit{Verifying Multi-Threaded Software using SMT-based Context-Bounded Model Checking}}\label{sec:related-work-5}
+
+Cordeiro {\it et al.}~\cite{Cordeiro:2011} descrevem três abordagens ({\it preguiçosa}, {\it gravação de escalonamento} e {\it sob aproximação e ampliação}) para verificar programas concorrentes usando o verificador de modelos ESBMC~\cite{Cordeiro:2012}, baseado em teoria de módulo da satisfiabilidade (SMT). A primeira abordagem gera todas as possíveis intercalações e chama o solucionador SMT em cada uma delas individualmente. A segunda codifica todas as possíveis intercalações em uma única fórmula e explora a rapidez do solucionador. A terceira reduz o espaço de estados abstraindo o número de intercalações das provas de insatisfiabilidade geradas pelo solucionador SMT. Modelando as primitivas de sincronização da biblioteca {\it Pthread}~\cite{Butenhof:1997}, o ESBMC cria um programa instrumentado, em relação ao original, e usa verificação de modelos limitada ao número de trocas de contexto nessa nova versão, com o objetivo de encontrar um erro ou explorar todas as intercalações possíveis.
+
+De acordo com os resultados experimentais, este trabalho se mostra eficaz para tratar programas concorrentes, encontrando não somente erros de atomicidade e violação de ordem, como também bloqueios fatais locais e globais. Dentre as três abordagens propostas, a preguiçosa se mostrou mais eficiente que as outras, sendo capaz de verificar todos os programas propostos. Apesar destes pontos, o verificador de modelos pode apenas dizer se um erro existe ou não, e caso exista, ele não pode apontar diretamente onde tal erro se encontra.
+
+\section{\textit{Automated Fault Localization for C Programs}}\label{sec:related-work-6}
+
+Griesmayer {\it et al.}~\cite{Griesmayer:2007} propuseram um método para localizar falhas em programas sequenciais em ANSI-C utilizando técnicas de BMC. Dados um programa, uma especificação e um contraexemplo para mostrar que a especificação não é satisfeita, ou seja, uma falha existe, os autores usam esse contraexemplo para criar uma versão estendida desse programa. As entradas do programa são fixadas de acordo com os valores do contraexemplo e introduzem predicados anormais para cada componente do programa, gerando uma versão instrumentada do código original. As variáveis do programa são modeladas não-deterministicamente, de forma a encontrar os valores que satisfaçam a especificação original do programa. O contraexemplo do programa instrumentado contém as linhas que levam à falha e quais valores são necessários para produzir uma execução bem-sucedida do programa.
+
+Um ponto positivo do método é o fato dos contraexemplos gerados pelo verificador de modelos indicarem não somente as linhas defeituosas do programa, mas também os valores necessários a serem atribuidos para as entradas do programa para corrigir tal falha. \textcolor{red}{reescrever:}Apesar disso, o método funciona apenas para programas ANSI-C padrão, {\it i.e.}, programas procedurais/sequenciais e o tempo de conversão, desenrolamento e geração da representação interna do programa faz com que o tempo para localização das falhas seja alto.
+
+\section{\textit{Effective Fault Localization Techniques for Concurrent Software}}\label{sec:related-work-7}
+
+Park {\it et al.}~\cite{Park:2014} apresentam um método de localização de falhas dinâmico para localizar as raízes da causa de defeitos de concorrência e a implementação de um protótipo da técnica, chamado \textsc{Falcon}. Usando detecção dinâmica de padrões e localização de falhas estatística, o \textsc{Falcon} é capaz de mostrar a existência de defeitos em programas concorrentes, tanto de atomicidade quanto violação de ordem, auxiliando desenvolvedores a corrigir falhas em códigos. A técnica utiliza dados providos por casos de teste para o programa em verificação e tenta encontrar padrões pré-estabelecidos de acesso à memória compartilhada. Tais padrões são organizados estatisticamente de forma a priorizar quais as possíveis falhas existentes no programa.
+
+De acordo com o estudo empírico realizado pelos autores, a técnica aparentou ser eficaz para tratar violações de atomicidade e ordem em programa concorrentes, mostrando-se eficiente em termos de espaço e tempo utilizado. No entanto, essa abordagem foi desenvolvida apenas para lidar com programas Java, depende de casos de teste para a procura por padrões defeituosos e, no trabalho em questão, os autores apenas avaliaram a ferramenta com uma entrada de teste e múltiplas execuções do programa.
+
+\section{\textit{Cause Clue Clauses: Error Localization using Maximum Satisfiability}}\label{sec:related-work-8}
+
+Jose {\it et al.}~\cite{Jose:2011} discutem sobre um algoritmo para localização de causas de erro, considerando uma redução para o {\it problema da satisfiabilidade máxima} (MAX-SAT), que aponta o número máximo de cláusulas de uma fórmula booleana que uma atribuição pode satisfazer simultaneamente. A ideia chave é combinar uma fórmula de rastreamento booleana e uma fórmula não-satisfatível, ambas em relação ao desdobramento do programa e uma execução do programa malsucedida, e usar MAX-SAT para encontrar o conjunto máximo de cláusulas que podem ser satisfeitas ao mesmo tempo nessa fórmula. O complemento desse conjunto devolvido pelo solucionador MAX-SAT contém os locais do programa que levam ao erro, logo, corrigindo esses locais, é possível conseguir uma execução sem falhas do programa para o caso de teste dado. Vale ressaltar que o uso de MAX-SAT também foi abordado por Trindade {\it et al.}~\cite{Trindade:2016} no ESBMC para avaliar o problema de particionamento de hardware-software.
+
+O algoritmo apresentado é capaz de localizar linhas defeituosas e os autores também realizaram experimentos para sugerir reparos de atribuições aritméticas e troca de operadores de comparação no código original. Apesar dessa abordagem ser útil para localizar linhas defeituosas, ela ainda depende de uma execução malsucedida, e funciona apenas para para programas ANSI-C padrão.
+
+\section{\textit{Mutation-Based Fault Localization for Real-World Multilingual Programs}}
+
+Hong {\it et al.}~\cite{Hong:2015} propõem uma técnica de localização de falhas baseada em mutantes para programas multilinguais, \textit{i.e.}, programas escritos em mais de uma linguagem que provêm interfaces para comunicação, chamado \textsc{Museum}. Os autores desenvolveram um novo conjunto de operadores de mutação que, junto aos convencionais, são capazes de localizar instruções defeituosas em todos os benchmarks adotados, o que melhora a acurácia ao se tratar de falhas multilinguais. Logo, ao usar esse conjunto de operadores mutantes extendido e métricas de suspeita apropriadas, o \textsc{Museum} é capaz de identificar defeitos em programas JNI.
+
+A avaliação empírica mostra que o \textsc{Museum} é mais preciso e eficaz que técnicas estado-da-arte de localização de falhas baseadas em espectro. No entanto, a técnica proposta precisa de ao menos um caso de teste que falha e ainda não foi avaliada com programas concorrentes.
+
+\section{\textit{Metallaxis-FL: Mutation-Based Fault Localization}}
+
+Papadakis {\it et al.}~\cite{Papadakis:2015} apresentam uma abordagem de localização de falhas baseadas em análise de mutação, chamada \textit{Metallaxis}. A abordagem consiste em usar mutantes e associá-los com potenciais locais defeituosos do programa, e quando mutantes são mortos (principalment por casos de testes que falham), tais são essencialmente bons indicadores sobre os locais defeituosos de um programa.  Ainda mais, a abordagem apresentada usa em seu favor um número alto de casos de teste para ordenar instruções mutadas, com relação à sua pontuação de suspeita, o qual leva a falhas no programa. De acordo com dados experimentais, \textit{Metallaxis} é substancialmente mais efetivo que abordagens baseadas em instruções, até quando técnicas de redução de custo de mutação (\textit{e.g.}, amostragem de mutação) são usada. \textit{Metallaxis} localiza falhas efetivamente e, visto que ele funciona sobre uma suíte de teste, ele só pode ser usado durante o teste para localizar potenciais falhas.
+
+A abordagem se mostra superior a abordagens baseadas em instruções; no entanto, ela ainda deende de uma extensa suíte de teste e só foi avaliada em software ANSI-C procedural/sequencial.
+
+\section{Comparação entre os Trabalhos}
+
+Os trabalhos relacionados tratam ou de localização de falhas em programas ou em verificação de programas concorrentes. Foi possível observar que o problema de localização de falhas é pertinente, visto que este processo toma muito tempo dos desenvolvedores no ciclo de desenvolvimento de software. O tratamento de programas concorrentes também foi observado como um problema complexo de ser tratado devido ao grande número de possibilidades nas tentativas de simular um comportamento defeituoso. Tendo esses pontos em mente, as principais diferenças entre a abordagem proposta nesse trabalho para as aqui discutidas podem ser listadas: o método proposto requer apenas o código-fonte do programa, em contraste com outros métodos, onde mais dados são necessários, como uma execução malsucedida; o método proposto funciona para programas concorrentes em C, amplamente usados em sistemas embarcados; e, finalmente, é possível apontar linhas defeituosas facilmente, enquanto que outras abordagens verificam a segurança de um programa. A Tabela~\ref{table:related-work-comparison} mostra um quadro comparativo entre o método proposto nesta dissertação e os trabalhos relacionados selecionados.
+
+\begin{table}[ht]
+    \renewcommand{\arraystretch}{1.0}
+    \caption{Comparação dos trabalhos relacionados}
+    \label{table:related-work-comparison}
+    \centering
+    \begin{tabular}{c|c|c|c|c}
+        \hline \shortstack{\bfseries Trabalhos} & \bfseries Localiza & \bfseries Aplicável em & \bfseries Verifica & \bfseries Necessita\\
+\bfseries relacionados & \bfseries falhas & \bfseries programas & \bfseries código & \bfseries de casos\\
+\bfseries & & \bfseries concorrentes & \bfseries C & \bfseries de teste\\
+        \hline Jones {\it et al.} (2009) & X & & X & X\\
+        \hline Cleve {\it et al.} (2005) & X & & X & X\\
+        \hline Birch {\it et al.} (2015) & X & & X & X\\
+        \hline Tomasco {\it et al.} (2015) & & X & X &\\
+        \hline Cordeiro {\it et al.} (2011) & & X & X &\\
+        \hline Griesmayer {\it et al.} (2007) & X & & X &\\
+        \hline Park {\it et al.} (2014) & X & X & &\\
+        \hline Jose {\it et al.} (2011) & X & & X &\\
+        \hline Hong {\it et al.} (2015) & X & & X & X\\
+        \hline Papadakis {\it et al.} (2015) & X & & X & X\\
+        \hline Método proposto & X & X & X &\\
+	\end{tabular}
+\end{table}
+
+Através da Tabela~\ref{table:related-work-comparison} pode-se observar que existem outros trabalhos que são capazes de localizar falhas em programas concorrentes. No entanto, nenhum deles é capaz de atingir ambos objetivos em programas escritos na linguagem C e, ainda mais, sem o auxílio de casos de teste previamente escritos, diferentemente do método proposto.
+
+\section{Resumo}\label{chap-3-summary}
+
+Neste capítulo foram apresentados diversos trabalhos relacionados a algum dos seguintes problemas: localização de falhas, suporte a programas concorrentes, verificação de código escrito na linguagem C e/ou dependência de casos de testes externos. Após a apresentação de cada técnica, assim como uma breve discussão sobre as vantagens e desvantagens de cada uma delas, foi feita uma comparação com o método proposto neste trabalho. Foi possível observar que o método proposto aborda os três primeiros itens sem a necessidade de casos de testes externos, o que o diferencia dos demais trabalhos. O próximo capítulo apresenta a metodologia proposta para localizar falhas em programas concorrentes utilizando técnicas de sequencialização e BMC.

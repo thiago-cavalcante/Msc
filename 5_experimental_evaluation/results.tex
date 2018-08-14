@@ -1,0 +1,159 @@
+\chapter{Resultados e Discussões}\label{chap_results}
+
+Este capítulo está dividido em três partes. A primeira parte descreve os objetivos dos experimentos conduzidos neste trabalho. A segunda é dedicada à descrição da configuração na qual os experimentos foram realizados, incluindo programas, versões e ambientes. A terceira apresenta os resultados obtidos quando se realizaram os experimentos com os benchmarks selecionados, assim como uma discussão sobre os resultados obtidos e avaliação geral do método proposto nesta dissertação.
+
+\section{Objetivos do Experimento}\label{sec:experimental-objectives}
+
+Utilizando os benchmarks propostos, o experimento tem os seguintes objetivos:
+
+\begin{enumerate}
+
+\item Demonstrar a aplicabilidade da metodologia para a localização de falhas em programas concorrentes em C.
+
+\item Avaliar o tempo usado pelo verificador de modelos para verificar o código gerado pelo método proposto.
+
+\end{enumerate}
+
+\section{Configuração Experimental}\label{sec:experimental-setup}
+
+De forma a verificar e validar o método proposto, foram usados o ESBMC v$3$.$0$.$0$ com o solucionador SMT Boolector~\cite{Brummayer:2009} e o Lazy-CSeq v$1$.$1$, com o CBMC~\cite{Clarke:2004} v$5$.$3$ (backend). Todos os experimentos foram conduzidos em um processador ocioso Intel Core i$7$ -- $4500$ $1$.$8$Ghz, com $8$ GB de RAM e executando sistema operacional Fedora $24$ $64$-bits.
+
+Os benchmarks na Tabela \ref{table:results} são os mesmos usados para avaliar o ESBMC em relação a programas concorrentes em C~\cite{Cordeiro:2011}. {\it $account\_bad.c$} é um programa que representa as operações básicas em contas bancárias: depósito, saque e saldo atual, com um semáforo para controlá-las. {\it $arithmetic\_prog\_bad.c$} é um programa básico produtor-consumidor, usando semáforos e variáveis condicionais para sincronizar operações. {\it $carter\_bad.c$} é um programa extraído de uma aplicação de banco de dados, o qual usa um semáforo para sincronizar as {\it threads}. {\it $circular\_buffer\_bad.c$}  simula um buffer, usando variáveis compartilhadas para sincronizar as operações de recebimento e envio. {\it $lazy01\_bad.c$} usa um semáforo para controlar operações de soma sobre uma variável compartilhada e então verificar o valor dela. {\it $queue\_bad.c$} é um programa que simula uma estrutura de dados de fila. {\it $sync01\_bad.c$} e {\it $sync02\_bad.c$} são programas produtores e consumidores: o primeiro nunca consome os dados e o último inicializa uma variável compartilha com algum dado (arbritário). {\it $token\_ring\_bad.c$} propaga valores por meio de variáveis compartilhadas e verifica se elas são equivalentes, por meio de {\it threads} diferentes. {\it $twostage\_bad.c$} simula um grande número de {\it threads} executando simultaneamente e {\it $wronglock\_bad.c$} simula um extenso número de {\it threads} produtoras e a propagação dos seus respectivos valores para outras {\it threads}. {\it $race-1\_1-join\_true-unreach-call.c$} é um programa que testa condições de corrida em uma variável compartilhada usando um semáforo para sincronizar o acesso à mesma. {\it $bigshot\_p\_false-unreach-call.c$} é um programa que aloca e copia dados para um ponteiro de \textit{string}, em duas \textit{threads} diferentes, e por último verifica se o ponteiro foi manipulado como esperado. {\it $fib\_bench\_false-unreach-call.c$} e {\it $fib\_bench\_longer\_false-unreach-call.c$} são programas que iteram um número de vezes pré-determinado e incrementam duas variáveis compartilhadas, sem um semáforo para sincronizar acessos, e então checam se alguma delas atingiu um valor específico ou não. {\it $lazy01\_false-unreach-call.c$} usa um semáforo para controlar operações de soma sobre uma variável compartilhada e então verifica o seu valor. {\it $stateful01\_false-unreach-call.c$} usa duas variáveis compartilhadas guardadas por dois diferentes semáforos, realiza operações aritméticas nas mesmas e então verifica seus valores finais. {\it $qw2004\_false-unreach-call.c$} testa operações aritméticas não guardadas sobre variáveis compartilhadas. Finalmente, {\it half\_sync.c} e {\it no\_sync.c} compartilham um contador para incrementar seu valor e verificar uma propriedade sem uma sincronia completa de \textit{threads}.
+
+O procedimento de avaliação experimental pode ser dividido em três passos diferentes. Primeiro, é necessário obter um contraexemplo para o dado programa. Caso o resultado dado pelo ESBMC for \textit{verification failed}, então o benchmark não é seguro, \textit{i.e.}, ele apresenta um erro de bloqueio fatal, assertiva, aquisição de semáforo, divisão por zero, segurança de ponteiros, estouro aritmético, e/ou violação de limites de vetores, e pode-se traduzir este compartamento defeituoso em um programa sequencial que simula tal execução. No segundo passo, é necessário extrair as informações de troca de contexto , \textit{i.e.}, número de trocas de contexto (instruções onde trocas de contexto ocorreram) e o número de \textit{threads} em execução, por meio do método apresentado no Capítulo~\ref{chap_methodology}, o qual é obtido por meio da remoção da opção \emph{\tt --deadlock-check} na linha de comando do ESBMC em questão\footnote{\label{esbmc-command-line}\texttt{esbmc} {\tt --no-bounds-check} {\tt --no-pointer-check} {\tt --no-div-by-zero-check} {\tt --no-slice} {\tt --deadlock-check} {\tt --boolector} {\tt\textless file\textgreater}} (no caso do Lazy-CSeq, removendo a opção \emph{\tt --deadlock} do comando line\footnote{\label{lazycseq-command-line}\texttt{cseq} {\tt --deadlock} {\tt --cex} {\tt --rounds 5} {\tt -i} {\tt\textless file\textgreater}} irá produzir o resultado esperado), e então realizar o processamento do contraexemplo gerado. No terceiro passo, o programa original é transformado em um sequencial, com as informações obtidas nos passos $1$ e $2$, aplicando as regras definidas no Capítulo~\ref{chap_methodology} e o método proposto por Griesmayer {\it et al.}~\cite{Griesmayer:2007}. Finalmente, a versão sequencial pode ser verificada no ESBMC, usando a linha de comando\footnotemark[\value{footnote}] sem a opção \emph{\tt --deadlock-check}, mudando o arquivo especificado e aplicando a mesma estratégia demonstrada no Capítulo~\ref{chap_methodology}.
+
+\section{Resultados Experimentais}\label{sec:experimental-results}
+
+A Tabela~\ref{table:results} resume os resultados experimentais. \textbf{F} descreve o nome do benchmark, \textbf{L} representa o número de linhas no código em questão, \textbf{T} é o número de {\it threads} no código, \textbf{D} identifica se um bloqueio fatal ocorreu (caso tal valor seja \texttt{1}), \textbf{FE} é o número de erros encontrados durante o processo de localização de falhas, isto é, o número de diferentes valores para \texttt{diag} retornados pelo ESBMC, \textbf{AE} é o número falhas verdadeiras, \textbf{R} representa o resultado final (\texttt{1} se a informação obtida pelo ESBMC é de fato útil), e, finalmente, \textbf{VT} é o tempo que o ESBMC levou para verificar o benchmark em questão. O ponto de interrogação é usado para identificar testes dos quais nenhuma informação foi obtida, devido a limitações do sistema.
+
+\begin{table}[ht]
+\renewcommand{\arraystretch}{1.0}
+\caption{Resultados do experimento}
+\label{table:results}
+\centering
+\begin{tabular}{c|c|c|c|c|c|c}
+\hline \bfseries \bfseries F & \bfseries L & \bfseries T & \bfseries D &\bfseries FE/AE & \bfseries VT & \bfseries R\\
+\hline {\it account\_bad.c} & $49$ & $2$ & $0$ & $3/3$ & $0$.$102$ & $1$\\
+\hline {\it arithmetic\_prog\_bad.c} & $82$ & $2$ & $1$ & $2/2$ & $0$.$130$ & $1$\\
+\hline {\it carter\_bad.c} & $43$ & $4$ & $1$ & $1/1$ & $0$.$289$ & $1$\\
+\hline {\it circular\_buffer\_bad.c} & $109$ & $2$ & $0$ & $7/7$ & $0$.$227$ & $1$\\
+\hline {\it queue\_bad.c} & $153$ & $2$ & $0$ & $4/4$ & $0$.$934$ & $1$\\
+\hline {\it sync01\_bad.c} & $64$ & $2$ & $1$ & $1/0$ & $0$.$451$ & $0$\\
+\hline {\it sync02\_bad.c} & $39$ & $2$ & $1$ & $2/2$ & $0$.$116$ & $1$\\
+\hline {\it token\_ring\_bad.c} & $56$ & $4$ & $0$ & $1/1$ & $0$.$307$ & $1$\\
+\hline {\it twostage\_bad.c} & $128$ & $9$ & $0$ & $1/1$ & $0$.$284$ & $1$\\
+\hline {\it wronglock\_bad.c} & $111$ & $7$ & $0$ & $1/1$ & $0$.$310$ & $1$\\
+\hline {\it race-1\_1-join\_true-unreach-call.c} & $58$ & $1$ & $0$ & $1/1$ & $0$.$399$ & $1$\\
+\hline {\it bigshot\_p\_false-unreach-call.c} & $35$ & $2$ & $0$ & $2/2$ & $10$.$724$ & $1$\\
+\hline {\it fib\_bench\_false-unreach-call.c} & $44$ & $2$ & $0$ & $2/2$ & $8$.$966$ & $1$\\
+\hline {\it fib\_bench\_longer\_false-unreach-call.c} & $44$ & $2$ & $0$ & $2/2$ & $11$.$147$ & $1$\\
+\hline {\it lazy01\_false-unreach-call.c} & $51$ & $3$ & $0$ & $1/1$ & $0$.$259$ & $1$\\
+\hline {\it stateful01\_false-unreach-call.c} & $56$ & $2$ & $0$ & $2/2$ & $0$.$264$ & $1$\\
+\hline {\it qw2004\_false-unreach-call.c} & $60$ & $1$ & $0$ & $1/1$ & $0$.$250$ & $1$\\
+\hline {\it half\_sync.c} & $22$ & $2$ & $0$ & $1/0$ & $0$.$322$ & $0$\\
+\hline {\it no\_sync.c} & $21$ & $2$ & $0$ & $1/0$ & $0$.$320$ & $0$\\
+\hline
+\end{tabular}
+\end{table}
+
+A verificação do arquivo {\it account\_bad.c} apresentou $3$ diferentes valores para \texttt{diag}, os quais estão em diferentes partes do código; no entanto, eles, por fim, identificaram a falha real existente no código original: uma assertiva mal-formulada.
+
+Os $7$  valores diagnosticados em relação ao {\it circular\_buffer\_bad.c} levam à uma assertiva errônea no programa, que está relacionada a um laço. Dessa forma, os valores de \texttt{diag} indicam tal laço.
+
+Durante a verificação do {\it arithmetic\_prog\_bad.c}, a metodologia proposta informou $2$ valores diferentes para \texttt{diag}, os quais direcionam a um laço na {\it thread} $2$ deste programa, significando que a falha está neste laço específico. 
+
+A análise de {\it queue\_bad.c} apresentou $4$ erros. As falhas identificadas são relacionadas a \textit{flags} que provêm controle de acesso a uma variável compartilhada e um loop onde elas são modificadas, isto é, o problema reside novamente em má operação.
+
+{\it sync02\_bad.c} apresentou $2$ valores diferentes de diagnóstico, relacionados à \textit{thread} consumidora no programa original, cujas linhas estão relacionadas a um bloqueio fatal presente no benchmark.
+
+{\it carter\_bad.c}, {\it token\_ring\_bad.c}, {\it twostage\_bad.c} e {\it wronglock\_bad.c} apresentaram $1$ linha defeituosa durante o diagnóstico de cada programa sequencializado. No primeiro, o método proposto foi capaz de encontrar uma atribuição a uma variável compartilhada que corrige o bloqueio fatal presente neste programa. No segundo, o valor de diagnóstico leva a expressão lógica mal-formulada na assertiva. O terceiro foi diagnosticado com uma linha defeituosa que aponta para uma assertiva mal-formulada e, finalmente, o quarto benchmark referido contém uma assertiva mal-formulada, a qual a metodologica foi capaz de apontar.
+
+A metodologia foi capaz de informar $1$ linha defeituosa diferente para {\it race-1\_1-join\_tru\\e-unreach-call.c}, o qual leva a uma assertiva mal-formulada no programa, e mudando o valor de comparação produziria uma execução bem-sucedida do programa.
+
+Os benchmarks {\it bigshot\_p\_false-unreach-call.c}, {\it fib\_bench\_false-unreach-call.c} e {\it fib\_be\\nch\_longer\_false-unreach-call.c} foram diagnosticados com $2$ erros. No primeiro, as linhas defeituosas obtidas se referem a uma assertiva, significando que a expressão lógica não é verdadeira em uma determinada intercalação. Os outros dois benchmarks são essencialmente os mesmos, diferindo apenas em um valor avaliado na assertiva. As linhas defeituosas associadas também estão relacionadas a tais valores, visto que os valores são usados nas comparações mencionadas podem ser diferentes dos esperados.
+
+{\it lazy01\_false-unreach-call.c} e {\it qw2004\_false-unreach-call.c} apresentaram $1$ erro cada. Em ambos, esses erros estão relacionados a assertivas, significando que as expressões associadas deveriam ser avaliadas com valores diferentes.
+
+{\it stateful01\_false-unreach-call.c} foi diagnosticado com $2$ falhas que levam a expressões em assertivas. Logo, para que seja possível produzir uma execução bem-sucedida do programa, deve-se alterar os valores utilizados.
+
+Embora {\it sync01\_bad.c} não tenha apresentado erros, ele foi diagnosticado com uma falha. De fato o ESBMC encontrou um \texttt{diag} com valor $0$, o que é particularmente estranho, visto que não há uma linha $0$. Além disso, mesmo após adicionar uma assertiva, o ESBMC ainda retorna o valor $0$. De fato, o programa apresenta problemas de sincronização, mas a metodologica proposta não foi capaz de prover informações úteis. Ainda mais, esse benchmark apresenta um bloqueio fatal devido a suas condicionais, característica que a metodologia não modela atualmente. Para considerar tal programa, seria necessária uma melhoria na gramática de sequencialização, de forma a modelar o comportamento de bloqueios fatais presentes em programas como este.
+
+Os casos principais que a metodologia proposta falhou foram {\it half\_sync.c} e {\it no\_sync.c}. Mesmo que o ESBMC tenha provido valores de \texttt{diag} razoáveis, eles não levam às falhas de verdade, visto que aplicando os consertos propostos não corrige o programa de entrada e tal procedimento ao invés disso leva a diferentes caminhos defeituosos. As falhas nesses programas estão relacionadas a sincronização de \textit{threads}, \textit{i.e.}, a propriedade é validada pelo verificador de modelos antes que outras \textit{threads} terminem sua execução. Ainda mais, a falta de uma chamada apropriada do método \texttt{pthread\_join} leva a essas falhas de sincronização, as quais não são suportadas pela abordagem proposta.
+
+De acordo com os resultados apresentados na Tabela~\ref{table:results}, pode-se notar que a metodologia proposta foi capaz de encontrar falhas (informações úteis) em $16$ de $19$ benchmarks, o que representa um total de $84$.$21$\%. É possível notar que os benchmarks os quais a verificação falhou e, consequentemente, para os quais nenhum contraexemplo foi obtido também estão incluídos nessa avaliação. A metodologia em si se mostrou ser útil para diagnosticar violações de corrida de dados, visto que a maioria dos benchmarks apresentam uma falha relacionada a esse problema; no entanto, o método proposto precisa ser aprimorado, de modo a verificar bloqueios fatais de uma maneira mais eficiente, transformações de laçõs também necessitam de um trabalho significativo, para que intercalações de \textit{threads} dentro de laços possam ser melhor representadas, e também um modelo apropriado para espera de \textit{threads} também necessita ser proposto, para que problemas de sincronização sejam completamente cobertos.
+
+Com relação ao tempo de verificação dos programas sequenciais instrumentados, na maioria dos benchmarks esse tempo é menor que $2$ segundos. Isso ocorre porque a metodologia proposta provê uma versão minimizada e sequencializada do programa concorrente, e também com menores fontes de não-determinismo, basicamente os valores de \texttt{diag}, os quais levam a uma sobrecarga pequena no verificador de modelos. Em $3$ benchmarks, no entanto, obtiveram-se tempos de verificação significantemente maiores, $5$ a $6$ mais que o normal. A execução do verificador de modelos foi analizada e, em tais casos, o solucionador SMT levou mais tempo que o esperado para avaliar a fórmula SMT do programa, possivelmente devido ao não-determinismo em \texttt{diag}.
+
+Com relação aos benchmarks em que nenhuma informação útil foi obtida, isso leva à conclusão de que gramática e regras aprimoradas são necessárias, de modo a localizar falhas. Além disso, os resultados experimentais mostraram a viabilidade da metodologia proposta para localizar falhas em programas concorrentes em C, visto que o ESBMC e o Lazy-CSeq são capazes de prover informações de diagnóstico úteis relacionadas a potenciais falhas.
+
+É importante mencionar que é possível aplicar a metodologia em programas onde o verificador de modelos é capaz de obter um contraexemplo para uma propriedade de segurança violada. Este contraexemplo é imprescindível para a etapa de sequencialização do programa, visto que ela depende inteiramente da intercalação presente no contraexemplo. Desta forma, cabe ao verificador escolhido explorar as intercalações possíveis para encontrar tal violação. No entanto, existem pontos em que o método pode ser melhorado, que serão explicitados posteriormente (cf. Capítulo~\ref{chap_conclusion}).
+
+\subsection{Comparação com Outras Técnicas de Localização de Falhas}
+\label{sec:comparison-fault-localization}
+
+Abordagens de localização de falhas baseadas em espectro (SBFL), tal como a proposta por Jones \textit{et al.}~\cite{Jones:2002}, tentam identificar blocos de código suspeitos, \textit{i.e.}, aqueles que são executados quando um caso de teste falha e leva a falhas no programa. Por um lado, técnicas SBFL não realizam análises semânticas complexas em programas, visto que as pontuações de suspeita são calculadas usando apenas informações provenientes da execução de suítes de teste. Por outro lado, a acurácia de abordagens SBFL são geralmente abaixo do desejado, quando aplicadas em programas reais grandes e complexos~\cite{Hong:2015}.
+
+Abordagens de localização de falhas baseadas em mutantes (MBFL), tal como a apresentada por Hong \textit{et al.}~\cite{Hong:2015}, também tentam encontrar blocos de código suspeitos, mas elas geram mutantes para tais blocos e executam novamente os casos de teste: se um bloco de código mutante é morto, então o bloco de código tem uma pontuação de suspeita mais alta. Esse esquema de mutantes geralmente supera a performance de abordagens SBFL~\cite{Hong:2015}, mas ele também leva mais tempo para gerar resultados úteis, visto que há uma variedade de possíveis mutantes para expressão de código.
+
+Dado o conhecimento atual em localização de falhas, não há outra técnica de localização de falhas que combine sequencialização, não-determinismo, e contraexemplos de verificação de modelos para solucionar o problema e que aborde programas concorrentes. Ainda mais, aplicando as abordagens deste trabalho em outras soluções não seria viável, visto que o passo de introdução de não-determinismo faz com que haja uma dependência de um verificador de modelos, anulando os passos de outras técnicas. Portanto, não é possível comparar o método proposto diretamente com abordagens SBFL e MBFL, visto que seria necessário reimplementá-las para abrangerem programas C baseados na biblioteca \textit{Pthread}, o que poderia introduzir erros e resultados inconclusivos.
+
+\subsection{Escalonabilidade}
+\label{sec:scalability}
+
+A metodologia proposta depende inteiramente de técnicas de verificação de modelos e uma execução mal-sucedida do programa, \textit{i.e.}, um contraexemplo proveniente de um verificador de modelos, para localizar falhas em programas concorrentes. Logo, pode-se afirmar que a metodologia é escalável caso o verificador de modelos usados para aplicá-la é escalável e pode prover corretamente um contraexemplo para o programa em verificação.
+
+Atualmente, verificadores de modelos são escaláveis para lidar com programas concorrentes grandes~\cite{Beyer:2016}. A princípio, verificadores de modelos tentavam modelos programas concorrentes em seus estados naturais, modelando instruções e execuções concorrentes, mas essa abordagem geralmente se deparava com o problema da explosão de estados. Então, pesquisadores propuseram diferentes abordagens, de forma a escalar a verificação de modelos com relação a programas concorrentes. Como exemplo, o Lazy-CSeq~\cite{Inverso:2014} é capaz de encontrar violações de suítes de teste extensas, tais como a suíte de concorrência da \textit{SV-Comp}, que contém erros de diferentes naturezas, e também já foi premiado como um dos verificadores de modelos mais eficientes para tratar concorrência em edições da \textit{SV-Comp}.
+
+\subsection{Aplicando a Abordagem Proposta na Prática}
+\label{sec:method-in-practice}
+
+Para avaliar como a metodologia proposta melhora o tempo de depuração geral, conduziu-se um experimento simples com $6$ desenvolvedores, com diferentes níveis de experiência. Pediu-se para que eles depurassem o benchmark {\it account\_bad.c} da forma que eles fariam normalmente tal tarefa. Então, explicaram-se os passos da abordagem proposta e pediu-se para que eles refizessem a tarefa usando a metodologia e anotou-se o tempo utilizado por cada um. Vale a pena apontar que os voluntários não tinham conhecimento prévio sobre a metodologia e cada um foi indepentemente contactado e avaliado.
+
+Um resumo dos resultados obtifos está disponível na Tabela~\ref{table:practice}, onde \textbf{Descrição do cargo} representa o nível de experiência de cada desenvolvedor, \textbf{Tempo de depuração não-assistida} representa o tempo, em minutos, que cada desenvolvedor levou para encontrar um erro no programa, e, finalmente, \textbf{Tempo de depuração assistida} representa o tempo, em minutos, que cada desenvolvedor levou para encontrar um erro usando a metodologia proposta.
+
+\begin{table}[htb]
+\renewcommand{\arraystretch}{1.0}
+\caption{Medindo os benefícios da metodologia proposta na prática.}
+\label{table:practice}
+\centering
+\begin{tabular}{c|c|c}
+\hline \bfseries Descrição & \bfseries Tempo de depuração & \bfseries Tempo de depuração\\
+       \bfseries do cargo  & \bfseries não-assistida      & \bfseries assistida\\
+\hline Desenvolvedor Sr A & $13.20$ & $2.50$\\
+\hline Desenvolvedor Sr B & $14.00$ & $2.75$\\
+\hline Desenvolvedor Pl A & $19.50$ & $3.20$\\
+\hline Desenvolvedor Pl B & $20.00$ & $3.00$\\
+\hline Desenvolvedor Jr A & $38.30$ & $5.10$\\
+\hline Desenvolvedor Jr B & $41.20$ & $4.25$\\
+\hline
+\end{tabular}
+\end{table}
+
+Embora o grupo de voluntários não tenha sido grande e não foi levada em consideração a familiaridade prévia com o erro proposto avaliada, assim como sua experiência prática em depuração, uma tendência parece existir em relação à redução do tempo utilizado associado para identificar o erro existente no programa escolhido. A principal causa é que a intuição e a experiência são substituídas pela metodologia, a qual consiste em prover uma execução mal-sucedida para o programa dado e então aplicar o arcabouço de sequencialização, de forma a detectar linhas que precisam de reparos. Como consequência, a tarefa de localização de falhas tornou-se um processo sistemático composto pelos seguintes passos: obtenção de um contraexemplo, criação de um código sequencial instrumentado não-determinístico equivalente e a extração de linhas defeituosas do novo contraexemplo. Esta metodologia, portanto, poderia ser aplicada na fase de testes do desenvolvimento de software, já que auxiliaria na diminuição do esforço para encontrar e solucionar defeitos de programas concorrentes. Para tal, seria necessária a implantação de um ambiente de verificação, \textit{e.g.}, um computador para realizar as tarefas de verificação, para prover os contraexemplos necessários para a aplicação do método.
+
+\subsection{Considerações Finais}
+\label{sec:final-considerations}
+
+Os benchmarks aplicados basicamente apresentam um tipo de erro: bloqueios fatais, assertivas, aquisição de semáforos, divisão por zero, segurança de ponteiros, estouro aritmético, ou violação de limites de vetores. Logo, aplicaram-se diferentes regras, dependendo da falha detectada. A Figura~\ref{figure:summary-verification-results} mostra um resumo de todos os resultados obtidos, o qual mostra que a metodologia proposta gera informações úteis sobre execuções mal-sucedidas, com relação ao erro presente no benchmark, em $84$.$21$\% dos benchmarks utilizados, além de identificar quais linhas estão relacionadas à falha associada e quais valores podem ser atribuídos para produzir uma execução bem-sucedida. Com relação aos benchmarks utilizados, a abordagem não foi capaz de diagnosticar linhas defeituosas em três deles, devido à modelagem da biblioteca concorrente do C, visto que tais benchmarks apresentaram problemas de bloqueios fatais e sincronização.
+
+\begin{figure*}[htb]
+\centering
+\includegraphics[scale=0.75]{figures/verification_results}
+\caption{Resumo dos resultados de verificação}
+\label{figure:summary-verification-results}
+\end{figure*}
+
+A Figura~\ref{figure:summary-verification-time} mostra um resumo do tempo de verificação necessário para cada benchmark. Treze programas levaram menos de $2$ segundos, de forma a avaliar as falhas existentes e as atribuições associadas para produzir uma execução bem-sucedida, três programas não foram verificados corretamente, com tempos associados de verificação menores que  $2$ segundos, e, finalmente, três benchmarks levaram cerca de $4$ a $5$ vezes mais para produzir resultados úteis. Com relação ao último caso, analizando o processo de verificação do verificador de modelos, foi possível apontar o gargalo como sendo o solucionador SMT, devido à quantidade de fontes de não-determinismo presentes em tais benchmarks. No entanto, o tempo de verificação em média ainda é baixo, se comparado com o que pode ser obtido com depuração de programas não-assistida~\cite{Mayer:2008}.
+
+\begin{figure*}[htb]
+\centering
+\includegraphics[scale=0.75]{figures/verification_time}
+\caption{Resumo dos resultados de todos os benchmarks}
+\label{figure:summary-verification-time}
+\end{figure*}
+
+Em resumo, os resultados apresentados mostram que a metodologia proposta é apropriada para localizar falhas em programas concorrentes em C, e que o tempo de verificação necessário para produzir uma execução bem-sucedida do programa é curto. Logo, a metodologia proposta pode ser útil para auxiliar desenvolvedores a depurar programas.
+
+\section{Resumo}\label{chap-5-summary}
+
+Neste capítulo apresentou a avaliação experimental realizada para o método proposto neste trabalho, assim como considerações a serem feitas sobre a metodologia apresentada. O experimento foi conduzido com um computador padrão e os dados obtidos foram analizados, mostrando a viabilidade do método para encontrar linhas defeituosas em códigos concorrentes, tendo uma taxa de sucesso de $84$.$21$\%, considerando todos os benchmarks propostos. A metodologia proposta mostrou-se útil para determinar as linhas defeituosas em um programa concorrente. No entanto, a dependência de um contraexemplo para iniciar o processo de transformação de código levou a alguns benchmarks não serem avaliados, pois o ESBMC não foi capaz de retornar um contraexemplo para os mesmos. Também é importante notar que após a transformação de código ser feita, o tempo de verificação do código instrumentado foi sempre menor que $1$ segundo. De modo geral, a metodologia garante que a correção no código original das linhas obtidas nos contraexemplos do novo código sequencial levam a uma execução bem-sucedida do programa.

@@ -1,0 +1,474 @@
+\chapter{A Metodologia Proposta}\label{chap_methodology}
+
+Neste capítulo, o método proposto para localizar falhas em programas concorrentes em C será completamente descrito. Primeiramente, um exemplo de motivação será apresentado para descrever a abordagem. Os passos anteriores à localização de falhas, onde técnicas de BMC são aplicadas, são mostrados a seguir. Também são descritas as regras de transformação para sequencializar um programa concorrente. Finalmente, uma explicação é dada sobre o processo de localização de falhas no programa concorrente transformado.
+
+\section{Visão Geral do Método}
+\label{sec:method-overview}
+
+Aqui, o método proposto é descrito brevemente, como mostrado na Figura~\ref{figure:methodology}, e uma explicação mais detalhada é exposta nas seções seguitnes. Dado um programa concorrente $P$, primeiramente checa-se se ele apresenta uma execução mal-sucedida com relação a uma determinada intercalação. Para realizar tal tarefa, $P$ é executado em um verificador de modelos duas vezes: a primeira execução verifica se existe algum bloqueio fatal e a segunda é responsável por outros tipos de violação, tais como erros de aquisição de semáforo, divisão por zero, segurança de ponteiros, estouro aritmético e violação de limites de vetores. Não é possível verificá-lo apenas uma vez porque os verificadores de modelos separam essas verificações, \textit{i.e.}, é necessário adicionar uma opção de linha de comando para habilitar a detecção de bloqueios fatais e ignorar violações devido a assertivas. Caso um contraexemplo possa ser obtido nesse passo, é possível prosseguir com o método. Então, o próximo passo define as regras de transformação, que são as instruções sequenciais que substituirão as originais concorrentes, e um arcabouço sequencial, o qual tem como objetivo simular a execução concorrente da intercalação mal-sucedida. O terceiro passo consiste em usar o método proposto por Griesmayer~\cite{Griesmayer:2007} para instrumentar atribuições e expressões, de forma a apontar locais e instruções defeituosas do programa. Tal programa instrumentado pode então ser executado, usando um verificador de modelos, e é possível coletar as linhas defeituosas, até que a verificação associada não produza diferentes elementos. Essa iteração é descrita na Figura~\ref{figure:methodology} por meio dos passos $3$, $4$, já que o método busca novos contraexemplos, com o intuito de encontrar novas linhas defeituosas. Finalmente, as linhas defeituosas são obtidas, assim como atribuições necessárias para produzir uma execução bem-sucedida de $P$.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[scale=0.35]{figures/methodology}
+  \caption{Metodologia proposta.}
+  \label{figure:methodology}
+\end{figure}
+
+\section{Exemplos Motivacionais}\label{sec:running-example}
+
+Dois programas concorrentes simples são utilizados para ilustrar a abordagem proposta. O primeiro (ver Figura~\ref{figure:example-1}) tem duas variáveis compartilhadas, os semáforos \texttt{mutex} e \texttt{lock}, usados para sincronizar as {\it threads} \texttt{A} e \texttt{B}. A função \texttt{main} inicializa cada contador da sua respectiva {\it thread} e começa a executar duas {\it threads}, executando as funções \texttt{threadA} e \texttt{threadB}, respectivamente. Cada função de {\it thread} adquire o semáforo \texttt{mutex}, incrementa o seu respectivo contador (\texttt{A\_count} ou \texttt{B\_count}), verifica se é possí­vel adquirir o semáforo \texttt{lock} (caso seu contador seja igual a um), libera o semáforo \texttt{mutex}, tenta adquirir o semáforo \texttt{mutex} logo em seguida, decrementa o seu contador, verifica se é possí­vel liberar o semáforo \texttt{lock} (caso seu contador seja zero), e finalmente libera o semáforo \texttt{mutex}. Visto que não há assertivas, não se deve obter outros tipos de violações, a não ser erros de concorrência. Pode-se notar que o controle de acesso ao semáforo \texttt{lock} é feito de forma local. Assumindo que trocas de contexto podem ocorrer em qualquer linha do programa, é provável que uma execução específica leve a um erro de bloqueio fatal.
+%
+\begin{figure}[htb]
+\centering
+\begin{minipage}{0.65\textwidth}
+\begin{lstlisting}
+void *threadA(void *arg) {
+	pthread_mutex_lock(&mutex);
+	A_count++;
+	if (A_count == 1) pthread_mutex_lock(&lock);
+	pthread_mutex_unlock(&mutex);
+	pthread_mutex_lock(&mutex);
+	A_count--;
+	if (A_count == 0) pthread_mutex_unlock(&lock);
+	pthread_mutex_unlock(&mutex);
+}
+void *threadB(void *arg) {
+	pthread_mutex_lock(&mutex);
+	B_count++;
+	if (B_count == 1) pthread_mutex_lock(&lock);
+	pthread_mutex_unlock(&mutex);
+	pthread_mutex_lock(&mutex);
+	B_count--;
+	if (B_count == 0) pthread_mutex_unlock(&lock);
+	pthread_mutex_unlock(&mutex);
+}
+int main() {
+	pthread_t A, B;
+	A_count = 0; B_count = 0;
+	pthread_create(&A, NULL, threadA, NULL);
+	pthread_create(&B, NULL, threadB, NULL);
+	pthread_join(A, NULL);
+	pthread_join(B, NULL);
+	return EXIT_SUCCESS;
+}
+\end{lstlisting}
+\end{minipage}
+\caption{Primeiro exemplo motivacional.}
+\label{figure:example-1}
+\end{figure}
+
+Para transformar um código concorrente para sequencial, deve-se, em linhas gerais, transformar declarações de programa concorrentes para versões sequenciais que tenham o mesmo comportamento e adicionar uma estrutura fixa para que o novo programa sequencial execute da mesma forma que o original, processo que será descrito nas próximas seções. Aplicando tais passos no código da Figura~\ref{figure:example-1}, tem-se como resultado o código mostrado nas Figuras~\ref{figure:hawk-applied-example-1-p1} e~\ref{figure:hawk-applied-example-1-p2}. Com o método aplicado no código concorrente, o restante do processo de localização de falhas depende apenas do verificador de modelos em uso, que retornará informações úteis relacionadas às falhas existentes no programa (o contraexemplo simplificado para esse código está disponível no Apêndice~\ref{appendix:counterexample-4}).
+
+\begin{figure}[h!]
+\centering
+\begin{minipage}{0.65\textwidth}
+\begin{lstlisting}
+... int non_det(), diag;
+int A_count, B_count;
+h_mutex mutex, lock;
+void A_1(void *arg) {
+	int t;
+	h_cs cs;
+	h_lock(&mutex, &cs, 1, 9);
+	t = A_count;
+	A_count = (diag == 10 ? non_det() : t + 1);
+	if ((diag == 11 ? non_det() : A_count) == 1)
+		h_lock(&lock, &cs, 1, 11);
+	h_unlock(&mutex, &cs, 1, 12);
+}
+void A_2(void *arg) {
+	int t;
+	h_cs cs;
+	h_lock(&mutex, &cs, 1, 13);
+	t = A_count;
+	A_count = (diag == 14 ? non_det() : t - 1);
+	if ((diag == 15 ? non_det() : A_count) == 0)
+		h_unlock(&lock, &cs, 1, 15);
+	h_unlock(&mutex, &cs, 1, 16);
+}
+void B_1(void *arg) {
+	int t;
+	h_cs cs;
+	h_lock(&mutex, &cs, 2, 20);
+	t = B_count;
+	B_count = (diag == 21 ? non_det() : t + 1);
+	if ((diag == 22 ? non_det() : B_count) == 1)
+		h_lock(&lock, &cs, 2, 22);
+}
+void B_2(void *arg) { ... } ...
+\end{lstlisting}
+\end{minipage}
+\caption{Método aplicado ao exemplo da Figura~\ref{figure:example-1} (parte $1$).}
+\label{figure:hawk-applied-example-1-p1}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\begin{minipage}{0.65\textwidth}
+\begin{lstlisting}
+... #define NCS 4
+int cs[] = {11, 21, 31, 22};
+int main() {
+	int i;
+	diag = non_det();
+	for (i = 0; i < NCS; i++) {
+		switch (cs[i]) {
+			case 1: {
+				case 11: {
+					A_count = 0; B_count = 0;
+					if (cs[i] == 11) break;
+				}
+			} break;
+			case 2: {
+				case 21: {
+					A_1(NULL);
+					if (cs[i] == 21) break;
+				}
+				case 22: {
+					A_2(NULL);
+					if (cs[i] == 22) break;
+				}
+			} break;
+			case 3: {
+				case 31: {
+					B_1(NULL);
+					if (cs[i] == 31) break;
+				}
+			} break;
+		}
+	}
+	assert(0);
+}
+\end{lstlisting}
+\end{minipage}
+\caption{Método aplicado ao exemplo da Figura~\ref{figure:example-1} (parte $2$).}
+\label{figure:hawk-applied-example-1-p2}
+\end{figure}
+
+O segundo (ver Figura~\ref{figure:example-2}) contém duas variáveis globais, \texttt{x} e \texttt{y}, utilizadas por cada uma das \textit{threads} existentes no programa. A primeira \textit{thread} incrementa o valor de \texttt{x} e a segunda decrementa o valor de \texttt{y}. Ambas \textit{threads} são executadas e finalmente é verificada uma propriedade, \textit{i.e.}, ambas as variáveis devem ter um valor positivo.
+
+\begin{figure}[htb]
+\centering
+\begin{minipage}{0.65\textwidth}
+\begin{lstlisting}
+... int x = 0, y = 0;
+void* sum_x(void* args) {
+    x++;
+    return NULL;
+}
+void* sum_y(void* args) {
+    y--;
+    return NULL;
+}
+int main(void) {
+    pthread_t t1, t2;
+    pthread_create(&t1, NULL, sum_x, NULL);
+    pthread_create(&t2, NULL, sum_y, NULL);
+    pthread_join(t1, NULL);
+    pthread_join(t2, NULL);
+    assert(x > 0 && y > 0);
+    return 0;
+}
+\end{lstlisting}
+\end{minipage}
+\caption{Segundo exemplo motivacional.}
+\label{figure:example-2}
+\end{figure}
+
+Utilizando os mesmos passos ilustrados no exemplo anterior, obtém-se o código da Figura~\ref{figure:example-2}, tem-se como resultado o código mostrado na Figura~\ref{figure:hawk-applied-example-2}. De forma similar, o verificador de modelos retornará informações úteis relacionadas às falhas existentes no programa (o contraexemplo simplificado para esse código está disponível no Apêndice~\ref{appendix:counterexample-5}), assim como valores possíveis para reproduzir uma execução bem-sucedida do mesmo. A seguir, será explicada a metodologia por completo, resumida na Figura~\ref{figure:methodology}.
+
+\begin{figure}[h!]
+\centering
+\begin{minipage}{0.65\textwidth}
+\begin{lstlisting}
+...
+int main(void) {
+    int cs[] = { 11, 21, 31, 12 };
+    int ncs  = 4;
+    int diag = nondet_int();
+    int x, y;
+    for (int i = 0; i < ncs; i++) {
+        switch (cs[i]) {
+            case 1: {
+                case 11: {
+                    x = 0;
+                    y = 0;
+                    if (cs[i] == 11) break;
+                }
+                case 12: {
+                    if (cs[i] == 12) break;
+                }
+            } break;
+            case 2: {
+                case 21: {
+                    int temp = x + 1;
+                    x = (diag == 7 ? nondet_int() : temp);
+                    if (cs[i] == 21) break;
+                }
+            } break;
+            case 3: {
+                case 31: {
+                    int temp = y - 1;
+                    y = (diag == 12 ? nondet_int() : temp);
+                    if (cs[i] == 31) break;
+                }
+            } break;
+        }
+    }
+    __ESBMC_assume(x > 0 && y > 0);
+    assert(0);
+    return 0;
+}
+\end{lstlisting}
+\end{minipage}
+\caption{Método aplicado ao exemplo da Figura~\ref{figure:example-2}.}
+\label{figure:hawk-applied-example-2}
+\end{figure}
+
+\section{Uso de BMC para Auxiliar na Localização de Falhas}\label{sec:bmc-usage}
+
+\subsection{Assegurando a Existência de Falhas em Programas Concorrentes}\label{sec:unsafety}
+
+De forma que seja possível aplicar a metodolgia proposta, é necessário assegurar a existência de falhas do programa concorrente $P$ sob verificação (\textbf{Passo 1.A} e \textbf{Passo 1.B} da Figura~\ref{figure:methodology}). Para alcançar tal objetivo, é necessário pelo menos uma propriedade violada (erro de bloqueio fatal, assertiva, aquisição de semáforo, divisão por zero, segurança de ponteiros, estouro aritmético, e/ou violação de limites de vetores) e o seu respectivo contraexemplo (veja Seção~\ref{sec:esbmc} para mais detalhes), informação que pode ser obtida por meio da verificação de $P$ em um verificador de modelos duas vezes. Se um contraexemplo para $P$ não puder ser encontrado, ou o limite $k$ é aumentado (limitado aos recursos de máquina disponíveis) ou afirma-se que $P$ é seguro ($P$ não contém falhas) até a profundidade $k$.
+
+\subsection{Extração de Informações das Trocas de Contexto de Contraexemplos}\label{sec:context-switch}
+
+Com posse de um contraexemplo $C_{ex}$ para $P$, é necessário extrair as informações de trocas de contexto para posteriormente aplicá-las com o objetivo de encontrar um programa sequencial $P_{seq}$ que reproduza o mesmo comportamento defeituoso que $P$ tem (\textbf{Passo 2} da Figura~\ref{figure:methodology}).
+
+Para que seja possível obter tal informação, seja $C_{ex}$ composto por um conjunto de estados $s_0,s_1,...,s_k$. Cada estado $s_i$ contém a linha $l_{s_i}$ e a {\it thread} $T_{s_i}$ a qual tal estado pertence. Anotando a tupla $(T_{s_i},l_{s_i})$ onde $T_{s_i} \neq T_{s_{i+1}}$ resulta nas trocas de contexto que ocorrem em $P$ para o dado comportamento defeituoso. Por exemplo, em relação ao programa da Figura~\ref{figure:example-1}, a informação de troca de contexto obtida do seu respectivo contraexemplo é $CS = [(0,27),(1,5),(2,14),(1,6)]$, onde a {\it thread} $0$ representa a função \texttt{main}, a {\it thread} $1$ representa a {\it thread} $A$ e a {\it thread} $2$ representa a {\it thread} $B$.
+
+\section{Sequencialização de Programas Concorrentes}\label{sec:sequentialization}
+
+\subsection{Modelagem das Primitivas de Sincronização da Biblioteca \textit{Phtread}}\label{sec:pthread}
+
+Levando em consideração a sequentialização, é necessário modelar as declarações de programa originalmente concorrentes para obter uma versão sequencial de tais declarações, mantendo suas respectivas funcionalidades (\textbf{Passo 2} da Figura~\ref{figure:methodology}).
+
+Primeiramente, uma estrutura do tipo \texttt{struct} foi desenvolvida para representar trocas de contexto. São armazenadas as variáveis \texttt{thread\_ID}, um identificador para a {\it thread} onde a troca de contexto ocorreu, e \texttt{program\_line}, um identificador para a linha do programa onde a troca de contexto ocorreu. Essa estrutura é chamada \texttt{h\_cs} e é definida como na Figura~\ref{figure:hawk-cs}.
+%
+\begin{figure}[htb]
+\centering
+\begin{minipage}{0.4\textwidth}
+\begin{lstlisting}
+typedef struct h_context_switch {
+	int thread_ID;
+	int program_line;
+} h_cs;
+\end{lstlisting}
+\end{minipage}
+\caption{Estrutura que representa uma troca de contexto.}
+\label{figure:hawk-cs}
+\end{figure}
+
+Então, desenvolveu-se uma estrutura do tipo \texttt{struct} para representar uma variável do tipo \texttt{pthread\_mutex\_t}. São armazenadas as variáveis \texttt{status}, um identificador para dizer se tal semáforo está adquirido ou não, e \texttt{last\_cs}, identificando as informações do programa relacionadas à aquisição ou liberação de tal semáforo. Essa estrutura é chamada \texttt{h\_mutex} e é definida como na Figura~\ref{figure:hawk-mutex}.
+%
+\begin{figure}[htb]
+\centering
+\begin{minipage}{0.3\textwidth}
+\begin{lstlisting}
+typedef struct h_mutex {
+	int status;
+	h_cs last_cs;
+} h_mutex;
+\end{lstlisting}
+\end{minipage}
+\caption{Estrutura que representa o tipo \texttt{pthread\_mutex\_t}.}
+\label{figure:hawk-mutex}
+\end{figure}
+
+Implementações para a manipulação de semáforos, que são a aquisição de um semáforo, \texttt{pthread\_mutex\_lock}, e a liberação de um semáforo, \texttt{pthread\_mutex\_unlock}. A função que representa a aquisição de um semáforo tem $4$ argumentos, que são \texttt{m} (o semáforo que uma {\it thread} está tentando adquirir), \texttt{cs} (uma variável de troca de contexto), \texttt{id} (um identificador para a {\it thread} que chamou a função de aquisição), e \texttt{line} (um identificador para a linha do programa de onde a função foi chamada). A função de liberação também tem $4$ argumentos, que são \texttt{m} (o semáforo que uma {\it thread} está tentando liberar), \texttt{cs} (uma variável de troca de contexto), \texttt{id} (um identificador para a {\it thread} que chamou a função de liberação), e \texttt{line} (um identificador para a linha do programa de onde a função foi chamada). A função de aquisição é chamada \texttt{h\_lock} e é definida como na Figura~\ref{figure:hawk-mutex-lock}. A função de liberação é chamada \texttt{h\_unlock} e é definida como na Figura~\ref{figure:hawk-mutex-unlock}.
+
+Variáveis condicionais são implementadas em {\it pthread} como na Figura~\ref{figure:pthread-conditionals}. De forma a simular o mesmo comportamento, a execução não precisa ser parada. Visto que se simula apenas um comportamento defeituoso, a condição necessária é assumida como já satisfeita, então basicamente muda-se a variável do tipo \texttt{pthread\_cond\_t} para o tipo inteiro, a função \texttt{pthread\_cond\_signal} atribui $0$ a tal variavel, e a função \texttt{pthread\_cond\_signal} atribui $1$. Esse processo é descrito na Figura~\ref{figure:hawk-conditionals}, como uma modelagem do código da Figura~\ref{figure:pthread-conditionals}.
+%
+\begin{figure}[htb]
+\centering
+\begin{minipage}{0.35\textwidth}
+\begin{lstlisting}
+pthread_cond_t c;
+...
+	pthread_cond_signal(&c, &m);
+...
+while (!condition) {
+	pthread_cond_wait(&c, &m);
+}
+\end{lstlisting}
+\end{minipage}
+\caption{Uso de variáveis condicionais padrão.}
+\label{figure:pthread-conditionals}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\begin{minipage}{0.35\textwidth}
+\begin{lstlisting}
+int c;
+...
+	c = 0;
+...
+while (!condition) {
+	c = 1;
+	break;
+}
+\end{lstlisting}
+\end{minipage}
+\caption{Modelagem de condicionais no método proposto.}
+\label{figure:hawk-conditionals}
+\end{figure}
+
+%
+\begin{figure}[htb]
+\centering
+\begin{minipage}{0.5\textwidth}
+\begin{lstlisting}
+void h_lock(h_mutex *m,
+			h_cs *cs,
+			int id,
+			int line) {
+	int status = m->status;
+	if (status == 1) {
+		__VERIFIER_error();
+	} else {
+		cs->thread_ID = id;
+		cs->program_line = line;
+		m->status = 1;
+		m->last_cs.thread_ID = cs->thread_ID;
+		m->last_cs.program_line = cs->program_line;
+	}
+}
+\end{lstlisting}
+\end{minipage}
+\caption{Modelagem da função \texttt{pthread\_mutex\_lock}.}
+\label{figure:hawk-mutex-lock}
+\end{figure}
+%
+\begin{figure}[htb]
+\centering
+\begin{minipage}{0.5\textwidth}
+\begin{lstlisting}
+void h_unlock(h_mutex *m,
+			  h_cs *cs,
+			  int id,
+			  int line) {
+	if (m->status == 1 &&
+			m->last_cs.thread_ID == id) {
+		cs->thread_ID = id;
+		cs->program_line = line;
+		m->status = 0;
+		m->last_cs.thread_ID = cs->thread_ID;
+		m->last_cs.program_line = cs->program_line;
+	} else {
+		__VERIFIER_error();
+	}
+}
+\end{lstlisting}
+\end{minipage}
+\caption{Modelagem da função \texttt{pthread\_mutex\_unlock}.}
+\label{figure:hawk-mutex-unlock}
+\end{figure}
+
+A Tabela~\ref{table:rules} resume todas as regras desenvolvidas neste trabalho para transformar programas concorrentes em sequenciais. A coluna \textit{``\#''} representa os dois grupos de instruções de programas, \textit{i.e.}, ($1$) normal e ($2$) concorrente, a coluna \textit{``Fragmento de código''} mostra o código a ser transformado, e as colunas \textit{``Sem bloqueio fatal''} and \textit{``Com bloqueio fatal''} dizem qual regra de transformação precisa ser executada, caso um programa apresente ou não um bloqueio fatal, respectivamente.
+
+\begin{table}[htb!]
+%\renewcommand{\arraystretch}{0.97}
+\renewcommand\arraystretch{0.97}
+\caption{Regras para transformar programas concorrentes}
+\label{table:rules}
+\centering\small
+\begin{tabular}{c|c|c|c}
+\hline \bfseries \# & \bfseries Fragmento de código & \bfseries Sem bloqueio fatal & \bfseries Com bloqueio fatal\\
+\hline \multirow{3}{*}{1}&Declaração&Sem alterações&Sem alterações\\ &Expressão&Desdobramento&Desdobramento\\&Instrução&Sem alterações&Sem alterações\\
+\hline \multirow{11}{*}{2}&\texttt{pthread\_t}&$\epsilon$&$\epsilon$\\
+&\texttt{pthread\_attr\_t}&$\epsilon$&$\epsilon$\\
+&\texttt{pthread\_cond\_attr\_t}&$\epsilon$&$\epsilon$\\
+&\texttt{pthread\_create}&$\epsilon$&$\epsilon$\\
+&\texttt{pthread\_join}&$\epsilon$&$\epsilon$\\
+&\texttt{pthread\_exit}&$\epsilon$&$\epsilon$\\
+&\texttt{pthread\_mutex\_t}&$\epsilon$&Semáforo é declarado\\
+&\texttt{pthread\_mutex\_lock}&$\epsilon$&Aquisição é chamada usando a variável\\
+&\texttt{pthread\_mutex\_unlock}&$\epsilon$&Liberação é chamada usando a variável\\
+&\texttt{pthread\_cond\_t}&$\epsilon$&Variável condicional é declarada\\
+&\texttt{pthread\_cond\_wait}&$\epsilon$&Parada é chamada usando a variável\\
+&\texttt{pthread\_cond\_signal}&$\epsilon$&Sinalização é chamada usando a variável\\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Adição de uma Estrutura Fixa para Simulação}\label{sec:framework}
+
+Uma estrutura fixa provê a mesma sequência de execução presente no programa original. Ela consiste basicamente em escrever cada código de {\it thread} dentro de um bloco condicional \texttt{case}, e as suas respectivas sequências de execução são especificadas no vetor \texttt{cs}. Tal estrutura é usada como a estrutura base para novas versões sequenciais de programas concorrentes (\textbf{Passo 2} da Figura~\ref{figure:methodology}) e a Figura~\ref{figure:framework} mostra como é tal codificação.
+%
+\begin{figure}[htb]
+\centering
+\begin{minipage}{0.45\textwidth}
+\begin{lstlisting}
+#define NCS X
+int cs[] = {...};
+int main(int argc, char *argv[]) {
+	int i;
+	for(i = 0; i < NCS; i++) {
+	  switch(cs[i]) {
+	    case 1:
+    	    case 11: { ... }
+    	    ...
+    	    case 20: { ... }
+	    break;
+	    case 2:
+    	    case 21: { ... }
+    	    ...
+    	    case 30: { ... }
+	    break;
+	    case 3:
+	        case 31: { ... }
+    	    ...
+    	    case 40: { ... }
+    	break;
+	    ...
+	    default:
+	    break;
+	  }
+	}
+	return 1;
+}
+\end{lstlisting}
+\end{minipage}
+\caption{A estrutura padrão para sequencializar programas concorrentes.}
+\label{figure:framework}
+\end{figure}
+
+Como se pode notar, a estrutura fixa mencionada provê novas posições fixas para cada parte do código original e a Tabela~\ref{table:relation} mostra a relação entre as novas posições e o tipo de fragmento de código, isto é, ela resume como o novo código sequencial é estruturado. Em particular, elementos globais, variáveis globais, declarações de arquivos de bibliotecas e outros tipos de declarações globais são posicionadas antes da função \texttt{main} do código sequencial. O corpo da sua função \texttt{main}, do código original, é posicionado entre a declaração do \texttt{case 1} e seu respectivo comando \texttt{break}, o corpo da primeira {\it thread} é posicionado entre a declaração do \texttt{case 2} e seu respectivo comando \texttt{break}, e assim por diante. Esse processo é repetido até que não existam mais {\it threads} para serem inseridas na versão sequencial do código. Adicionalmente, os argumentos passados para a função \texttt{main} do programa original são todos passados para a função \texttt{main} da versão sequencial. Em casos onde {\it threads} são parcialmente executadas, uma troca de contexto ocorre, outra {\it thread} é executada ou uma {\it thread} anterior continua a execução do ponto onde a mesma parou, os respectivos trechos de código são inseridos em cada bloco \texttt{case} dentro do bloco maior $N^{th}$ \texttt{case} (o $N^{th}$ \texttt{case} representa a $N^{th}$ {\it thread}), de tal forma que a ordem de execução permance a mesma.
+%
+\begin{table}[htb]
+	\renewcommand{\arraystretch}{1.0}
+	\caption{Relação entre as posições no programa e o código original}
+	\label{table:relation}
+	\centering
+	\begin{tabular}{c|c}
+		\hline \bfseries Tipo de fragmento de código & \bfseries Posição no\\
+		\bfseries no código original & \bfseries novo código sequencial\\
+		\hline elementos globais & antes da linha $1$\\
+		\hline corpo da função principal & entre o ''case $1$'' e o ''break''\\
+		\hline corpo da {\it thread} $n$ & entre o ''case $n + 1$'' e o ''break''\\
+		\hline
+	\end{tabular}
+\end{table}
+
+De forma a manter a mesma ordem de execução encontrada no programa original, o controle da ordem do \texttt{switch} é necessário. Uma ordem de trocas de contexto, obtida por meio de um contraexemplo do programa concorrente, pode ser copiada para o novo código sequencial, controlando os blocos \texttt{case} e as declarações condicionais\footnotemark dentro do bloco \texttt{switch}. Em linhas gerais, o processo de adição de controle de ordem de trocas de contexto para o novo programa sequencial pode ser dividido em dois passos. Com o intuito de mostrar uma situação simples de tal passo, assume-se que existem no máximo $10$ trocas de contexto em cada {\it thread} ($\forall N_{ti}, N_{ti} < 10$), um contraexemplo, dado pelo verificador de modelos, tem $N$ trocas de contexto, e dentre essas $N$ trocas de contexto, $N_{t0}$ ocorrem na função \texttt{main} do programa, $N_{t1}$ ocorrem na {\it thread} $1$, $N_{t2}$ na {\it thread} $2$, e assim por diante, de forma que $(N_{t0} + ... + N_{tn} = N)$.
+
+O primeiro passo é obter informações dos contraexemplos gerados pelo verificador de modelos, {\it i.e.}, o número total de trocas de contexto no programa original e em cada {\it thread}, a ordem de todas as trocas de contexto por todo o programa e também em cada {\it thread} isolada, e a posição correspondente onde uma troca de contexto ocorreu. Com tais dados, é possível adicionar declarações condicionais\footnotemark[\value{footnote}] para manter a mesma ordem de execução do programa original, de forma que quando uma linha é executada, o código sequencial executa o próximo bloco \texttt{case}, o qual representa a próxima {\it thread} no programa original.
+
+\footnotetext{\texttt{if (cs[i]) == Y) break;}, onde \texttt{Y} representa o número da troca de contexto relacionada}
+
+Pode-se notar que se existem laços iterativos no programa original concorrente, para cada laço, uma variável global \texttt{loopcounter} é adicionada. Além disso, a declaração para incrementar o valor da variável \texttt{loopcounter} também é adicionado ao fim do bloco de cada laço. Essa nova variável global adicionada é usada como uma condição para controlar diretamente os comandos \texttt{break}, de forma que quando uma troca de contexto ocorre, dentro de um laço, o valor atribuído à variável \texttt{loopcounter} também deve ser respectivamente usado no comando \texttt{break}, de forma a manter a sequência de execução original do programa.
+
+O segundo passo consiste em modificador os valores relacionados ao vetor \texttt{cs}, de tal forma que a ordem de execução é mantida, no novo programa sequencial. Mudando as linhas $1$ e $2$, na Figura~\ref{figure:framework}, de acordo com o número específico de trocas de contexto existentes e as suas respectivas ordens de execução, é possível garantir a ordem de execução original, visto que o bloco \texttt{switch} (linha $6$) seleciona qual trecho de código (representando {\it threads} do programa original) é executado, baseado no valor de \texttt{cs[i]}.
+
+Por exemplo, na Figura~\ref{figure:example-1}, a ordem de execução é: {\it thread} $0$, {\it thread} $1$, {\it thread} $2$ e, finalmente {\it thread} $1$ (essa informação é obtida através da análise do contraexemplo gerado pelo verificador de modelos, como descrito na Seção~\ref{sec:context-switch}). O vetor \texttt{cs} terá os valores $11$, $21$, $31$ e $22$, significando que o primeiro \texttt{case} será executado, então o primeiro \texttt{case} mais interno dentro do segundo, o terceiro e, por último, o segundo \texttt{case} mais interno dentro do segundo.
+
+Vale ressaltar que a tarefa de considerar todos as possíveis intercalações é atribuída ao verificador de modelos, já que o mesmo procurará alguma intercalação que não satisfaça alguma propriedade de segurança. O método em questão é responsável por, dada uma intercalação mal-sucedida, encontrar as linhas envolvidas na falha presente no programa.
+
+\section{Aplicação de um Método Sequencial para Localizar Falhas}\label{sec:fault-localization}
+
+Finalmente, o método proposto por Griesmayer~\cite{Griesmayer:2007} é aplicado (\textbf{Passo 3} da Figura~\ref{figure:methodology}). Em linhas gerais, cada atribuição em $P$ é convertida para uma versão não-determinística dela mesma e esse valor é escolhido pelo verificador de modelos (\textbf{Passo 4} da Figura~\ref{figure:methodology}) e também é relacionado à variável de diagnóstico, {\it i.e.}, \texttt{diag}. Desta forma, se um contraexemplo for obtido para $P_{seq}$, existem valores para \texttt{diag} em tal rastro, os quais podem compor o conjunto de linhas defeituosas em $P$. A correção de tais linhas leva a uma execução bem-sucedida de $P$. Por exemplo, na Figura~\ref{figure:example-2}, o valor obtido para $diag$ é $12$. Isso significa que esta linha no programa original causa a falha da assertiva. De fato, ao analizar o programa é possível perceber que a assertiva espera um valor positivo para \texttt{y}, mas a operação de decremento na linha $12$ impossibilita isso.
+
+\section{Resumo}\label{chap-4-summary}
+
+Neste capítulo foi apresesentado o método proposto para localizar falhas em programas concorrentes usando técnicas de verificação de modelos e sequencialização, sendo esta a contribuição maior do presente trabalho. Foi dada uma explicação detalhada das transformações necessárias, assim como um exemplo para ilustrar melhor o processo de localização de falhas. Mostrou-se também a importância do contraexemplo obtido antes da aplicação do método proposto, visto que o mesmo contém a ordem das {\it threads} executadas e os pontos onde trocas de contexto ocorreram. A modelagem necessária para transformar declarações de programa concorrentes em sequenciais também foi explicada, assim como a estrutura fixa necessária para reproduzir a mesma ordem de execução do programa original. Por fim, um método sequencial pode ser aplicado no novo código para obter as linhas que levam às falhas do programa. Como resultado, tem-se o embasamento para a avaliação experimental realizada no próximo capítulo.

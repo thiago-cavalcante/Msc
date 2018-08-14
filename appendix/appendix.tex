@@ -1,0 +1,703 @@
+\chapter{Publicações}
+
+\section{Referente à Pesquisa}
+
+\begin{itemize}
+
+\item \textbf{Alves, E. H. S.}, Cordeiro, L. C., Lima Filho, E. B. {\it Fault Localization in Multi-Threaded C Programs using Bounded Model Checking}. Em V Simpósio Brasileiro de Engenharia de Sistemas Computacionais (SBESC), 2015. (\textbf{Publicado})~\cite{AlvesCF15}
+
+\item \textbf{Alves, E. H. S.}, Cordeiro, L. C., Lima Filho, E. B. {\it A Method to Localize Faults in Concurrent C Programs}. Em \textit{Journal of Software and Systems}, 2017. (\textbf{Publicado})~\cite{AlvesCF17}
+
+\end{itemize}
+
+\section{Contribuições em outras Pesquisas}
+
+\begin{itemize}
+\item Cavalcante, T. R. F., \textbf{Alves, E. H. S.}, Carvalho, C. B. \textit{Radio Communication to Control and Run an Autonomous Mission for UAVs via a Mobile Application}. Em IV Escola Regional de Informática (ERIN), 2017. (\textbf{Publicado})
+\item Monteiro, F. R. M., \textbf{Alves, E. H. S.}, Silva, I. S., Ismail, H. I., Cordeiro, L. C., Lima Filho, E. B. \textit{ESBMC-GPU A Context-Bounded Model Checking Tool to Verify CUDA Programs}. Em \textit{Science of Computer Programming}, 2018. (\textbf{Publicado})~\cite{MonteiroASICF18}
+\end{itemize}
+
+\chapter{Contraexemplo para o código da Figura~\ref{figure:sequential-code}}\label{appendix:counterexample-1}
+
+\begin{lstlisting}
+ESBMC version 2.1.0 64-bit x86_64 linux
+file model.c: Parsing
+Converting
+Type-checking model
+Generating GOTO Program
+GOTO program creation time: 0.246s
+GOTO program processing time: 0.004s
+Starting Bounded Model Checking
+Symex completed in: 0.002s
+size of program expression: 26 assignments
+Slicing time: 0.000s
+Generated 1 VCC(s), 1 remaining after simplification
+Encoding remaining VCC(s) using bit-vector arithmetic
+Encoding to solver time: 0.000s
+Solving with solver Boolector
+Runtime decision procedure: 0.001s
+Building error trace
+
+Counterexample:
+
+State 1 file model.c line 14 function main thread 0
+<main invocation>
+----------------------------------------------------
+Violated property:
+  file model.c line 14 function main
+  assertion 
+  FALSE
+
+VERIFICATION FAILED
+\end{lstlisting}
+
+\chapter{Contraexemplo para o código da Figura~\ref{figure:griesmayer-method-applied-code}}\label{appendix:counterexample-2}
+
+\begin{lstlisting}[breaklines=true]
+ESBMC version 2.1.0 64-bit x86_64 linux
+file griesmayer.c: Parsing
+Converting
+Type-checking griesmayer
+Generating GOTO Program
+GOTO program creation time: 0.277s
+GOTO program processing time: 0.005s
+Starting Bounded Model Checking
+Symex completed in: 0.010s
+size of program expression: 126 assignments
+Slicing time: 0.004s
+Generated 1 VCC(s), 1 remaining after simplification
+Encoding remaining VCC(s) using bit-vector arithmetic
+Encoding to solver time: 0.002s
+Solving with solver Boolector
+Runtime decision procedure: 0.051s
+Building error trace
+
+Counterexample:
+
+State 2 file griesmayer.c line 12 function nondet thread 0
+c::nondet at griesmayer.c line 16
+c::controller at griesmayer.c line 37
+<main invocation>
+----------------------------------------------------
+  c::controller::$tmp::return_value_nondet$1=-2012462479 (-2012462479)
+
+State 3 file griesmayer.c line 16 function controller thread 0
+c::controller at griesmayer.c line 37
+<main invocation>
+----------------------------------------------------
+  griesmayer::controller::1::diag=-2012462479 (-2012462479)
+
+State 4  thread 0
+c::controller at griesmayer.c line 37
+<main invocation>
+----------------------------------------------------
+  c::controller::$tmp::tmp$2=FALSE
+
+State 5  thread 0
+c::controller at griesmayer.c line 37
+<main invocation>
+----------------------------------------------------
+  c::controller::$tmp::tmp$4=FALSE
+
+State 6  thread 0
+c::controller at griesmayer.c line 37
+<main invocation>
+----------------------------------------------------
+  c::controller::$tmp::tmp$6=FALSE
+
+State 7 file griesmayer.c line 19 function controller thread 0
+c::controller at griesmayer.c line 37
+<main invocation>
+----------------------------------------------------
+  griesmayer::controller::1::tc=2 (2)
+
+State 8 file griesmayer.c line 20 function controller thread 0
+c::controller at griesmayer.c line 37
+<main invocation>
+----------------------------------------------------
+  griesmayer::controller::1::output=2 (2)
+
+State 9 file griesmayer.c line 21 function controller thread 0
+c::controller at griesmayer.c line 37
+<main invocation>
+----------------------------------------------------
+  c::main::$tmp::return_value_controller$1=2 (2)
+
+State 10  thread 0
+<main invocation>
+----------------------------------------------------
+  c::main::$tmp::tmp$2=TRUE
+
+State 12 file griesmayer.c line 12 function nondet thread 0
+c::nondet at griesmayer.c line 16
+c::controller at griesmayer.c line 37
+<main invocation>
+----------------------------------------------------
+  c::controller::$tmp::return_value_nondet$1=2 (2)
+
+State 13 file griesmayer.c line 16 function controller thread 0
+c::controller at griesmayer.c line 37
+<main invocation>
+----------------------------------------------------
+  griesmayer::controller::1::diag=2 (2)
+
+State 14  thread 0
+c::controller at griesmayer.c line 37
+<main invocation>
+----------------------------------------------------
+  c::controller::$tmp::tmp$2=FALSE
+
+State 15 file griesmayer.c line 17 function controller thread 0
+c::controller at griesmayer.c line 37
+<main invocation>
+----------------------------------------------------
+  griesmayer::controller::1::ta=1 (1)
+
+State 16  thread 0
+c::controller at griesmayer.c line 37
+<main invocation>
+----------------------------------------------------
+  c::controller::$tmp::tmp$4=TRUE
+
+State 18 file griesmayer.c line 12 function nondet thread 0
+c::nondet at griesmayer.c line 18
+c::controller at griesmayer.c line 37
+<main invocation>
+----------------------------------------------------
+  c::controller::$tmp::return_value_nondet$5=-3 (-3)
+
+State 19 file griesmayer.c line 18 function controller thread 0
+c::controller at griesmayer.c line 37
+<main invocation>
+----------------------------------------------------
+  griesmayer::controller::1::tb=-3 (-3)
+
+State 20  thread 0
+c::controller at griesmayer.c line 37
+<main invocation>
+----------------------------------------------------
+  c::controller::$tmp::tmp$6=FALSE
+
+State 21 file griesmayer.c line 19 function controller thread 0
+c::controller at griesmayer.c line 37
+<main invocation>
+----------------------------------------------------
+  griesmayer::controller::1::tc=2 (2)
+
+State 22 file griesmayer.c line 20 function controller thread 0
+c::controller at griesmayer.c line 37
+<main invocation>
+----------------------------------------------------
+  griesmayer::controller::1::output=0 (0)
+
+State 23 file griesmayer.c line 21 function controller thread 0
+c::controller at griesmayer.c line 37
+<main invocation>
+----------------------------------------------------
+  c::main::$tmp::return_value_controller$3=0 (0)
+
+State 24  thread 0
+<main invocation>
+----------------------------------------------------
+  c::main::$tmp::tmp$4=TRUE
+
+State 26 file griesmayer.c line 12 function nondet thread 0
+c::nondet at griesmayer.c line 16
+c::controller at griesmayer.c line 37
+<main invocation>
+----------------------------------------------------
+  c::controller::$tmp::return_value_nondet$1=2 (2)
+
+State 27 file griesmayer.c line 16 function controller thread 0
+c::controller at griesmayer.c line 37
+<main invocation>
+----------------------------------------------------
+  griesmayer::controller::1::diag=2 (2)
+
+State 28  thread 0
+c::controller at griesmayer.c line 37
+<main invocation>
+----------------------------------------------------
+  c::controller::$tmp::tmp$2=FALSE
+
+State 29 file griesmayer.c line 17 function controller thread 0
+c::controller at griesmayer.c line 37
+<main invocation>
+----------------------------------------------------
+  griesmayer::controller::1::ta=4 (4)
+
+State 30  thread 0
+c::controller at griesmayer.c line 37
+<main invocation>
+----------------------------------------------------
+  c::controller::$tmp::tmp$4=TRUE
+
+State 32 file griesmayer.c line 12 function nondet thread 0
+c::nondet at griesmayer.c line 18
+c::controller at griesmayer.c line 37
+<main invocation>
+----------------------------------------------------
+  c::controller::$tmp::return_value_nondet$5=-3 (-3)
+
+State 33 file griesmayer.c line 18 function controller thread 0
+c::controller at griesmayer.c line 37
+<main invocation>
+----------------------------------------------------
+  griesmayer::controller::1::tb=-6 (-6)
+
+State 34  thread 0
+c::controller at griesmayer.c line 37
+<main invocation>
+----------------------------------------------------
+  c::controller::$tmp::tmp$6=FALSE
+
+State 35 file griesmayer.c line 19 function controller thread 0
+c::controller at griesmayer.c line 37
+<main invocation>
+----------------------------------------------------
+  griesmayer::controller::1::tc=2 (2)
+
+State 36 file griesmayer.c line 20 function controller thread 0
+c::controller at griesmayer.c line 37
+<main invocation>
+----------------------------------------------------
+  griesmayer::controller::1::output=0 (0)
+
+State 37 file griesmayer.c line 21 function controller thread 0
+c::controller at griesmayer.c line 37
+<main invocation>
+----------------------------------------------------
+  c::main::$tmp::return_value_controller$5=0 (0)
+
+State 38  thread 0
+<main invocation>
+----------------------------------------------------
+  c::main::$tmp::tmp$6=TRUE
+
+State 40 file griesmayer.c line 12 function nondet thread 0
+c::nondet at griesmayer.c line 16
+c::controller at griesmayer.c line 37
+<main invocation>
+----------------------------------------------------
+  c::controller::$tmp::return_value_nondet$1=2 (2)
+
+State 41 file griesmayer.c line 16 function controller thread 0
+c::controller at griesmayer.c line 37
+<main invocation>
+----------------------------------------------------
+  griesmayer::controller::1::diag=2 (2)
+
+State 42  thread 0
+c::controller at griesmayer.c line 37
+<main invocation>
+----------------------------------------------------
+  c::controller::$tmp::tmp$2=FALSE
+
+State 43 file griesmayer.c line 17 function controller thread 0
+c::controller at griesmayer.c line 37
+<main invocation>
+----------------------------------------------------
+  griesmayer::controller::1::ta=9 (9)
+
+State 44  thread 0
+c::controller at griesmayer.c line 37
+<main invocation>
+----------------------------------------------------
+  c::controller::$tmp::tmp$4=TRUE
+
+State 46 file griesmayer.c line 12 function nondet thread 0
+c::nondet at griesmayer.c line 18
+c::controller at griesmayer.c line 37
+<main invocation>
+----------------------------------------------------
+  c::controller::$tmp::return_value_nondet$5=-3 (-3)
+
+State 47 file griesmayer.c line 18 function controller thread 0
+c::controller at griesmayer.c line 37
+<main invocation>
+----------------------------------------------------
+  griesmayer::controller::1::tb=-9 (-9)
+
+State 48  thread 0
+c::controller at griesmayer.c line 37
+<main invocation>
+----------------------------------------------------
+  c::controller::$tmp::tmp$6=FALSE
+
+State 49 file griesmayer.c line 19 function controller thread 0
+c::controller at griesmayer.c line 37
+<main invocation>
+----------------------------------------------------
+  griesmayer::controller::1::tc=2 (2)
+
+State 50 file griesmayer.c line 20 function controller thread 0
+c::controller at griesmayer.c line 37
+<main invocation>
+----------------------------------------------------
+  griesmayer::controller::1::output=2 (2)
+
+State 51 file griesmayer.c line 21 function controller thread 0
+c::controller at griesmayer.c line 37
+<main invocation>
+----------------------------------------------------
+  c::main::$tmp::return_value_controller$7=2 (2)
+
+State 53 file griesmayer.c line 38 function main thread 0
+<main invocation>
+----------------------------------------------------
+Violated property:
+  file griesmayer.c line 38 function main
+  assertion 
+  FALSE
+
+VERIFICATION FAILED
+\end{lstlisting}
+
+\chapter{Contraexemplo para o código da Figura~\ref{figure:corrected-sequential-code}}\label{appendix:counterexample-3}
+
+\begin{lstlisting}[breaklines=true]
+ESBMC version 2.1.0 64-bit x86_64 linux
+file model.c: Parsing
+Converting
+Type-checking model
+Generating GOTO Program
+GOTO program creation time: 0.235s
+GOTO program processing time: 0.004s
+Starting Bounded Model Checking
+Symex completed in: 0.003s
+size of program expression: 31 assignments
+Slicing time: 0.000s
+Generated 0 VCC(s), 0 remaining after simplification
+VERIFICATION SUCCESSFUL
+BMC program time: 0.003s
+\end{lstlisting}
+
+\chapter{Contraexemplo simplificado para o código da Figura~\ref{figure:example-1}}\label{appendix:counterexample-4}
+
+\begin{lstlisting}[breaklines=true]
+Counterexample:
+
+State 1 file /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 32 thread 0
+
+State 2 file /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 27 thread 0
+
+State 3 file /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 28 thread 0
+
+State 4 file /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 30 thread 0
+
+State 5 file /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 31 thread 0
+
+State 6 file concurrent.c line 6 thread 0
+
+State 7 file concurrent.c line 5 thread 0
+
+State 8 file concurrent.c line 6 thread 0
+
+State 9 file concurrent.c line 5 thread 0
+
+State 10 file /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 26 thread 0
+
+State 11 file <built-in> line 12 thread 0
+
+State 12 file <built-in> line 13 thread 0
+
+State 13 file <built-in> line 14 thread 0
+
+State 14 file <built-in> line 15 thread 0
+
+State 15 file <built-in> line 57 thread 0
+
+State 16 file <built-in> line 56 thread 0
+
+State 17 file <built-in> line 58 thread 0
+
+State 18 file /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 40 function pthread_start_main_hook thread 0
+c::pthread_start_main_hook at  line 
+
+State 19 file /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 41 function pthread_start_main_hook thread 0
+c::pthread_start_main_hook at  line 
+
+State 20 file concurrent.c line 32 function main thread 0
+<main invocation>
+
+State 21 file concurrent.c line 33 function main thread 0
+<main invocation>
+
+State 26 file /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 86 function pthread_create thread 0
+c::pthread_create at concurrent.c line 34
+<main invocation>
+
+State 27 file /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 92 function pthread_create thread 0
+c::pthread_create at concurrent.c line 34
+<main invocation>
+
+State 28 file /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 92 function pthread_create thread 0
+c::pthread_create at concurrent.c line 34
+<main invocation>
+
+State 29 file /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 93 function pthread_create thread 0
+c::pthread_create at concurrent.c line 34
+<main invocation>
+
+State 30 file /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 94 function pthread_create thread 0
+c::pthread_create at concurrent.c line 34
+<main invocation>
+
+State 31 file /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 95 function pthread_create thread 0
+c::pthread_create at concurrent.c line 34
+<main invocation>
+
+State 32 file /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 96 function pthread_create thread 0
+c::pthread_create at concurrent.c line 34
+<main invocation>
+
+State 33 file /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 101 function pthread_create thread 0
+c::pthread_create at concurrent.c line 34
+<main invocation>
+
+State 39 file /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 86 function pthread_create thread 0
+c::pthread_create at concurrent.c line 35
+<main invocation>
+
+State 40 file /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 92 function pthread_create thread 0
+c::pthread_create at concurrent.c line 35
+<main invocation>
+
+State 41 file /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 92 function pthread_create thread 0
+c::pthread_create at concurrent.c line 35
+<main invocation>
+
+State 42 file /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 93 function pthread_create thread 0
+c::pthread_create at concurrent.c line 35
+<main invocation>
+
+State 43 file /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 94 function pthread_create thread 0
+c::pthread_create at concurrent.c line 35
+<main invocation>
+
+State 44 file /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 95 function pthread_create thread 0
+c::pthread_create at concurrent.c line 35
+<main invocation>
+
+State 45 file /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 96 function pthread_create thread 0
+c::pthread_create at concurrent.c line 35
+<main invocation>
+
+State 46 file /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 101 function pthread_create thread 0
+c::pthread_create at concurrent.c line 35
+<main invocation>
+
+State 50 file /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 135 function pthread_join_switch thread 0
+c::pthread_join_switch at concurrent.c line 36
+<main invocation>
+
+State 51 file /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 137 function pthread_join_switch thread 0
+c::pthread_join_switch at concurrent.c line 36
+<main invocation>
+
+State 57 file /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 236 function pthread_mutex_lock_check thread 1
+c::pthread_mutex_lock_check at concurrent.c line 9
+c::threadA at /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 67
+
+State 58 file /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 239 function pthread_mutex_lock_check thread 1
+c::pthread_mutex_lock_check at concurrent.c line 9
+c::threadA at /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 67
+
+State 59 file /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 242 function pthread_mutex_lock_check thread 1
+c::pthread_mutex_lock_check at concurrent.c line 9
+c::threadA at /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 67
+
+State 60 file /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 242 function pthread_mutex_lock_check thread 1
+c::pthread_mutex_lock_check at concurrent.c line 9
+c::threadA at /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 67
+
+State 61 file /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 242 function pthread_mutex_lock_check thread 1
+c::pthread_mutex_lock_check at concurrent.c line 9
+c::threadA at /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 67
+
+State 62 file /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 242 function pthread_mutex_lock_check thread 1
+c::pthread_mutex_lock_check at concurrent.c line 9
+c::threadA at /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 67
+
+State 65 file concurrent.c line 10 function threadA thread 1
+c::threadA at /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 67
+
+State 69 file /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 236 function pthread_mutex_lock_check thread 1
+c::pthread_mutex_lock_check at concurrent.c line 11
+c::threadA at /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 67
+
+State 70 file /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 239 function pthread_mutex_lock_check thread 1
+c::pthread_mutex_lock_check at concurrent.c line 11
+c::threadA at /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 67
+
+State 71 file /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 242 function pthread_mutex_lock_check thread 1
+c::pthread_mutex_lock_check at concurrent.c line 11
+c::threadA at /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 67
+
+State 72 file /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 242 function pthread_mutex_lock_check thread 1
+c::pthread_mutex_lock_check at concurrent.c line 11
+c::threadA at /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 67
+
+State 73 file /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 242 function pthread_mutex_lock_check thread 1
+c::pthread_mutex_lock_check at concurrent.c line 11
+c::threadA at /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 67
+
+State 74 file /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 242 function pthread_mutex_lock_check thread 1
+c::pthread_mutex_lock_check at concurrent.c line 11
+c::threadA at /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 67
+
+State 78 file /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 266 function pthread_mutex_unlock_check thread 1
+c::pthread_mutex_unlock_check at concurrent.c line 12
+c::threadA at /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 67
+
+State 79 file /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 266 function pthread_mutex_unlock_check thread 1
+c::pthread_mutex_unlock_check at concurrent.c line 12
+c::threadA at /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 67
+
+State 80 file /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 266 function pthread_mutex_unlock_check thread 1
+c::pthread_mutex_unlock_check at concurrent.c line 12
+c::threadA at /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 67
+
+State 81 file /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 266 function pthread_mutex_unlock_check thread 1
+c::pthread_mutex_unlock_check at concurrent.c line 12
+c::threadA at /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 67
+
+State 87 file /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 236 function pthread_mutex_lock_check thread 2
+c::pthread_mutex_lock_check at concurrent.c line 20
+c::threadB at /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 67
+
+State 88 file /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 239 function pthread_mutex_lock_check thread 2
+c::pthread_mutex_lock_check at concurrent.c line 20
+c::threadB at /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 67
+
+State 89 file /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 242 function pthread_mutex_lock_check thread 2
+c::pthread_mutex_lock_check at concurrent.c line 20
+c::threadB at /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 67
+
+State 90 file /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 242 function pthread_mutex_lock_check thread 2
+c::pthread_mutex_lock_check at concurrent.c line 20
+c::threadB at /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 67
+
+State 91 file /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 242 function pthread_mutex_lock_check thread 2
+c::pthread_mutex_lock_check at concurrent.c line 20
+c::threadB at /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 67
+
+State 92 file /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 242 function pthread_mutex_lock_check thread 2
+c::pthread_mutex_lock_check at concurrent.c line 20
+c::threadB at /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 67
+
+State 95 file concurrent.c line 21 function threadB thread 2
+c::threadB at /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 67
+
+State 99 file /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 236 function pthread_mutex_lock_check thread 2
+c::pthread_mutex_lock_check at concurrent.c line 22
+c::threadB at /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 67
+
+State 100 file /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 239 function pthread_mutex_lock_check thread 2
+c::pthread_mutex_lock_check at concurrent.c line 22
+c::threadB at /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 67
+
+State 101 file /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 245 function pthread_mutex_lock_check thread 2
+c::pthread_mutex_lock_check at concurrent.c line 22
+c::threadB at /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 67
+
+State 104 file /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 236 function pthread_mutex_lock_check thread 1
+c::pthread_mutex_lock_check at concurrent.c line 13
+c::threadA at /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 67
+
+State 105 file /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 239 function pthread_mutex_lock_check thread 1
+c::pthread_mutex_lock_check at concurrent.c line 13
+c::threadA at /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 67
+
+State 106 file /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 245 function pthread_mutex_lock_check thread 1
+c::pthread_mutex_lock_check at concurrent.c line 13
+c::threadA at /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 67
+
+State 107 file /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 247 function pthread_mutex_lock_check thread 1
+c::pthread_mutex_lock_check at concurrent.c line 13
+c::threadA at /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 67
+
+
+Violated property:
+  file /tmp/esbmc_release_n70Swf/buildrelease/ansi-c/library/pthread_lib.c line 247 function pthread_mutex_lock_check
+  Deadlocked state in pthread_mutex_lock
+  (unsigned int)blocked_threads_count != num_threads_running
+
+VERIFICATION FAILED
+\end{lstlisting}
+
+\chapter{Contraexemplo simplificado para o código da Figura~\ref{figure:example-2}}\label{appendix:counterexample-5}
+
+\begin{lstlisting}[breaklines=true]
+ESBMC version 2.1.0 64-bit x86_64 linux
+...
+Counterexample:
+
+State 1 file main.c line 4 thread 0
+----------------------------------------------------
+  x = 0 (00000000000000000000000000000000)
+
+State 2 file main.c line 4 thread 0
+----------------------------------------------------
+  y = 0 (00000000000000000000000000000000)
+
+State 4 file pthread_lib.c line 71 function pthread_trampoline thread 1
+----------------------------------------------------
+  threadid = 1 (00000000000000000000000000000001)
+
+State 5 file pthread_lib.c line 72 function pthread_trampoline thread 1
+----------------------------------------------------
+  startdata = { .func=&sum_x, .start_arg=NULL }
+
+State 6 file main.c line 7 function sum_x thread 1
+sum_x at pthread_lib.c line 75
+----------------------------------------------------
+  x = 1 (00000000000000000000000000000001)
+
+State 7 file pthread_lib.c line 75 function pthread_trampoline thread 1
+----------------------------------------------------
+  exit_val = NULL
+
+State 8 file pthread_lib.c line 79 function pthread_trampoline thread 1
+----------------------------------------------------
+  __ESBMC_pthread_end_values[1] = NULL
+
+State 9 file pthread_lib.c line 80 function pthread_trampoline thread 1
+----------------------------------------------------
+  __ESBMC_pthread_thread_ended[1] = TRUE
+
+State 11 file pthread_lib.c line 71 function pthread_trampoline thread 2
+----------------------------------------------------
+  threadid = 2 (00000000000000000000000000000010)
+
+State 12 file pthread_lib.c line 72 function pthread_trampoline thread 2
+----------------------------------------------------
+  startdata = { .func=&sum_y, .start_arg=NULL }
+
+State 13 file main.c line 12 function sum_y thread 2
+sum_y at pthread_lib.c line 75
+----------------------------------------------------
+  y = -1 (11111111111111111111111111111111)
+
+State 15 file pthread_lib.c line 75 function pthread_trampoline thread 2
+----------------------------------------------------
+  exit_val = NULL
+
+State 16 file pthread_lib.c line 79 function pthread_trampoline thread 2
+----------------------------------------------------
+  __ESBMC_pthread_end_values[2] = NULL
+
+State 17 file pthread_lib.c line 80 function pthread_trampoline thread 2
+----------------------------------------------------
+  __ESBMC_pthread_thread_ended[2] = TRUE
+
+State 21 file main.c line 22 function main thread 0
+main
+----------------------------------------------------
+Violated property:
+  file main.c line 22 function main
+  assertion
+  (_Bool)(x > 0 && y > 0)
+
+VERIFICATION FAILED
+\end{lstlisting}

@@ -1,10 +1,88 @@
 \chapter{Fundamentação Teórica}\label{chap_background}
 
-Neste capítulo, são apresentados os conceitos básicos utilizados durante o desenvolvimento desta dissertação. Primeiramente serão apresentados alguns conceitos importante sobre a verificação de modelos. Em seguida, o uso de técnicas de verificação de modelos para auxiliar no processo de localização de falhas será discutido, como também um método proposto para localizar falhas em programas sequenciais será demonstrado. Por fim, um resumo do capítulo é dado, para sintetizar o conteúdo do capítulo.
+Neste capítulo, são apresentados os conceitos básicos utilizados durante o desenvolvimento desta dissertação. Primeiramente serão apresentados alguns conceitos importantes sobre verificação formal com o objetivo de chegar em invariantes. Em seguida, sobre representações de sistemas dinâmicos lineares (contínuos e discretos), discretização, e análise quantitativa da resposta ao degrau de sistemas dinâmicos. Também falaremos a respeito de técnicas de projeto de controle para sistemas discretos, em particular, cada técnica usada para comparação com a estratégia utilizada nesse trabalho: alocação de polos, LQR e CEGIS. Além disso, uma breve introdução a implementação de controladores digitais e efeitos de palavra finita. Por fim, um resumo do capítulo é dado, para sintetizar o conteúdo do mesmo.
 
-\section{Verificação de Modelos}\label{sec:model-checking}
+\section{Verificação Formal}\label{sec:formal-verification}
 
-\subsection{Teoria dos Módulos da Satisfiabilidade (SMT)}\label{sec:smt}
+A verificação formal é o processo de verificar se um projeto satisfaz alguns requisitos ou até mesmo propriedades. Normalmente, preocupa-se com a verificação formal de projetos que podem ser especificados hierarquicamente; isso também é consistente com a forma como um ser humano faria para projetar. Comumente, para verificar formalmente um projeto, ele deve primeiro ser convertido em um formato `verificável' mais simples. O projeto é especificado como um conjunto de sistemas de interação; cada um tem um número finito de configurações, chamado estados. Estados e transição entre estados constituem FSMs (\textit{Formal Specification Methods}). Todo o sistema é um FSM, que pode ser obtido compondo os FSMs associados a cada componente. Portanto, o primeiro passo na verificação consiste em obter uma descrição completa do sistema FSM. Dado um estado presente (ou configuração atual), o próximo estado (ou configuração sucessiva) de um FSM pode ser escrito como uma função de seu estado atual e entradas (função de transição ou relação de transição).
+
+Nota-se que todo este \textit{framework} é uma das funções discretas. Funções discretas podem ser representadas convenientemente por BDDs (diagrama de decisão binária; uma estrutura de dados que representa funções booleanas (de 2 valores)) e seus MDDs de extensão (diagrama de decisão de múltiplos valores; uma estrutura de dados que representa funções discretas de valor finito). Usa-se BDDs e MDDs para representar todas as quantidades necessárias neste espaço discreto (mais especificamente as funções de transição, as entradas, as saídas e os estados dos FSMs). Para que os BDDs e MDDs sejam representações eficientes de funções discretas, uma boa ordenação de variáveis de entrada (entradas reais, saídas, estado) das funções deve ser calculada. Em geral, os BDDs operam em conjuntos de pontos em vez de pontos individuais; isso é chamado de manipulação simbólica.
+
+Os dois métodos mais populares para verificação formal automática são a contenção de linguagem e a verificação de modelo.
+
+\subsection{Verificação de Modelo de Lógica Temporal}\label{sec:mctl}
+
+Um sistema de estados finitos pode ser representado por um grafo de transição de estado rotulado, onde rótulos de um estado são os valores de proposições atômicas naquele estado. Propriedades sobre o sistema são expressas como fórmulas em lógica temporal das quais o sistema de transição de estados deve ser um `modelo'. A verificação de modelos consiste em percorrer o grafo do sistema de transição e verificar se satisfaz a fórmula que representa a propriedade, isto é, o sistema é um modelo da propriedade.
+
+\subsubsection{Lógica da Árvore de Computação}\label{subsec:ctl}
+
+A lógica temporal expressa a ordenação de eventos no tempo por meio de operadores que especificam propriedades como ``$p$ eventualmente se manterá''. Existem várias versões da lógica temporal; uma é a lógica da árvore computacional (CTL). Árvores de computação são derivadas de grafos de transição de estado. A estrutura do grafo é desenrolada em uma árvore infinita com raiz no estado inicial. A Figura~\ref{figure:tree} mostra um exemplo de desenrolamento de um grafo em uma árvore. Os caminhos nesta árvore representam todos os cálculos possíveis do sistema que está sendo modelado. Fórmulas em CTL referem-se à árvore de cálculo derivada do modelo. O CTL é classificado como uma lógica de tempo de ramificação porque possui operadores que descrevem a estrutura de ramificação dessa árvore.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[scale=0.35]{figures/Tree}
+  \caption{Desenrolamento do grafo de transição de estado.}
+  \label{figure:tree}
+\end{figure}
+
+Fórmulas em CTL são construídas a partir de proposições atômicas (onde cada proposição corresponde a uma variável no modelo), conectivos booleanos padrão de lógica proposicional (por exemplo, e ($\lor$), ou ($\wedge$), ou-exclusivo($\veebar$), negação ($\lnot$)) e operadores temporais. Cada operador temporal consiste em duas partes: um quantificador de caminho (\textbf{A} ou \textbf{E}) seguido por uma modalidade temporal (\textbf{F}, \textbf{G}, \textbf{X}, \textbf{U}). Todos os operadores temporais são interpretados em relação a um estado atual implícito. Existem, em geral, muitos caminhos de execução (sequências de transições de estado) do sistema, começando no estado atual. O quantificador de caminho indica se a modalidade define uma propriedade que deve ser verdadeira para todos os caminhos possíveis (denotada pelo quantificador de caminho universal \textbf{A}) ou se a propriedade precisa apenas de algum caminho (denotado pelo quantificador de caminho existencial \textbf{E}). As modalidades temporais descrevem a ordenação de eventos no tempo ao longo de um caminho de execução e têm o seguinte significado intuitivo:
+
+\begin{enumerate}
+\item $\textbf{F}\phi$ (lê-se ``$\phi$ vale no futuro'') é verdadeiro de um caminho se existir um estado no caminho onde a fórmula $\phi$ é verdadeira;
+\item $\textbf{G}\phi$ (lê-se ``$\phi$ vale globalmente'') é verdadeiro de um caminho se $\phi$ for verdadeiro em todos os estados no caminho;
+\item $\textbf{X}\phi$ (lê-se ``$\phi$ vale no próximo estado'') é verdadeiro de um caminho se $\phi$ é verdadeiro no estado alcançado imediatamente após o estado atual no caminho;
+\item $\phi\textbf{U}\psi$ (lê-se ``$\phi$ vale enquanto $\psi$ vale'', chamado ``forte até'') é verdadeiro de um caminho se $\psi$ for verdadeiro em algum estado no caminho, e $\phi$ é válido em todos os estados anteriores.
+\end{enumerate}
+
+Cada fórmula da lógica é verdadeira ou falsa em um determinado estado; sua verdade é avaliada a partir da verdade de suas subfórmulas de forma recursiva, até chegar a proposições atômicas que são verdadeiras ou falsas em um dado estado. Uma fórmula é satisfeita por um sistema se for verdadeira para todos os estados iniciais do sistema. Se a propriedade não for válida, o verificador de modelo produzirá um contraexemplo, que é um caminho de execução que testemunha a falha. Um algoritmo eficiente para verificação automática de modelos foi descrito por Clarke \textit{et al.}~\cite{Clarke:1995}. A tabela a seguir mostra exemplos de avaliações de fórmulas na árvore de computação da Figura~\ref{figure:tree}:
+
+\begin{table}[htb]
+	\renewcommand{\arraystretch}{1.0}
+	\caption{Exemplos de avaliações de fórmulas na arvore de computação mostrada.}
+	\label{table:ctl}
+	\centering
+	\begin{tabular}{c|c}
+		\hline \bfseries Fórmula & \bfseries T/F\\
+		\hline $\textbf{EG} (RED)$ & $True$\\
+		\hline $\textbf{E} (RED \cup GREEN)$ & $True$\\
+		\hline $\textbf{AF}(GREEN)$ & $False$\\
+		\hline
+	\end{tabular}
+\end{table}
+
+\subsubsection{Contenção de Linguagem}\label{subsec:lc}
+
+Existem propriedades de interesse prático que não podem ser descritas no CTL. Um exemplo é a propriedade ``quase sempre'': uma condição, $\textbf{q}$, sempre se mantém após um número finito de transições (note que as fórmulas $\textbf{FG}$ $\textbf{q}$ e $\textbf{AFG}$ $\textbf{q}$ expressariam isso, mas estas não são fórmulas legais de CTL). Esta propriedade se parece muito com $\textbf{AF}$ $\textbf{AG}$ $\textbf{q}$, mas não é o mesmo. Pode-se exibir um sistema de transição onde $\textbf{AF}$ $\textbf{G}$ $\textbf{q}$ é verdadeiro, enquanto $\textbf{AF}$ $\textbf{AG}$ $\textbf{q}$ é falso.
+ 
+Uma solução seria usar um tipo mais expressivo de lógica temporal (por exemplo, a propriedade anterior poderia ser expressa em Propositional Linear Temporal Logic (PLTL) ou CTL). Porém haveria desvantagens, como a maior complexidade de algoritmos para verificação de modelos. Uma alternativa é usar outro paradigma de verificação, chamado contenção de linguagem, baseado na teoria dos $\omega$-autômatos. Por exemplo, é fácil expressar a propriedade ``quase sempre'' anterior usando um autômato.
+
+Para alcançar a verificação de contenção de linguagem, representamos a composição do sistema dado com um modelo que representa a negação da propriedade e verificamos o vazio da linguagem. A linguagem do sistema composto está vazia se e somente se o sistema satisfizer a propriedade $\textbf{T}$.
+ 
+O vazio de linguagem é usado não apenas para verificar as propriedades que não podem ser expressas em \textit{Fair} CTL, mas também para verificar se a abstração de um sistema ainda contém o sistema original. Em ambos os casos, é preciso complementar um $\omega$-autômato ($\textbf{T}$), e isso é difícil de fazer se o autômato não for determinístico (como é geralmente o caso de uma abstração). O fato de que a complementação de uma propriedade determinista é fácil, enquanto a complementação de uma propriedade não-determinística pode ser difícil, é um problema-chave com a contenção da linguagem. Isto levou a muita pesquisa em diferentes classes de $\omega$-autômatos com diferentes expressividade e dificuldade de complementação.
+
+\section{Sistemas Dinâmicos Lineares}\label{sec:lds}
+
+\subsection{Contínuos}\label{subsec:c}
+
+\subsection{Discretos}\label{subsec:d}
+
+\subsection{Processo de Discretização}\label{subsec:pd}
+
+\subsection{Análise Quantitativa da Resposta ao Degrau}\label{subsec:aqrd}
+
+\section{Técnicas de Projeto de Controle para Sistemas Discretos}\label{sec:tpcsd}
+
+\subsection{Alocação de Polos}\label{subsec:ap}
+
+\subsection{Regulador Quadrático Linear}\label{subsec:rql}
+
+\subsection{Síntese Indutiva Guidada por Contra Exemplos - CEGIS}\label{subsec:cegis}
+
+\section{Implementação de Controladores Digitais}\label{subsec:icd}
+
+\subsection{Efeitos de Palavra Finita}\label{subsec:fwl}
+
+
 
 SMT (\textit{Satisfiability Modulo Theories}) verifica a satisfatibilidade de fórmulas de primeira ordem a partir de uma ou mais teorias de fundamentação, que são compostas por um conjunto de sentenças. De modo formal, $\sigma$ -- \textit{theory} é uma coleção de sentenças sobre a assinatura $\sigma$. Dada uma teoria $T$, diz-se que $\varphi$ é um módulo satisfatível de $T$ se $T \subset {\phi}$. Em outra definição, pode-se dizer que uma teoria $T$ é definida como uma classe de estruturas e $\varphi$ é um módulo satisfatível se existe uma estrutura $M$ em $T$ que satisfaz $\varphi$ (\textit{i.e.}, $M \models \varphi$)~\cite{Moura:2009}.
 

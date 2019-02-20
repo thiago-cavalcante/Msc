@@ -36,7 +36,17 @@
 \usepackage{mdframed}
 \usepackage[T1]{fontenc}
 \usepackage{tabu}
-\usepackage{systeme}
+\usepackage{systeme} 
+\usepackage{mathtools}
+
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+
+\newcommand{\R}{\mathbb R}
+
+\newcommand{\commentib}[1]{{\color{blue} [IB: #1]}}
+\newcommand{\commentlc}[1]{{\color{red} [LC: #1]}}
+\newcommand{\commenttc}[1]{{\color{green} [TC: #1]}}
+\newcommand{\commentef}[1]{{\color{brown} [EF: #1]}}
 
 \input{format/confpage.tex}
 

@@ -4,19 +4,19 @@ Neste capítulo, são apresentados os conceitos básicos utilizados durante o desen
 
 \section{Verificação Formal}\label{sec:formal-verification}
 
-A verificação formal é o processo de verificar se um projeto satisfaz alguns requisitos ou até mesmo propriedades. Normalmente, preocupa-se com a verificação formal de projetos que podem ser especificados hierarquicamente; isso também é consistente com a forma como um ser humano faria para projetar. Comumente, para verificar formalmente um projeto, ele deve primeiro ser convertido em um formato `verificável' mais simples. O projeto é especificado como um conjunto de sistemas de interação; cada um tem um número finito de configurações, chamado estados. Estados e transição entre estados constituem FSMs (\textit{Formal Specification Methods}). Todo o sistema é um FSM, que pode ser obtido compondo os FSMs associados a cada componente. Portanto, o primeiro passo na verificação consiste em obter uma descrição completa do sistema FSM. Dado um estado presente (ou configuração atual), o próximo estado (ou configuração sucessiva) de um FSM pode ser escrito como uma função de seu estado atual e entradas (função de transição ou relação de transição).
+A verificação formal é o processo de verificar se um projeto satisfaz alguns requisitos ou até mesmo propriedades~\cite{jhala2009software}. Normalmente, preocupa-se com a verificação formal de projetos que podem ser especificados hierarquicamente; isso também é consistente com a forma como um ser humano faria para projetar. Comumente, para verificar formalmente um projeto, ele deve primeiro ser convertido em um formato `verificável' mais simples. O projeto é especificado como um conjunto de sistemas de interação; cada um tem um número finito de configurações, chamado estados. Estados e transição entre estados constituem máquinas de estado finito(FSMs, do inglês \textit{finite state machines})~\cite{dorofeeva2010fsm}. Todo o sistema é um FSM, que pode ser obtido compondo os FSMs associados a cada componente. Portanto, o primeiro passo na verificação consiste em obter uma descrição completa do sistema FSM. Dado um estado atual (ou configuração atual), o próximo estado (ou configuração sucessiva) de um FSM pode ser escrito como uma função de seu estado atual e entradas (função de transição ou relação de transição).
 
-Nota-se que todo este \textit{framework} é uma das funções discretas. Funções discretas podem ser representadas convenientemente por BDDs (diagrama de decisão binária; uma estrutura de dados que representa funções booleanas (de 2 valores)) e seus MDDs de extensão (diagrama de decisão de múltiplos valores; uma estrutura de dados que representa funções discretas de valor finito). Usa-se BDDs e MDDs para representar todas as quantidades necessárias neste espaço discreto (mais especificamente as funções de transição, as entradas, as saídas e os estados dos FSMs). Para que os BDDs e MDDs sejam representações eficientes de funções discretas, uma boa ordenação de variáveis de entrada (entradas reais, saídas, estado) das funções deve ser calculada. Em geral, os BDDs operam em conjuntos de pontos em vez de pontos individuais; isso é chamado de manipulação simbólica.
+Nota-se que todo este \textit{framework} é uma das funções discretas. Funções discretas podem ser representadas convenientemente por BDDs (diagrama de decisão binária) - uma estrutura de dados que representa funções booleanas (de 2 valores) - e seus MDDs de extensão (diagrama de decisão de múltiplos valores) - uma estrutura de dados que representa funções discretas de valor finito~\cite{cheng2010mdd}. Usa-se BDDs e MDDs para representar todas as quantidades necessárias neste espaço discreto (mais especificamente as funções de transição, as entradas, as saídas e os estados dos FSMs). Para que os BDDs e MDDs sejam representações eficientes de funções discretas, uma boa ordenação de variáveis de entrada (entradas reais, saídas, estado) das funções deve ser calculada. Em geral, os BDDs operam em conjuntos de pontos em vez de pontos individuais; isso é chamado de manipulação simbólica.
 
-Os dois métodos mais populares para verificação formal automática são a contenção de linguagem e a verificação de modelo.
+Os dois métodos mais populares para verificação formal automática são a contenção de linguagem~\cite{balarin1993iterative} e a verificação de modelo~\cite{jhala2009software}.
 
 \subsection{Verificação de Modelo de Lógica Temporal}\label{sec:mctl}
 
-Um sistema de estados finitos pode ser representado por um grafo de transição de estado rotulado, onde rótulos de um estado são os valores de proposições atômicas naquele estado. Propriedades sobre o sistema são expressas como fórmulas em lógica temporal das quais o sistema de transição de estados deve ser um `modelo'. A verificação de modelos consiste em percorrer o grafo do sistema de transição e verificar se satisfaz a fórmula que representa a propriedade, isto é, o sistema é um modelo da propriedade.
+Um sistema de estados finitos pode ser representado por um grafo de transição de estado rotulado, onde rótulos de um estado são os valores de proposições atômicas naquele estado. Propriedades sobre o sistema são expressas como fórmulas em lógica temporal das quais o sistema de transição de estados deve ser um `modelo'. A verificação de modelos consiste em percorrer o grafo do sistema de transição e verificar se satisfaz a fórmula que representa a propriedade, isto é, o sistema é um modelo da propriedade~\cite{villa1996vis}.
 
 \subsubsection{Lógica da Árvore de Computação}\label{subsec:ctl}
 
-A lógica temporal expressa a ordenação de eventos no tempo por meio de operadores que especificam propriedades como ``$p$ eventualmente se manterá''. Existem várias versões da lógica temporal; uma é a lógica da árvore computacional (CTL). Árvores de computação são derivadas de grafos de transição de estado. A estrutura do grafo é desenrolada em uma árvore infinita com raiz no estado inicial. A Figura~\ref{figure:tree} mostra um exemplo de desenrolamento de um grafo em uma árvore. Os caminhos nesta árvore representam todos os cálculos possíveis do sistema que está sendo modelado. Fórmulas em CTL referem-se à árvore de cálculo derivada do modelo. O CTL é classificado como uma lógica de tempo de ramificação porque possui operadores que descrevem a estrutura de ramificação dessa árvore.
+A lógica temporal expressa a ordenação de eventos no tempo por meio de operadores que especificam propriedades como ``$p$ eventualmente se manterá''. Existem várias versões da lógica temporal; uma é a lógica da árvore computacional (CTL)~\cite{del1999visual}. Árvores de computação são derivadas de grafos de transição de estado. A estrutura do grafo é desenrolada em uma árvore infinita com raiz no estado inicial. A Figura~\ref{figure:tree} mostra um exemplo de desenrolamento de um grafo em uma árvore. Os caminhos nesta árvore representam todos os cálculos possíveis do sistema que está sendo modelado. Fórmulas em CTL referem-se à árvore de cálculo derivada do modelo. O CTL é classificado como uma lógica de tempo de ramificação porque possui operadores que descrevem a estrutura de ramificação dessa árvore.
 
 \begin{figure}[ht]
   \centering
@@ -54,23 +54,23 @@ Cada fórmula da lógica é verdadeira ou falsa em um determinado estado; sua verda
 
 Existem propriedades de interesse prático que não podem ser descritas no CTL. Um exemplo é a propriedade ``quase sempre'': uma condição, ${\displaystyle \mathbf{q}}$, sempre se mantém após um número finito de transições (note que as fórmulas ${\displaystyle \mathbf{F}}{\displaystyle \mathbf{G}}$ ${\displaystyle \mathbf{q}}$ e ${\displaystyle \mathbf{A}}{\displaystyle \mathbf{F}}{\displaystyle \mathbf{G}}$ ${\displaystyle \mathbf{q}}$ expressariam isso, mas estas não são fórmulas legais de CTL). Esta propriedade se parece muito com ${\displaystyle \mathbf{A}}{\displaystyle \mathbf{F}}$ ${\displaystyle \mathbf{A}}{\displaystyle \mathbf{G}}$ ${\displaystyle \mathbf{q}}$, mas não é o mesmo. Pode-se exibir um sistema de transição onde ${\displaystyle \mathbf{A}}{\displaystyle \mathbf{F}}$ ${\displaystyle \mathbf{G}}$ ${\displaystyle \mathbf{q}}$ é verdadeiro, enquanto ${\displaystyle \mathbf{A}}{\displaystyle \mathbf{F}}$ ${\displaystyle \mathbf{A}}{\displaystyle \mathbf{G}}$ ${\displaystyle \mathbf{q}}$ é falso.
  
-Uma solução seria usar um tipo mais expressivo de lógica temporal (por exemplo, a propriedade anterior poderia ser expressa em Propositional Linear Temporal Logic (PLTL) ou CTL). Porém haveria desvantagens, como a maior complexidade de algoritmos para verificação de modelos. Uma alternativa é usar outro paradigma de verificação, chamado contenção de linguagem, baseado na teoria dos $\omega$-autômatos. Por exemplo, é fácil expressar a propriedade ``quase sempre'' anterior usando um autômato.
+Uma solução seria usar um tipo mais expressivo de lógica temporal (por exemplo, a propriedade anterior poderia ser expressa em Propositional Linear Temporal Logic (PLTL)\cite{sistla1985complexity} ou CTL). Porém haveria desvantagens, como a maior complexidade de algoritmos para verificação de modelos. Uma alternativa é usar outro paradigma de verificação, chamado contenção de linguagem, baseado na teoria dos $\omega$-autômatos. Por exemplo, é fácil expressar a propriedade ``quase sempre'' anterior usando um autômato~\cite{villa1996vis}.
 
 Para alcançar a verificação de contenção de linguagem, representamos a composição do sistema dado com um modelo que representa a negação da propriedade e verificamos o vazio da linguagem. A linguagem do sistema composto está vazia se e somente se o sistema satisfizer a propriedade ${\displaystyle \mathbf{T}}$.
  
-O vazio de linguagem é usado não apenas para verificar as propriedades que não podem ser expressas em \textit{Fair} CTL, mas também para verificar se a abstração de um sistema ainda contém o sistema original. Em ambos os casos, é preciso complementar um $\omega$-autômato (${\displaystyle \mathbf{T}}$), e isso é difícil de fazer se o autômato não for determinístico (como é geralmente o caso de uma abstração). O fato de que a complementação de uma propriedade determinista é fácil, enquanto a complementação de uma propriedade não-determinística pode ser difícil, é um problema-chave com a contenção da linguagem. Isto levou a muita pesquisa em diferentes classes de $\omega$-autômatos com diferentes expressividade e dificuldade de complementação.
+O vazio de linguagem é usado não apenas para verificar as propriedades que não podem ser expressas em \textit{Fair} CTL~\cite{hojati1993bdd}, mas também para verificar se a abstração de um sistema ainda contém o sistema original. Em ambos os casos, é preciso complementar um $\omega$-autômato (${\displaystyle \mathbf{T}}$), e isso é difícil de fazer se o autômato não for determinístico (como é geralmente o caso de uma abstração). O fato de que a complementação de uma propriedade determinista é fácil, enquanto a complementação de uma propriedade não-determinística pode ser difícil, é um problema-chave com a contenção da linguagem. Isto levou a muita pesquisa em diferentes classes de $\omega$-autômatos com diferentes expressividade e dificuldade de complementação.
 
 \section{Sistemas Dinâmicos Lineares}\label{sec:lds}
 
-Sistemas dinâmicos lineares são sistemas dinâmicos~\cite{katok1995introduction} cujas funções de avaliação são lineares. Embora os sistemas dinâmicos em geral não tenham soluções de forma fechada, os sistemas dinâmicos lineares podem ser resolvidos com exatidão e possuem um rico conjunto de propriedades matemáticas. Sistemas lineares também podem ser usados para entender o comportamento qualitativo de sistemas dinâmicos gerais, calculando os pontos de equilíbrio do sistema e aproximando-o como um sistema linear em torno de cada um desses pontos.
+Sistemas dinâmicos lineares são sistemas dinâmicos~\cite{katok1995introduction} cujas funções de avaliação são lineares~\cite{kailath1980linear}. Embora os sistemas dinâmicos em geral não tenham soluções de forma fechada, os sistemas dinâmicos lineares podem ser resolvidos com exatidão e possuem um rico conjunto de propriedades matemáticas. Sistemas lineares também podem ser usados para entender o comportamento qualitativo de sistemas dinâmicos gerais, calculando os pontos de equilíbrio do sistema e aproximando-o como um sistema linear em torno de cada um desses pontos~\cite{katok1995introduction}.
 
-Em um sistema dinâmico linear, a variação de um vetor de estado (um vetor ${\displaystyle N}$-dimensional dado por ${\displaystyle \mathbf{x}}$) é igual a uma matriz constante (dado por ${\displaystyle \mathbf{A}}$) multiplicada por ${\displaystyle \mathbf{x}}$. Essa variação pode ter duas formas: ou como um fluxo, no qual ${\displaystyle \mathbf{x}}$ varia continuamente com o tempo
+Em um sistema dinâmico linear, a variação de um vetor de estado (um vetor ${\displaystyle N}$-dimensional dado por ${\displaystyle \\{x}}$) é igual a uma matriz constante (dado por ${\displaystyle \mathbf{A}}$) multiplicada por ${\displaystyle \mathbf{x}}$. Essa variação pode ter duas formas: ou como um fluxo, no qual ${\displaystyle \mathbf{x}}$ varia continuamente com o tempo~\cite{bakshi2008control}
 
 \begin{equation}
 \dot{{\displaystyle \mathbf{x}}}(t)={\displaystyle \mathbf{A}} \cdot {\displaystyle \mathbf{x}}(t)
 \end{equation}
 
-ou como um mapeamento, em que ${\displaystyle \mathbf{x}}$ varia em etapas discretas
+ou como um mapeamento, em que ${\displaystyle \mathbf{x}}$ varia em etapas discretas~\cite{bakshi2008control}
 
 \begin{equation}\label{eq:dtsx}
 {\displaystyle \mathbf{x}}_{n+1}={\displaystyle \mathbf{A}} \cdot {\displaystyle \mathbf{x}}_n
@@ -82,11 +82,11 @@ Sistemas dinâmicos lineares podem ser resolvidos exatamente, em contraste com a 
 
 \subsection{Contínuos}\label{subsec:c}
 
-Um sistema é chamado de sistema de tempo contínuo se aceitar sinais de tempo contínuo como entrada e gerar sinais de tempo contínuo como saída. A entrada será indicada por itálico em minúsculo $\mathit{u}(t)$ para entrada única ou por negrito $\mathbf{u}(t)$ para múltiplas entradas. Se o sistema tem $p$ entradas, então $\mathbf{u}(t)$ é um vetor $p \times 1$ ou $\mathbf{u} = [\mathit{u}_\mathrm{1} ~ \mathit{u}_\mathrm{2} ~ \dots ~ \mathit{u}_p]^T$, onde $T$ denota a transposição. Da mesma forma, a saída será denotada por $\mathit{y}(t)$ ou $\mathbf{y}(t)$. Supõe-se que o tempo $t$ varie de $-\infty$ a $\infty$.
+Um sistema é chamado de sistema de tempo contínuo se aceitar sinais de tempo contínuo como entrada e gerar sinais de tempo contínuo como saída~\cite{willsky1997signals}. A entrada será indicada por itálico em minúsculo $\mathit{u}(t)$ para entrada única ou por negrito $\mathbf{u}(t)$ para múltiplas entradas. Se o sistema tem $p$ entradas, então $\mathbf{u}(t)$ é um vetor $p \times 1$ ou $\mathbf{u} = [\mathit{u}_\mathrm{1} ~ \mathit{u}_\mathrm{2} ~ \dots ~ \mathit{u}_p]^T$, onde $T$ denota a transposição. Da mesma forma, a saída será denotada por $\mathit{y}(t)$ ou $\mathbf{y}(t)$. Supõe-se que o tempo $t$ varie de $-\infty$ a $\infty$.
 
 \subsubsection{Equações de Espaço de Estados}\label{subsec:ssec}
 
-Todo sistema agregado linear invariante no tempo pode ser descrito por
+Todo sistema linear invariante no tempo pode ser descrito por
 
 \begin{equation}\label{eq:ssec}
 \begin{cases}
@@ -110,11 +110,11 @@ Todo sistema agregado linear invariante no tempo pode ser descrito por
 \subsection{Discretos}\label{subsec:d}
 
 A maioria dos conceitos em sistemas de tempo contínuo pode ser aplicada diretamente aos sistemas de tempo discreto.
-Um sistema é chamado de sistema de tempo discreto se aceitar sinais de tempo discreto como entrada e gerar sinais de tempo discreto como saída. Todos os sinais de tempo discreto em um sistema serão considerados como tendo o mesmo período de amostragem $T_\mathrm{s}$. A entrada e a saída serão denotadas por $u[k]:= u (kT)$ e $y[k]:= y(kT)$, onde $k$ denota o instante de tempo discreto e é um inteiro que varia de $-\infty$ a $\infty$. Eles se tornam negrito para múltiplas entradas e múltiplas saídas.
+Um sistema é chamado de sistema de tempo discreto se aceitar sinais de tempo discreto como entrada e gerar sinais de tempo discreto como saída~\cite{oppenheim1999discrete}. Todos os sinais de tempo discreto em um sistema serão considerados como tendo o mesmo período de amostragem $T_\mathrm{s}$. A entrada e a saída serão denotadas por $u[k]:= u (kT)$ e $y[k]:= y(kT)$, onde $k$ denota o instante de tempo discreto e é um inteiro que varia de $-\infty$ a $\infty$. Eles se tornam negrito para múltiplas entradas e múltiplas saídas~\cite{astrom2010feedback}.
 
-Um sistema de tempo discreto é causal se a saída atual depende de entradas atuais e passadas. O estado no tempo $k_\mathrm{0}$, denotado por $\mathbf{x}[k0]$, é a informação no instante de tempo $k_\mathrm{0}$, que junto com $\mathbf{u}[k]$, $k \geq k_\mathrm{0}$, determina unicamente a saída $\mathbf{y}[k]$, $k \geq k0$. As entradas de $\mathbf{x}$ são chamadas de variáveis de estado. Se o número de variáveis de estado for finito, o sistema de tempo discreto é agrupado; caso contrário, é distribuído. Todo sistema de tempo contínuo envolvendo atraso de tempo é um sistema distribuído. Em um sistema de tempo discreto, se o atraso de tempo for um múltiplo inteiro do período de amostragem $T_\mathrm{s}$, então o sistema de tempo discreto é um sistema aglomerado.
+Um sistema de tempo discreto é causal se a saída atual depende de entradas atuais e passadas~\cite{haykin2007signals}. O estado no tempo $k_\mathrm{0}$, denotado por $\mathbf{x}[k0]$, é a informação no instante de tempo $k_\mathrm{0}$, que junto com $\mathbf{u}[k]$, $k \geq k_\mathrm{0}$, determina unicamente a saída $\mathbf{y}[k]$, $k \geq k0$. As entradas de $\mathbf{x}$ são chamadas de variáveis de estado. Se o número de variáveis de estado for finito, o sistema de tempo discreto é agrupado; caso contrário, é distribuído. Todo sistema de tempo contínuo envolvendo atraso de tempo é um sistema distribuído. Em um sistema de tempo discreto, se o atraso de tempo for um múltiplo inteiro do período de amostragem $T_\mathrm{s}$, então o sistema de tempo discreto é um sistema aglomerado~\cite{astrom2010feedback}.
 
-Um sistema de tempo discreto é linear se as propriedades de aditividade e homogeneidade se mantiverem. A resposta de cada sistema linear em tempo discreto pode ser decomposta como
+Um sistema de tempo discreto é linear se as propriedades de aditividade e homogeneidade se mantiverem~\cite{oppenheim1999discrete}. A resposta de cada sistema linear em tempo discreto pode ser decomposta como
 
 \begin{equation*}
 Resposta = resposta~ de ~estado~ zero~~ +~~ resposta ~de~ entrada~ zero
@@ -124,7 +124,7 @@ e as respostas de estado zero satisfazem a propriedade de superposição, e portan
 
 \subsubsection{Equações de Espaço de Estados}\label{subsec:sse}
 
-Cada sistema de tempo discreto linear agregado e invariante no tempo pode ser descrito por
+Cada sistema de tempo discreto linear invariante no tempo pode ser descrito por
 
 \begin{equation}\label{eq:ssed}
 \begin{cases}
@@ -160,23 +160,23 @@ Z[\hat{\mathbf{x}}(k+1)]=&~\sum_{k=0}^{\infty} \mathbf{x}(k+1)z^{-k} \\
 
 \subsection{Estabilidade de Sistemas Leneares Invariantes no Tempo}\label{subsec:ltis}
 
-Os sistemas são projetados para executar algumas tarefas ou para processar sinais. Se um sistema não é estável, o sistema pode  ocasionar até mesmo desastres (queimar, desintegrar ou saturar quando um sinal, não importa quão pequeno seja, for aplicado). Portanto, um sistema instável é inútil na prática e a estabilidade é um requisito básico para todos os sistemas. Além da estabilidade, os sistemas devem atender a outros requisitos, como rastrear os sinais desejados e suprimir o ruído, para serem realmente úteis na prática. A resposta de sistemas lineares sempre pode ser decomposta como a resposta de estado zero e a resposta de entrada zero. É comum na literatura mostrar a estabilidade destas duas respostas separadamente. Nesta seção, faremos uma breve introdução de estabilidade BIBO (bounded-input bounded-output) para a resposta do estado zero e estabilidades marginais e assintóticas para a resposta da entrada zero, para o caso de sistemas em tempo discreto.
+Os sistemas são projetados para executar algumas tarefas ou para processar sinais. Se um sistema não é estável, o sistema pode  ocasionar até mesmo desastres (queimar, desintegrar ou saturar quando um sinal, não importa quão pequeno seja, for aplicado). Portanto, um sistema instável é inútil na prática e a estabilidade é um requisito básico para todos os sistemas. Além da estabilidade, os sistemas devem atender a outros requisitos, como rastrear os sinais desejados e suprimir o ruído, para serem realmente úteis na prática. A resposta de sistemas lineares sempre pode ser decomposta como a resposta de estado zero e a resposta de entrada zero. É comum na literatura mostrar a estabilidade destas duas respostas separadamente. Nesta seção, faremos uma breve introdução de estabilidade bounded-input bounded-output (BIBO) para a resposta do estado zero e estabilidades marginais e assintóticas para a resposta da entrada zero, para o caso de sistemas em tempo discreto~\cite{oppenheim1999discrete}.
 
-Dado o sistema em tempo discreto single-input single-output (SISO),
+Dado o sistema em tempo discreto single-input single-output (SISO)\cite{haykin2007signals},
 
 \begin{equation}\label{eq:bibo}
 \mathbf{y}[k]=\sum_{m=0}^{k} g[k-m]\mathbf{m}[m]= \sum_{m=0}^{k} g[m]\mathbf{u}[k-m],
 \end{equation}
 
-\noindent onde $g[k]$ é a sequência de resposta ao impulso ou a seqüência de saída excitada por uma sequência de impulso aplicada em $k = 0$. Para ser descrito por (\ref{eq:bibo}), o sistema de tempo discreto deve ser linear, invariante no tempo, e causal. Além disso, o sistema deve ser inicialmente relaxado em $k = 0$.
+\noindent onde $g[k]$ é a sequência de resposta ao impulso ou a sequência de saída excitada por uma sequência de impulso aplicada em $k = 0$. Para ser descrito por \eqref{eq:bibo}, o sistema de tempo discreto deve ser linear, invariante no tempo, e causal. Além disso, o sistema deve ser inicialmente relaxado em $k = 0$.
 
 Diz-se que uma sequência de entrada $\mathbf{u}[k]$ é limitada se $\mathbf{u}[k]$ não crescer até infinito positivo ou negativo ou se existir uma constante $\mathbf{u}[m]$ tal que $|\mathbf{u}[k]|\leq \mathbf{u}[m] < \infty$, para $k=0,1,2,\dots$.
 
-Diz-se que um sistema é BIBO estável se toda sequência de entrada limitada excita uma sequência de saída limitada. Essa estabilidade é definida para a resposta do estado zero e é aplicável somente se o sistema estiver inicialmente relaxado.
+Diz-se que um sistema é BIBO estável se toda sequência de entrada limitada excita uma sequência de saída limitada~\cite{ogata2002modern}. Essa estabilidade é definida para a resposta do estado zero e é aplicável somente se o sistema estiver inicialmente relaxado.
 
-O sistema em tempo discreto mostrado em (\ref{eq:dtsx}) é dito ser marginalmente estável ou estável no sentido de Lyapunov se todo estado inicial finito $\mathbf{x}_o$ excita uma resposta limitada. É assintoticamente estável se todo estado inicial finito excita uma resposta limitada, que, além disso, se aproxima de $0$ como $k \rightarrow \infty$.
+O sistema em tempo discreto mostrado em \eqref{eq:dtsx} é dito ser marginalmente estável ou estável no sentido de Lyapunov se todo estado inicial finito $\mathbf{x}_o$ excita uma resposta limitada~\cite{chen1995linear}. É assintoticamente estável se todo estado inicial finito excita uma resposta limitada, que, além disso, se aproxima de $0$ como $k \rightarrow \infty$~\cite{chen1995linear}.
 
-Outra forma bastante comum de verificar a estabilidade de m sistema de tempo discreto é através da avaliação dos seus autovalores, ou seja, caso a magnitude dos autovalores da matrix de estado $\mathbf{A}$ for menor que $1$, o sistema [e dito estável. Se analisarmos o sistema resultante no domínio da frequência, os autovalores em malha fechada correspondem aos pólos da função de transferência em malha fechada.
+Outra forma bastante comum de verificar a estabilidade de m sistema de tempo discreto é através da avaliação dos seus autovalores, ou seja, caso a magnitude dos autovalores da matrix de estado $\mathbf{A}$ for menor que $1$, o sistema é dito estável~\cite{chen1995linear}. Se analisarmos o sistema resultante no domínio da frequência, os autovalores em malha fechada correspondem aos pólos da função de transferência em malha fechada.
 
 
 \subsection{Processo de Discretização}\label{subsec:pd}
@@ -218,7 +218,7 @@ Assim, se uma entrada altera o valor apenas em instantes de tempo discreto $kT$ 
 \noindent onde $\mathbf{A}_d=$, $\mathbf{B}_d=\int_{0}^{T_\mathrm{s}} e^{\mathbf{A}\tau}d\tau\mathbf{B}$, $\mathbf{C}_d=\mathbf{C}$ e $\mathbf{D}_d=\mathbf{D}$
 
 
-Segundo Chen, a matriz $\mathbf{B}_d$ pode ser obtida por $\mathbf{B}_d=\mathbf{A}^{-1}(\mathbf{A}_d-\mathbf{I})\mathbf{B}$ (caso $\mathbf{A}$ não seja singular).
+Segundo Chen~\cite{chen1995linear}, a matriz $\mathbf{B}_d$ pode ser obtida por $\mathbf{B}_d=\mathbf{A}^{-1}(\mathbf{A}_d-\mathbf{I})\mathbf{B}$ (caso $\mathbf{A}$ não seja singular).
 
 A solução das equações de estado para sistemas em tempo discreto pode ser obtida por
 
@@ -230,13 +230,11 @@ A solução das equações de estado para sistemas em tempo discreto pode ser obtida
 \mathbf{y}(k)=\mathbf{C}\mathbf{A}^k\mathbf{x}[0]+\sum_{m=0}^{k-1}(\mathbf{C}\mathbf{A}^{k-m-1}\mathbf{B}\mathbf{u}[m])+\mathbf{D}\mathbf{u}[k]
 \end{equation}
 
- 
-
 \subsection{Análise Quantitativa da Resposta ao Degrau}\label{subsec:aqrd}
 
-Dado um sistema linear de entrada/saída (Eq.~\ref{eq:ssed}), a forma geral da solução da Equação~\ref{eq:ssed} é dada pela equação de convolução em (\ref{eq:solyd}). Vemos a partir da forma dessa equação que a solução consiste em uma resposta de condição inicial e uma resposta de entrada. A resposta de entrada, corresponde aos dois últimos termos da Equação \ref{eq:solyd}, consiste em dois componentes, a resposta transitória e a resposta em estado estacionário. A resposta transitória ocorre no primeiro período de tempo após a entrada ser aplicada e reflete a incompatibilidade entre a condição inicial e a solução de estado estacionário. A resposta de estado estacionário é a parte da resposta de saída que reflete o comportamento de longo prazo do sistema sob as entradas dadas. Para entradas que são periódicas, a resposta em estado estacionário será frequentemente periódica e, para entradas constantes, a resposta será frequentemente constante.
+Dado um sistema linear de entrada/saída (Equação~\ref{eq:ssed}), a forma geral da solução da Equação~\ref{eq:ssed} é dada pela equação de convolução em \eqref{eq:solyd}~\cite{astrom2010feedback}. Vemos a partir da forma dessa equação que a solução consiste em uma resposta de condição inicial e uma resposta de entrada. A resposta de entrada, corresponde aos dois últimos termos da Equação \ref{eq:solyd}, consiste em dois componentes, a resposta transitória e a resposta em estado estacionário. A resposta transitória ocorre no primeiro período de tempo após a entrada ser aplicada e reflete a incompatibilidade entre a condição inicial e a solução de estado estacionário. A resposta de estado estacionário é a parte da resposta de saída que reflete o comportamento de longo prazo do sistema sob as entradas dadas. Para entradas que são periódicas, a resposta em estado estacionário será frequentemente periódica e, para entradas constantes, a resposta será frequentemente constante.
 
-Uma forma de entrada particularmente comum é o degrau unitário, que representa uma mudança abrupta na entrada de um valor para outro.  Um degrau unitário (às vezes chamada de função de degrau Heaviside) é definida como
+Uma forma de entrada particularmente comum é o degrau unitário, que representa uma mudança abrupta na entrada de um valor para outro. Um degrau unitário (às vezes chamada de função de degrau Heaviside~\cite{oppenheim1999discrete}) é definida como
 
 \begin{equation*}
   \mathbf{u}[k]=\systeme{
@@ -275,7 +273,7 @@ Quando projetamos controladores para sistemas em tempo discreto, dispomos de mui
 \subsection{Alocação de Polos}\label{subsec:ap}
 
 Dado que o sistema em questão seja descrito como em (\ref{eq:ssed}), assumindo que tenha apenas um sinal de entrada, e o polinômio característico da matrix $\mathbf{A}$ seja $P(z)=z^n+p_\mathrm{1}z^{\mathrm{n-1}}+\dots + p_n$. 
-Assumindo que o sistema em (\ref{eq:ssed}) é alcançável, pode-se transformá-lo na forma canônica, mudando as variáveis de estado pela transformação $z=T_\mathrm{s}\mathbf{x}$, e a equação de estado transformado é
+Assumindo que o sistema em \eqref{eq:ssed} é alcançável, pode-se transformá-lo na forma canônica, mudando as variáveis de estado pela transformação $z=T_\mathrm{s}\mathbf{x}$, e a equação de estado transformado é~\cite{bakshi2008control}
 
 \begin{equation}\label{eq:ssed2}
 z(k+1)=\hat{\mathbf{A}}z(k)+\hat{\mathbf{B}}\mathbf{u}(k)
@@ -305,12 +303,9 @@ Com o sistema sendo alcançável, existe uma realimentação linear que fornece um s
 \mathbf{W}_c=(\mathbf{B}~\mathbf{A}\mathbf{B}\dots \mathbf{A}^{n-1}\mathbf{B})
 \end{equation}
 
-
-
-
 \subsection{Regulador Quadrático Linear}\label{subsec:rql}
 
-O regulador quadrático linear LQR da teoria de controle ótimo pode ser usado para resolver uma família de problemas de projeto do regulador em que o estado é acessível e a regulação e o esforço do atuador são medidos por um desvio médio-quadrado. Uma formulação estocástica do problema LQR é conveniente para nós; uma formulação mais usual é como um problema de controle ótimo. O sistema é descrito por
+O regulador quadrático linear (LQR) da teoria de controle ótimo pode ser usado para resolver uma família de problemas de projeto do regulador em que o estado é acessível e a regulação e o esforço do atuador são medidos por um desvio médio quadrático. Uma formulação estocástica do problema LQR é conveniente para nós; uma formulação mais usual é como um problema de controle ótimo. O sistema é descrito por
 
 \begin{equation*}
 \dot{\mathbf{x}}=\mathbf{A}\mathbf{x}+\mathbf{B}\mathbf{u}+\mathbf{w},
@@ -318,83 +313,244 @@ O regulador quadrático linear LQR da teoria de controle ótimo pode ser usado par
 
 \noindent onde $w$ é um ruído branco de média zero, isto é, $w$ tem matriz de densidade espectral de potência $S_\mathrm{w} (w) = I$ para todos $w$. O estado $\mathbf{x}$ está disponível para o controlador, então $\mathbf{y} = \mathbf{x}$ nesse \textit{framework}.
 
-A função de custo do LQR é a soma do estado ponderado do quadrado médio do estado estacionário x, e o sinal do atuador ponderado do quadrado médio do estado estacionário u:
+A função de custo do LQR é a soma do estado ponderado do quadrado médio do estado estacionário x, e o sinal do atuador ponderado do quadrado médio do estado estacionário u~\cite{boyd1991linear}
 
 \begin{equation}
 J_\mathrm{lqr} = \lim_{t\to \infty} \mathbf{E}(\mathbf{x}(t)^TQ\mathbf{x}(t)+\mathbf{u}(t)^TR\mathbf{u}(t)),
 \end{equation}
 
-\noindent onde Q e R são matrizes positivas de peso semidefinido; a
-O primeiro termo penaliza os desvios de x de zero, e o segundo termo representa o custo de usar o sinal do atuador. Podemos expressar esse custo em nossa estrutura, formando o sinal de saída regulado $ \begin{bmatrix}
-R^{\frac{1}{2}}u \\
+\noindent onde $Q$ e $R$ são matrizes positivas de peso semidefinido; a
+O primeiro termo penaliza os desvios de $\mathbf{x}$ de zero, e o segundo termo representa o custo de usar o sinal do atuador. Podemos expressar esse custo, formando o sinal de saída regulado $ \begin{bmatrix}
+R^{\frac{1}{2}}u &
 Q^{\frac{1}{2}}x 
-\end{bmatrix}  $, portanto, $J_\mathrm{lqr} = \lim_{t\to \infty} \mathbf{E}z(t)^Tz(t),$ o desvio quadrático médio de z. 
+\end{bmatrix} ' $, portanto, $J_\mathrm{lqr} = \lim_{t\to \infty} \mathbf{E}z(t)^Tz(t)$, o desvio quadrático médio de $z$. Como $w$ é um ruído branco, temos $J_\mathrm{lqr}=||H||_2^2$, o quadrado da norma $\mathbf{H}_2$ da matriz de transferência em malha fechada.
+
+A planta para o problema de regulador LQR é dada por: $\mathbf{A_\mathrm{p}=A}$, $\mathbf{B_\mathrm{u}=B}$, $\mathbf{B_\mathrm{w}=I}$, $\mathbf{C_\mathrm{z}}=[0~Q^{\frac{1}{2}}]'$, $\mathbf{C_\mathrm{y}=I}$, $\mathbf{D_\mathrm{zw}=0}$, $\mathbf{D_\mathrm{zu}}=[R^{\frac{1}{2}}~0]'$, $\mathbf{D_\mathrm{yw}=0}$ e $\mathbf{D_\mathrm{yu}=0}$, onde:
+
+\begin{equation}\label{eq:ssedLQR}
+\begin{cases}
+\dot{\mathbf{x}}=\mathbf{A}_\mathrm{p}\mathbf{x}+\mathbf{B}_\mathrm{w}\mathbf{w}+\mathbf{B}_\mathrm{u}\mathbf{u}\\
+\mathbf{z}=\mathbf{C}_\mathrm{z}\mathbf{x}+\mathbf{D}_\mathrm{zw}\mathbf{w}+\mathbf{D}_\mathrm{zu}\mathbf{u}\\
+\mathbf{y}=\mathbf{C}_\mathrm{y}\mathbf{x}+\mathbf{D}_\mathrm{yw}\mathbf{w}+\mathbf{D}_\mathrm{yu}\mathbf{u}\\
+\end{cases},
+\end{equation}
+
+As especificações consideradas são a capacidade de realização e a especificação de desigualdade funcional $||H||_2 \leq \alpha$. As suposições padrão são que $(Q, A)$ é observável, $(A, B)$ é controlável, e $R>0$, caso em que a especificação declarada na última sentença é mais forte do que (\textit{i.e.}, implica) estabilidade interna. Com estas suposições padrão, existe na verdade um controlador que atinge o menor custo possível de LQR, e é uma realimentação de estado constante, $K_\mathrm{lqr}(s)=-K_\mathrm{sfb}$, que pode ser encontrado com~\cite{boyd1991linear}
+
+Dado que $X_\mathrm{lqr}$ tenha única solução positiva definida da equação algébrica de Riccati[] que pode ser encontrada através da matrix Hamiltoniana associada $M$, e depois dada uma matriz $T$, tal que
+
+\begin{equation*}
+T^{-1}MT=\begin{bmatrix}
+\hat{A}_{11} & \hat{A}_{12} \\
+0 & \hat{A}_{22} 
+\end{bmatrix},
+\end{equation*}
+
+\noindent onde $\hat{A}_{11}$ é estável, pode-se particionar $T$ como
+
+\begin{equation*}
+T=\begin{bmatrix}
+T_{11} & T_{12} \\
+T_{21} & T_{22} 
+\end{bmatrix},
+\end{equation*}
+
+\noindent Portanto a solução $X_\mathrm{lqr}=T_{21}T_{11}^{-1}$. Logo $K_\mathrm{lqr}=R^{-1}B^TX_\mathrm{lqr}$, com isso pode-se chegar a $J_\mathrm{lqr}=\mathbf{Tr}X_\mathrm{lqr}$. Em particular, a especificação $||H||_\mathrm{2} \leq \alpha$ (e também de realização) é alcançável se e somente se $\alpha \geq \sqrt{\mathbf{Tr} X_\mathrm{lqr}}$, caso em que o controlador LQR ótimo $K_\mathrm{lqr}$ obedeça às especificações.
+
+\subsection{Sintonia Automática}\label{subsec:auto}
 
 \subsection{Síntese Indutiva Guidada por Contra Exemplos - CEGIS}\label{subsec:cegis}
 
+Síntese indutiva guiada por contra exemplos (CEGIS) é um processo iterativo para a síntese de programas e atualmente está se tornando popular. Cada iteração realiza uma generalização indutiva baseada em contra exemplos fornecida por um mecanismo de verificação. Normalmente, a generalização indutiva usa informações sobre um número limitado de entradas para fazer afirmações sobre todas as possíveis entradas, na forma de soluções candidatas~\cite{abate2018counterexample}.
+
+\begin{figure}[ht]
+	\centering
+	\framebox{\parbox{5.0in}{
+			\centering
+			\includegraphics[width=0.8\textwidth]{figures/cegis}}
+	}
+	\caption{Diagrama em Blocos CEGIS.}
+	\label{fig:cegisDiag}
+\end{figure}
+
+A Figura~\ref{fig:cegisDiag} mostra a estrutura do CEGIS \cite{abate2018counterexample} e consiste em duas etapas principais: síntese e verificação. A etapa de verificação consiste em verificar a satisfatibilidade dos requerimentos em relação a uma determinada propriedade analisada, caso ela falhe ou seja bem-sucedida. O estágio de síntese, por sua vez, consiste em gerar um programa candidato, a fim de verificar se ele satisfaz uma propriedade analisada.
+
+No estágio de síntese, há um algoritmo de ``aprendizagem'' que aprende com contra exemplos fornecidos por um mecanismo de verificação. O algoritmo de aprendizagem procede pesquisando o espaço de candidatos conceitos para encontrar um que seja consistente com os exemplos vistos até o momento. Pode haver vários conceitos consistentes, e a estratégia de busca determina o candidato escolhido. Esse candidato é então apresentado ao mecanismo de verificação, que verifica o candidato quanto à especificação de correção. Se o candidato estiver correto, o sintetizador finaliza e produz este candidato. Caso contrário, o mecanismo de verificação gera um contra exemplo, gerando o motivo da falha. Esse contra exemplo é retornado ao algoritmo de aprendizagem, que adiciona o contra exemplo ao seu conjunto de exemplos e repete sua pesquisa. É possível que, após algum número de iterações desse loop, o algoritmo de aprendizagem possa ser incapaz de encontrar um candidato consistente; nesse caso, a etapa de aprendizagem e, portanto, o procedimento CEGIS, falha~\cite{alur2013syntax}.
+
+Dada a especificação do programa desejado, $\sigma$, o procedimento de síntese indutiva gera um programa candidato $P^*$ que satisfaz $\sigma(P^*, {\vec{x}})$ para um subconjunto ${\vec{x}}_{inpts}$ de todas as entradas possíveis. O programa candidato $P^*$ é passado para o estágio de verificação, que verifica se ele satisfaz a especificação $\sigma(P^*, {\vec{x}})$ para todas as entradas possíveis. A técnica faz isso verificando se $\lnot \sigma (P^*, {\vec{x}})$ é insatisfatório. Se assim for, $\forall {\vec{x}}. \lnot \sigma (P^*, {\vec{x}})$ é válido, e nós sintetizamos com sucesso uma solução e o algoritmo é finalizado. Caso contrário, o verificador produz um contra exemplo ${\vec{c}}$ da atribuição satisfatória, que é então adicionada ao conjunto de entradas passadas para o sintetizador, e o loop é repetido.
+
+O método utilizado nos blocos de síntese e verificação varia em diferentes implementações do CEGIS.
+
 \section{Implementação de Controladores Digitais}\label{subsec:icd}
 
-\subsection{Efeitos de Palavra Finita}\label{subsec:fwl}
+A implementação das leis de controle usando um computador é discutida neste capítulo. O principal problema é implementar um sistema de tempo discreto. Os princípios para fazer isso foram abordados em detalhes. É simples gerar o código do algoritmo de controle. A importância da pré-filtragem para evitar o aliasing foi mencionada. Filtragem digital não-linear sofisticada para remoção de valores discrepantes também foi discutida. O atraso computacional é influenciado consideravelmente pela organização do código de computador. Dificuldades que surgem da saturação em atuadores e formas de evitar essas dificuldades são discutidas. Isso também fornece automaticamente uma solução para a troca e inicialização de modo.
 
 
+Os métodos de projeto baseados em alocação de pólos por realimentação de estado fornecem um controlador da forma
 
-SMT (\textit{Satisfiability Modulo Theories}) verifica a satisfatibilidade de fórmulas de primeira ordem a partir de uma ou mais teorias de fundamentação, que são compostas por um conjunto de sentenças. De modo formal, $\sigma$ -- \textit{theory} é uma coleção de sentenças sobre a assinatura $\sigma$. Dada uma teoria $T$, diz-se que $\varphi$ é um módulo satisfatível de $T$ se $T \subset {\phi}$. Em outra definição, pode-se dizer que uma teoria $T$ é definida como uma classe de estruturas e $\varphi$ é um módulo satisfatível se existe uma estrutura $M$ em $T$ que satisfaz $\varphi$ (\textit{i.e.}, $M \models \varphi$)~\cite{Moura:2009}.
-
-Solucionadores SMT como o Z3~\cite{Moura:2008} e Boolector~\cite{Brummayer:2009} suportam diferentes tipos de teorias, de modo que o seu desempenho pode variar conforme a sua implementação.
-
-\begin{table}[htb]
-	\renewcommand{\arraystretch}{1.0}
-	\caption{Exemplos de teorias suportadas.}
-	\label{table:smt}
-	\centering
-	\begin{tabular}{c|c}
-		\hline \bfseries Teoria & \bfseries Exemplo\\
-		\hline Igualdade & $x_1 = x_2 \wedge \neg (x_2 = x_3) \Rightarrow \neg (x_1 = x_3)$\\
-		\hline Aritmética Linear & $(7y_1 + y_2 \geq 5) \vee (y_2 + y_3 \leq 2)$\\
-		\hline Vetores de $bit$ & $(b \gg i) \& 1 = 1$\\
-		\hline Arranjos & $store(a, j, 5) \Rightarrow a[j] = 5$\\
-		\hline Teorias Combinadas & $(j \leq k \wedge a[j] = 2) \Rightarrow a[i] < 3$\\
-		\hline
-	\end{tabular}
-\end{table}
-
-A Tabela~\ref{table:smt} mostra algumas das teorias suportadas pelos solucionadores SMT utilizados neste trabalho. A teoria de igualdade permite verificações de igualdade e desigualdade entre predicados utilizando os operadores ($=$) ($\leq$) ($<$). A teoria da aritmética linear é responsável apenas pelas funções aritméticas (adição, subtração, multiplicação e divisão) entre variáveis e constantes numéricas. A teoria de vetores de $bit$ permite operações $bit$ a $bit$ considerando diferentes arquiteturas (\textit{e.g.}, $32$ e $64$ $bits$), nela estão presentes os operadores: e ($\&$), ou ($\mid$), ou-exclusivo ($\bigoplus$), complemento ($\sim$), deslocamento para a direita ($\gg$) e deslocamento para a esquerda ($\ll$). Além disso, a teoria de arranjos permite a manipulação de operadores como $select$ e $store$.
-
-Em contraste com as fórmulas geradas na satisfação booleana, que são apenas compostas por variáveis booleanas, as quais podem assumir valores verdadeiro e falso e conectivos lógicos, as fórmulas de primeira ordem são formadas por conectivos lógicos, variáveis, quantificadores, funções e símbolos de predicado~\cite{Moura:2009}. De modo geral, as teorias do módulo da satisfatibilidade tem sido aplicadas em diversos cenários~\cite{Moura:2018}, apresentando resultados mais promissores (se comparados à satisfação booleana), incluindo o suporte a diferentes teorias de decisão~\cite{Moura:2008, Moura:2009}.
-
-\subsection{\textit{Efficient SMT-based Context-Bounded Model Checker}}\label{sec:esbmc}
-
-O ESBMC é um verificador de modelos limitado ao contexto baseados nas teorias de módulo da satisfiabilidade (SMT), o qual é usado para verificar programas ANSI-C~\cite{Cordeiro:2012,DBLP:conf/tacas/MorseRCN014}. O ESBMC pode verificar tanto programas sequenciais quanto concorrentes e verifica propriedades relacionadas a estouro aritmético, divisão por zero, acesso ilegal a posições em memória, segurança de ponteiros, bloqueios fatais e corrida de dados. Esse processo é totalmente automático e não requer interação de usuário para anotar programas com pré- e/ou pós-condições.
-
-No ESBMC, o programa a ser verificado é modelado como um sistema de transição de estados $M = (S, R, s_0)$, 
-que é extraído de um gráfico de fluxo de controle (GFC). $S$ representa o conjunto de estados, $R \subseteq S \times S$ representa o conjunto de transições ({\it i.e.}, pares de estados que especificam como o sistema pode navegar de um estado para outro) e $s_0 \subseteq S$ representa o conjunto de estadaos iniciais. Um estado $s \in S$ consiste de um valor do contador de programa $pc$ e os valores de todas as variáveis do programa. Um estado inicial $s_0$ atribui a localização inicial do programa do GFC para o $pc$. Cada transição $\gamma = (s_i, s_{i+1}) \in R$ entre dois estados $s_i$ and $s_{i+1}$ é identificada como uma fórmula lógica $\gamma (s_i,s_{i+1})$ que captura as restrições nos valores do contador de programa e das variáveis do programa correspondentes.
-
-Dado um sistema de transição $M$, uma propriedade de segurança $\phi$, um limite de contexto $C$ e um limite $k$, o ESBMC constrói uma árvore de alcançabilidade (AA) que representa o desdobramento do programa para $C$, $k$ e $\phi$. Ele então deriva uma condição de verificação (CV)$\psi^{\pi}_k$, para cada intercalação (ou caminho de computação) dada $\pi = \{v_1,...,v_k\}$, que é dada pela seguinte fórmula lógica:
-
-\begin{equation}
-\label{eq:bounded-model-checking}
-    \psi^{\pi}_{k} =
-    \overbrace{I(s_{0}) \wedge \bigvee_{i=0}^{k} \bigwedge_{j=0}^{i-1} \gamma(s_j,s_{j+1})}^{\textrm{restrições}}
-    \wedge \overbrace{\neg \phi(s_i)}^{\textrm{propriedade}}
+\begin{equation}\label{eq:imple}
+\begin{aligned}
+\mathbf{x}(k+1)=&~\mathbf{F}\mathbf{x}(k)+\mathbf{G}\mathbf{y}(k)+\mathbf{G}_\mathrm{c}\mathbf{u}_\mathrm{c}(k) \\
+  \mathbf{u}(k)=&~\mathbf{C}\mathbf{x}(k)+\mathbf{D}\mathbf{y}(k)+\mathbf{D}_\mathrm{c}\mathbf{u}_\mathrm{c}(k) \\
+\end{aligned}
 \end{equation}
 
-Aqui, $I$ caracteriza o conjunto de estados iniciais $M$ e $\gamma(s_j,s_{j+1})$ é a relação de $M$ entre passos de tempo $j$ e $j+1$. Consequentemente, $I(s_0) \wedge \bigvee_{j=0}^{i-1} \gamma (s_j,s_{j+1})$ representa a executação de $M$ de largura $i$ e $\psi^{\pi}_{k}$ pode ser satisfatível se e somente se para algum $i \leq k$ existe um estado alcançável ao longo de $\pi$ em um passo de tempo $i$ no qual $\phi$ é violada. $\psi^{\pi}_{k}$ é uma fórmula livre de quantificadores em um subconjunto de lógica de primeira ordem decidível, o qual sua satisfiabilidade é verificada por um solucionador SMT. Se $\psi^{\pi}_{k}$ é satisfatível, então $\phi$ é violada ao longo de $\pi$ e o solucionador SMT fornece uma atribuição satisfatória, da qual pode-se extrair valores para variáveis do programa e construir um contraexemplo. Um contraexemplo para uma propriedade $\phi$ é uma sequência de estados $s_0,s_1,...,s_k$ com $s_0 \in S_0$, $s_k \in S$, e $\gamma (s_i, s_{i+1})$ para $0 \leq i < k$. Se $\psi^{\pi}_{k}$ não é satisfatível, pode-se concluir que nenhum estado de erro é alcançável em $k$ passos ou menos ao longo de $\pi$. Finalmente, pode-se definir $\psi_{k} = \bigwedge_{\pi} \psi_{k}^{\pi}$ e usá-la para verificar todos os caminhos.
+A implementação de um sistema de tempo discreto descrito por (\ref{eq:imple}) usando um computador digital é simples. Os detalhes dependem do \textit{hardware} e \textit{software} disponíveis. Para mostrar os princípios, assume-se que o sistema descrito por (\ref{eq:imple}) deve ser implementado usando um computador digital com conversores AD e DA e um \textit{clock} de tempo real. Uma representação gráfica do programa é mostrada na Fig.~\ref{fig:program}. A execução do programa é controlada pelo \textit{clock}. A barra horizontal indica que a execução é interrompida até que uma interrupção venha do \textit{clock}. O \textit{clock} é ajustado para que uma interrupção seja obtida em cada instante de amostragem. O código no bloco é executado após cada interrupção.
 
-No entanto, o ESBMC combina verificação de modelos simbólica com a exploração explícita do espaço de estados; em particular, ele explicitamente explora todas as possíveis intercalações (até o limite de contexto dado) enquanto ele trata cada intercalação em si simbolicamente. O ESBMC implementa diferentes variações dessa abordagem, que diferem no modo que elas são exploradas na AA. A variação mais eficaz simplesmente percore a AA em profundidade e chama o procedimento BMC sequencial para cada intercalação quando ela atinge um nodo folha da AA. Ele pára ou quando encontra erro ou sistematicamente explorou todas as possíveis intercalações da AA.
+\begin{figure}[ht]
+	\centering
+	\framebox{\parbox{5.0in}{
+			\centering
+			\includegraphics[width=0.8\textwidth]{figures/program.png}}
+	}
+	\caption{Representações gráficas de um programa usado para implementar um sistema de tempo discreto.}
+	\label{fig:program}
+\end{figure}
 
-O modelo de memória do ESBMC usa análise estática de ponteiros, preenchimentos em estruturas, com o objetivo de alinhar todos os campos aos limites de palavra, forçamento de regras de alinhamento de acesso de memória e alocação de vetores de bytes, quando o tipo de alocação de memória não é claro, para que a fórmula SMT não seja tão extensa e suscetível a erros.
+O corpo do código é dado na Figura~\ref{fig:codigoEsqueleto}. A conversão analógico-digital é comandada na primeira linha. Os valores apropriados são armazenados nas matrizes \texttt{y} e \texttt{tic}. O sinal de controle $\mathbf{u}$ é calculado na segunda linha usando multiplicação vetor-matriz e adição vetorial. O vetor de estado $\mathbf{x}$ é atualizado na terceira linha e a conversão de digital para analógico é realizada na quarta linha. Para obter um código completo, também é necessário ter declarações de tipo para os vetores \texttt{u}, \texttt{uc}, \texttt{xey} e as matrizes \texttt{F}, \texttt{G}, \texttt{Gc}, \texttt{C}, \texttt{D} e \texttt{Dc}. Também é necessário atribuir valores às matrizes e o valor inicial do estado $\mathbf{x}$. Ao usar linguagens de computador que não possuem operações de matriz, é necessário escrever procedimentos apropriados para gerar operações de matriz usando operações em escalares. Observe que as segunda e terceira linhas do código correspondem exatamente ao algoritmo em (\ref{eq:imple}).
 
-O ESBMC também implementa a prova por indução~\cite{MorseCNF13,Gadelha:2017} para verificar propriedades em programas, \textit{i.e.}, utilizar uma abordagem iterativa de aprofundamento para checar se uma propriedade de segurança $\phi$ é satisfeita em cada passo $k$. O ESBMC usa um algoritmo \textit{k-induction}, que consiste de três casos diferentes: caso base, condição adiante e passo indutivo. No caso base tenta-se encontrar um contraexemplo em até $k$ desdobramentos de laço; na condição adiante verifica-se se os laços foram completamente desdobrados e que $\phi$ é válida em todos os estados alcançáveis dentro de $k$ passos; no passo indutivo assegura-se que sempre que $\phi$ é válida para $k$ desdobramentos, ela também é válida após o próximo desdobramento do sistema.
+\begin{figure}[ht]
+\centering
+\begin{minipage}{0.65\textwidth}
+\texttt{Procedimento Regular()}
 
-Uma outra aplicação do ESBMC é a verificação de programas concorrentes para a plataforma CUDA~\cite{PereiraAMSCCSF16,Pereira:2016}. Utilizando um modelo operacional, \textit{i.e.}, uma representação abstrata das bibliotecas CUDA padrões que aproxima de forma conservadora as suas semânticas, o ESBMC é capaz de verificar propriedades de segurança em programas CUDA. Além disso, o ESBMC implementa a redução parcial de ordem e a análise de duas \textit{threads} para minimizar a exploração de espaço de estados.
+\texttt{inicio}
+\begin{lstlisting}
+  Adin y uc
+  u:=C*x+D*y+Dc*uc
+  x:=F*x+G*y+Gg*uc
+  Daout u
+\end{lstlisting}
+\texttt{fim}
+\end{minipage}
+\caption{Esqueleto de código de computador para a lei de controle de (\ref{eq:imple}).}
+\label{fig:codigoEsqueleto}
+\end{figure}
 
-\section{Localização de Falhas e Verificação de Modelos}\label{sec:fault-localization-and-model-checking}
+Para obter um bom sistema de controle, também é necessário considerar
 
-\subsection{Uso de Contraexemplos para Localizar Falhas}\label{sec:using-counterexamples}
+\begin{itemize}
+\item Pré-filtragem e atraso computacional;
 
-Em verificação de modelos, a atividade mais essencial, em relação à localização de falhas, é a de geração de um contraexemplo, o qual é produzido quando um programa não satisfaz uma dada especificação. Um contraexemplo não provê unicamente informações sobre a relação causa-efeito de uma dada violação, mas ele também pode auxiliar na localização de falhas, como Clarke {\it et al.}~\cite{Clarke:2003,Clarke:1995} citam. Mas, visto que uma grande massa de informação é obtida em um contraexemplo, as linhas de fato defeituosas não são facilmente identificadas.
+Para evitar o \textit{aliasing}, é necessário usar um pré-filtro analógico para eliminar perturbações com freqüências maiores que a freqüência de Nyquist associada à taxa de amostragem. Em um problema de controle, normalmente há muito mais informação disponível sobre os sinais em termos de equações diferenciais para os modelos de processo e possivelmente também para as perturbações. Geralmente, é útil amostrar os sinais analógicos a uma taxa comparativamente alta e evitar o aliasing por um pré-filtro analógico comum projetado do ponto de vista do processamento do sinal. Como o pré-filtro analógico tem dinâmica, é necessário incluir a dinâmica de filtro no modelo de processo. Se o pré-filtro ou a taxa de amostragem for alterada, os coeficientes da lei de controle devem ser recalculados. Com taxas de amostragem normais, isto é, $15$ a $45$ vezes por período, é necessário considerar a dinâmica do pré-filtro no projeto do controlador.
 
-Alguns métodos foram propostos, com o objetivo de localizar possíveis causas de falha, usando contraexemplos. Ball {\it et al.}~\cite{Ball:2003} propuseram uma abordagem que tenta isolar possíveis causas de contraexemplos, gerados pelo verificador de modelos SLAM~\cite{Ball:2001}. A ideia é que potenciais linhas defeituosas podem ser isoladas através de uma comparação entre as transições obtidas em contraexemplos e execuções bem-sucedidas, visto que transições não presentes em rastreamentos bem-sucedidos são potenciais causas de erros. Groce {\it et al.}~\cite{Groce:2003} afirmam que se um contraexemplo existe, um caminho similar mas não-defeituoso também existe e pode ser obtido usando técnicas de BMC. Elementos de programa relacionados a uma dada violação são sugeridos pelas diferenças entre tal contraexemplo e um caminho bem-sucedido. Tal abordagem é implementada no verificador de modelos {\it Java PathFinder}~\cite{JPF} e também pode porver caminhos de execução que levam a estados errôneos, com relação a programasa concorrentes ({\it e.g.}, corrida de dados). O conceito chave da abordagem descrita por Groce {\it et al.}~\cite{Groce:2006} é similar ao anterior e usa alinhamento de restrições para associar estados, em um contraexemplo, com os estados correspondentes em uma execução não-defeituosa, os quais são gerados por um solucionador de restrições. Os estados mencionados são estados abstratos sobre predicados, os quais representam estados concretos em uma execução. Usando propriedades de métricas de distância, restrições podem ser aplicadas para representar execuções do programa, e restrições sem correspondentes que representam estados concretos possivelmente levam a falhas. E ainda, se uma propriedade de métricas de distânica não é satisfeita, um contraexemplo é gerado pelo verificador de modelos~\cite{Groce:2006}.
+Como as conversões e cálculos AD e DA levam tempo, sempre haverá um atraso quando uma lei de controle for implementada usando um computador. O atraso, que é chamado de atraso computacional, depende de como o algoritmo de controle é implementado. Existem basicamente duas maneiras diferentes de fazer isso. Na primeira, as variáveis medidas lidas no tempo $t_k$ podem ser usadas para calcular o sinal de controle a ser aplicado no tempo $t_{k+1}$. Outra possibilidade é ler as variáveis medidas no tempo $t_k$ e fazer a conversão DA o mais rápido possível.
+
+\item Não-linearidades do(s) atuador(s);
+
+A teoria linear tem uma ampla aplicabilidade, muitas vezes existem algumas não-linearidades que devem ser levadas em conta. Por exemplo, acontece frequentemente que os atuadores são não-lineares. As válvulas são comumente usadas como atuadores em sistemas de controle de processo. Isto corresponde a uma não-linearidade do tipo saturação, onde os limites correspondem a uma válvula totalmente aberta ou fechada. A não-linearidade é, portanto, importante quando grandes mudanças são feitas. Pode haver dificuldades com o sistema de controle durante a inicialização e o desligamento, bem como durante grandes mudanças, se as não-linearidades não forem consideradas. Um exemplo típico é a integração do integrador. Outras não-linearidades típicas em sistemas do mundo real são limitações de taxa, histerese e \textit{backslash}. A maneira racional de lidar com a saturação é desenvolver uma teoria de projeto que leve em conta a não-linearidade. Isso pode ser feito usando a teoria de controle ótimo. No entanto, tal método de projeto é bastante complicado. A lei de controle correspondente também é complexa. Portanto, é prático usar métodos heurísticos simples.
+
+\item Aspectos operacionais;
+
+Entre o controlador e o operador do sistema de controle existem muitas outras coisas. Isso inclui uma avaliação das informações exibidas ao operador e os mecanismos para o operador alterar os parâmetros do controlador. Para discutir a interface do operador, é necessário considerar como o sistema será utilizado operacionalmente. Primeiro, é importante perceber a ampla variedade de aplicações dos sistemas de controle. Não há como dar um tratamento abrangente. Por exemplo, as demandas são muito diferentes para um piloto automático, uma sala de controle de processos ou uma planta de uma nave espacial. Muitas vezes é desejável ter a possibilidade de executar um sistema controle manualmente. Como o controlador é um sistema dinâmico, o estado do controlador deve ter o valor correto quando o modo é alternado de manual para automático. Se este não for o caso, existe um modo de rastreamento, que ajusta o estado do controlador para que seja compatível com as entradas e saídas do controlador. Um modo de rastreamento pode ser visto como uma implementação de um observador. Com o controle digital, é possível ter muitos outros modos de operação. Estimativa de parâmetros e algoritmos de projeto de controle podem ser incluídos no controlador. Com um controlador sendo um sistema dinâmico, é importante definir o estado do controlador apropriadamente quando o controlador estiver ligado. Com o controle digital, é possível usar uma parametrização no algoritmo de controle e outra na comunicação do operador. Os parâmetros exibidos para o operador podem então estar relacionados ao desempenho do sistema e não aos detalhes do algoritmo de controle. A conversão entre os parâmetros é feita por um algoritmo no computador. É muito importante certificar-se de que um sistema de controle digital funcione com segurança. Idealmente, isso significa que o sistema deve fornecer o resultado correto ou um alarme se não estiver funcionando corretamente.
+
+
+\item Realização;
+
+Ao longo deste capítulo, mostraremos como o arredondamento e a quantização nos conversores AD e DA influenciam o comportamento do sistema. Os erros de arredondamento nos cálculos da lei de controle também causam quantização, que pode ser modelada e analisada da mesma forma que a quantização do conversor. A quantização decorrente das computações depende criticamente de como as computações são organizadas, por exemplo, sobre como o controlador de dados amostrados é realizado. Algumas realizações diferentes são: forma direta, forma de companheiro, forma de série (Jordan), forma paralela (diagonal), forma de escada e a forma operador $\delta$.
+
+\item Aspectos de programação.
+
+Praticamente todos os controladores de tempo discreto são implementados em um sistema operacional de tempo real. Em alguns sistemas, as diferentes partes dos algoritmos podem ser distribuídas entre diferentes processadores. A comunicação pode introduzir atrasos variáveis no tempo (\textit{jitter}) no período de amostragem. A programação é um aspecto importante da implementação de um sistema de controle, tanto no que diz respeito à eficiência do sistema quanto ao tempo necessário para a implementação. O esforço necessário e as abordagens utilizadas dependem do \textit{software} disponível e da natureza do problema de controle. O código é normalmente escrito em C ou C++. Ada, desenvolvida pelo Departamento de Defesa dos EUA para aplicações de controle digital, é a primeira linguagem projetada e desenvolvida para aplicações de tempo real. O caráter e a dificuldade da programação dependem muito da aplicação. Os requisitos sobre as comunicações do operador são críticos. O código necessário para a comunicação do operador é geralmente muito maior que o código de controle puro. A Figura~\ref{fig:codigoEsqueleto2} mostra um exemplo de código embarcado no computador digital para operar um sistema de controle, onde o procedimento \texttt{Regular} é o código necessário para implementar o algoritmo de controle desejado e \texttt{Display} calcula algumas variáveis e as exibe em formato analógico ou digital.
+
+\end{itemize}
+
+\begin{figure}[ht]
+\centering
+\begin{minipage}{0.65\textwidth}
+\begin{lstlisting}
+repita
+  Espere por uma interrupção do clock
+  Regular()
+  Display()
+sempre
+\end{lstlisting}
+\end{minipage}
+\caption{Esqueleto de código de computador para um loop de controle.}
+\label{fig:codigoEsqueleto2}
+\end{figure}
+
+\subsection{Efeitos de Tamanho de Palavra Finita}\label{subsec:fwl}
+
+Outra importante propriedade a se considerar na implementação em controle digital é o que a literatura chama de efeitos de palavra finita (FWL, do ingles \textit{finite word length}). Devido ao foco desse trabalho levar em conta essa propriedade que muitas vezes é deixada de lado, falaremos com um pouco mais de detalhes como segue.
+
+Ao implementar um sistema de controle digital, é necessário verificar alguns fatores,tais como: precisão dos conversores, precisão necessária nos cálculos, o método de cálculo (em aritmética de ponto fixo ou ponto flutuante), etc. Com isso, deve-se entender os efeitos das limitações e estimar suas consequências para o sistema de malha fechada. Esta não é uma questão trivial, porque a resposta depende de uma interação complexa drealimentação, do algoritmo e da taxa de amostragem. Felizmente, apenas estimativas brutas devem ser feitas. Por exemplo, a quantidade de bits de resolução (\textit{e.g.} $10$ ou $12$ bits) e o comprimento da palavra (\textit{e.g.} $24$ ou $32$ bits).
+
+Algoritmos de controle digital são tipicamente implementados em microcontroladores e microprocessadores, que possuem comprimentos de $8$, $16$ ou $32$ bits. Para ilustrar o efeito que o tamanho da palavra podem ocasionar na computação numérica, usamos o produto escalar dos vetores $a=[100~1~100]$ e $b=[100~1~-100]$.O produto escalar é $(a, b)= 1$. Se o produto escalar for calculado em representação de ponto flutuante com uma precisão correspondente a três casas decimais, o resultado será zero porque $100 \cdot 100 + 1 = 1$ é arredondado para $10000$. Observe que o resultado obtido depende da ordem das operações. As operações de comprimento de palavra finita não são associativas nem distributivas.
+
+As dificuldades de implementação podem ser evitadas sem usar o cálculo completo de precisão dupla, adicionando os termos em precisão dupla e arredondando para precisão simples depois. Esse método pode ser aplicado a cálculos de ponto fixo e de ponto flutuante. Observe que a instrução de multiplicação para muitos microprocessadores é implementada para que a operação de multiplicação esteja disponível com precisão dupla. Muitas linguagens de alto nível também possuem construções que suportam esse tipo de cálculo. De um modo geral, arredondamento e quantização darão origem a pequenos erros, ao passo que os efeitos do \textit{overflow} serão desastrosos.
+
+Outra análise que pode ser feita sobre os efeitos fwl em sistemas em tempo discreto com realimentação de estados é a seguinte:
+
+A matriz do controlador de realimentação de estado estático $K$ de um sistema digital como~\eqref{eq:ssed} é fortemente afetada pelos efeitos de fwl, que podem comprometer algumas propriedades do sistema e devem ser manipuladas durante as fases de projeto.
+
+Os efeitos da fwl nos coeficientes do controlador são descritos da seguinte forma
+
+\begin{equation}
+\mathcal{FWL}_{\langle I,F \rangle}[\cdot]:\R^{m\times n} \rightarrow \R^{m\times n}_{Q}~,
+\end{equation}
+
+\noindent onde $\R^{m\times n}_{Q}$ é o conjunto discreto de matrizes $m \times n$ composto pelos elementos $\R^{m \times n}$, que podem ser representados em o formato de ponto fixo $\langle I, F \rangle$ e $I$ e $F$ são o número de bits das partes inteiras e fracionárias, respectivamente.
+
+Supondo que apenas $K$ é digital e implementado com aritmética de ponto fixo, cujos coeficientes estão sujeitos a efeitos fwl, um sistema dinâmico diferente de espaço de estados digital de ordem $n$ com controlador de realimentação de estado $\Omega_{\mathrm{fwl}}$ similar a \eqref{eq:ssed} tal como o sinal de controle é $\mathbf{u}(k) = \mathbf{r}(k)-\mathbf{K}_{\mathrm{fwl}}\mathbf{x}(k)$, onde a matriz $\mathbf{K}_{fwl}:= \mathcal{FWL}_{\langle I; F \rangle}[\mathbf{K}]$ é a matriz do controlador que sofre efeitos de fwl. Como consequência, tais efeitos de fwl podem influenciar os parâmetros de resposta a degraus do sistema, podendo não atender às especificações.
+%
+%SMT (\textit{Satisfiability Modulo Theories}) verifica a satisfatibilidade de fórmulas de primeira ordem a partir de uma ou mais teorias de fundamentação, que são compostas por um conjunto de sentenças. De modo formal, $\sigma$ -- \textit{theory} é uma coleção de sentenças sobre a assinatura $\sigma$. Dada uma teoria $T$, diz-se que $\varphi$ é um módulo satisfatível de $T$ se $T \subset {\phi}$. Em outra definição, pode-se dizer que uma teoria $T$ é definida como uma classe de estruturas e $\varphi$ é um módulo satisfatível se existe uma estrutura $M$ em $T$ que satisfaz $\varphi$ (\textit{i.e.}, $M \models \varphi$)~\cite{Moura:2009}.
+%
+%Solucionadores SMT como o Z3~\cite{Moura:2008} e Boolector~\cite{Brummayer:2009} suportam diferentes tipos de teorias, de modo que o seu desempenho pode variar conforme a sua implementação.
+%
+%\begin{table}[htb]
+%	\renewcommand{\arraystretch}{1.0}
+%	\caption{Exemplos de teorias suportadas.}
+%	\label{table:smt}
+%	\centering
+%	\begin{tabular}{c|c}
+%		\hline \bfseries Teoria & \bfseries Exemplo\\
+%		\hline Igualdade & $x_1 = x_2 \wedge \neg (x_2 = x_3) \Rightarrow \neg (x_1 = x_3)$\\
+%		\hline Aritmética Linear & $(7y_1 + y_2 \geq 5) \vee (y_2 + y_3 \leq 2)$\\
+%		\hline Vetores de $bit$ & $(b \gg i) \& 1 = 1$\\
+%		\hline Arranjos & $store(a, j, 5) \Rightarrow a[j] = 5$\\
+%		\hline Teorias Combinadas & $(j \leq k \wedge a[j] = 2) \Rightarrow a[i] < 3$\\
+%		\hline
+%	\end{tabular}
+%\end{table}
+%
+%A Tabela~\ref{table:smt} mostra algumas das teorias suportadas pelos solucionadores SMT utilizados neste trabalho. A teoria de igualdade permite verificações de igualdade e desigualdade entre predicados utilizando os operadores ($=$) ($\leq$) ($<$). A teoria da aritmética linear é responsável apenas pelas funções aritméticas (adição, subtração, multiplicação e divisão) entre variáveis e constantes numéricas. A teoria de vetores de $bit$ permite operações $bit$ a $bit$ considerando diferentes arquiteturas (\textit{e.g.}, $32$ e $64$ $bits$), nela estão presentes os operadores: e ($\&$), ou ($\mid$), ou-exclusivo ($\bigoplus$), complemento ($\sim$), deslocamento para a direita ($\gg$) e deslocamento para a esquerda ($\ll$). Além disso, a teoria de arranjos permite a manipulação de operadores como $select$ e $store$.
+%
+%Em contraste com as fórmulas geradas na satisfação booleana, que são apenas compostas por variáveis booleanas, as quais podem assumir valores verdadeiro e falso e conectivos lógicos, as fórmulas de primeira ordem são formadas por conectivos lógicos, variáveis, quantificadores, funções e símbolos de predicado~\cite{Moura:2009}. De modo geral, as teorias do módulo da satisfatibilidade tem sido aplicadas em diversos cenários~\cite{Moura:2018}, apresentando resultados mais promissores (se comparados à satisfação booleana), incluindo o suporte a diferentes teorias de decisão~\cite{Moura:2008, Moura:2009}.
+%
+%\subsection{\textit{Efficient SMT-based Context-Bounded Model Checker}}\label{sec:esbmc}
+%
+%O ESBMC é um verificador de modelos limitado ao contexto baseados nas teorias de módulo da satisfiabilidade (SMT), o qual é usado para verificar programas ANSI-C~\cite{Cordeiro:2012,DBLP:conf/tacas/MorseRCN014}. O ESBMC pode verificar tanto programas sequenciais quanto concorrentes e verifica propriedades relacionadas a estouro aritmético, divisão por zero, acesso ilegal a posições em memória, segurança de ponteiros, bloqueios fatais e corrida de dados. Esse processo é totalmente automático e não requer interação de usuário para anotar programas com pré- e/ou pós-condições.
+%
+%No ESBMC, o programa a ser verificado é modelado como um sistema de transição de estados $M = (S, R, s_0)$, 
+%que é extraído de um gráfico de fluxo de controle (GFC). $S$ representa o conjunto de estados, $R \subseteq S \times S$ representa o conjunto de transições ({\it i.e.}, pares de estados que especificam como o sistema pode navegar de um estado para outro) e $s_0 \subseteq S$ representa o conjunto de estadaos iniciais. Um estado $s \in S$ consiste de um valor do contador de programa $pc$ e os valores de todas as variáveis do programa. Um estado inicial $s_0$ atribui a localização inicial do programa do GFC para o $pc$. Cada transição $\gamma = (s_i, s_{i+1}) \in R$ entre dois estados $s_i$ and $s_{i+1}$ é identificada como uma fórmula lógica $\gamma (s_i,s_{i+1})$ que captura as restrições nos valores do contador de programa e das variáveis do programa correspondentes.
+%
+%Dado um sistema de transição $M$, uma propriedade de segurança $\phi$, um limite de contexto $C$ e um limite $k$, o ESBMC constrói uma árvore de alcançabilidade (AA) que representa o desdobramento do programa para $C$, $k$ e $\phi$. Ele então deriva uma condição de verificação (CV)$\psi^{\pi}_k$, para cada intercalação (ou caminho de computação) dada $\pi = \{v_1,...,v_k\}$, que é dada pela seguinte fórmula lógica:
+%
+%\begin{equation}
+%\label{eq:bounded-model-checking}
+%    \psi^{\pi}_{k} =
+%    \overbrace{I(s_{0}) \wedge \bigvee_{i=0}^{k} \bigwedge_{j=0}^{i-1} \gamma(s_j,s_{j+1})}^{\textrm{restrições}}
+%    \wedge \overbrace{\neg \phi(s_i)}^{\textrm{propriedade}}
+%\end{equation}
+%
+%Aqui, $I$ caracteriza o conjunto de estados iniciais $M$ e $\gamma(s_j,s_{j+1})$ é a relação de $M$ entre passos de tempo $j$ e $j+1$. Consequentemente, $I(s_0) \wedge \bigvee_{j=0}^{i-1} \gamma (s_j,s_{j+1})$ representa a executação de $M$ de largura $i$ e $\psi^{\pi}_{k}$ pode ser satisfatível se e somente se para algum $i \leq k$ existe um estado alcançável ao longo de $\pi$ em um passo de tempo $i$ no qual $\phi$ é violada. $\psi^{\pi}_{k}$ é uma fórmula livre de quantificadores em um subconjunto de lógica de primeira ordem decidível, o qual sua satisfiabilidade é verificada por um solucionador SMT. Se $\psi^{\pi}_{k}$ é satisfatível, então $\phi$ é violada ao longo de $\pi$ e o solucionador SMT fornece uma atribuição satisfatória, da qual pode-se extrair valores para variáveis do programa e construir um contraexemplo. Um contraexemplo para uma propriedade $\phi$ é uma sequência de estados $s_0,s_1,...,s_k$ com $s_0 \in S_0$, $s_k \in S$, e $\gamma (s_i, s_{i+1})$ para $0 \leq i < k$. Se $\psi^{\pi}_{k}$ não é satisfatível, pode-se concluir que nenhum estado de erro é alcançável em $k$ passos ou menos ao longo de $\pi$. Finalmente, pode-se definir $\psi_{k} = \bigwedge_{\pi} \psi_{k}^{\pi}$ e usá-la para verificar todos os caminhos.
+%
+%No entanto, o ESBMC combina verificação de modelos simbólica com a exploração explícita do espaço de estados; em particular, ele explicitamente explora todas as possíveis intercalações (até o limite de contexto dado) enquanto ele trata cada intercalação em si simbolicamente. O ESBMC implementa diferentes variações dessa abordagem, que diferem no modo que elas são exploradas na AA. A variação mais eficaz simplesmente percore a AA em profundidade e chama o procedimento BMC sequencial para cada intercalação quando ela atinge um nodo folha da AA. Ele pára ou quando encontra erro ou sistematicamente explorou todas as possíveis intercalações da AA.
+%
+%O modelo de memória do ESBMC usa análise estática de ponteiros, preenchimentos em estruturas, com o objetivo de alinhar todos os campos aos limites de palavra, forçamento de regras de alinhamento de acesso de memória e alocação de vetores de bytes, quando o tipo de alocação de memória não é claro, para que a fórmula SMT não seja tão extensa e suscetível a erros.
+%
+%O ESBMC também implementa a prova por indução~\cite{MorseCNF13,Gadelha:2017} para verificar propriedades em programas, \textit{i.e.}, utilizar uma abordagem iterativa de aprofundamento para checar se uma propriedade de segurança $\phi$ é satisfeita em cada passo $k$. O ESBMC usa um algoritmo \textit{k-induction}, que consiste de três casos diferentes: caso base, condição adiante e passo indutivo. No caso base tenta-se encontrar um contraexemplo em até $k$ desdobramentos de laço; na condição adiante verifica-se se os laços foram completamente desdobrados e que $\phi$ é válida em todos os estados alcançáveis dentro de $k$ passos; no passo indutivo assegura-se que sempre que $\phi$ é válida para $k$ desdobramentos, ela também é válida após o próximo desdobramento do sistema.
+%
+%Uma outra aplicação do ESBMC é a verificação de programas concorrentes para a plataforma CUDA~\cite{PereiraAMSCCSF16,Pereira:2016}. Utilizando um modelo operacional, \textit{i.e.}, uma representação abstrata das bibliotecas CUDA padrões que aproxima de forma conservadora as suas semânticas, o ESBMC é capaz de verificar propriedades de segurança em programas CUDA. Além disso, o ESBMC implementa a redução parcial de ordem e a análise de duas \textit{threads} para minimizar a exploração de espaço de estados.
+
+%\section{Localização de Falhas e Verificação de Modelos}\label{sec:fault-localization-and-model-checking}
+%
+%\subsection{Uso de Contraexemplos para Localizar Falhas}\label{sec:using-counterexamples}
+%
+%Em verificação de modelos, a atividade mais essencial, em relação à localização de falhas, é a de geração de um contraexemplo, o qual é produzido quando um programa não satisfaz uma dada especificação. Um contraexemplo não provê unicamente informações sobre a relação causa-efeito de uma dada violação, mas ele também pode auxiliar na localização de falhas, como Clarke {\it et al.}~\cite{Clarke:2003,Clarke:1995} citam. Mas, visto que uma grande massa de informação é obtida em um contraexemplo, as linhas de fato defeituosas não são facilmente identificadas.
+%
+%Alguns métodos foram propostos, com o objetivo de localizar possíveis causas de falha, usando contraexemplos. Ball {\it et al.}~\cite{Ball:2003} propuseram uma abordagem que tenta isolar possíveis causas de contraexemplos, gerados pelo verificador de modelos SLAM~\cite{Ball:2001}. A ideia é que potenciais linhas defeituosas podem ser isoladas através de uma comparação entre as transições obtidas em contraexemplos e execuções bem-sucedidas, visto que transições não presentes em rastreamentos bem-sucedidos são potenciais causas de erros. Groce {\it et al.}~\cite{Groce:2003} afirmam que se um contraexemplo existe, um caminho similar mas não-defeituoso também existe e pode ser obtido usando técnicas de BMC. Elementos de programa relacionados a uma dada violação são sugeridos pelas diferenças entre tal contraexemplo e um caminho bem-sucedido. Tal abordagem é implementada no verificador de modelos {\it Java PathFinder}~\cite{JPF} e também pode porver caminhos de execução que levam a estados errôneos, com relação a programasa concorrentes ({\it e.g.}, corrida de dados). O conceito chave da abordagem descrita por Groce {\it et al.}~\cite{Groce:2006} é similar ao anterior e usa alinhamento de restrições para associar estados, em um contraexemplo, com os estados correspondentes em uma execução não-defeituosa, os quais são gerados por um solucionador de restrições. Os estados mencionados são estados abstratos sobre predicados, os quais representam estados concretos em uma execução. Usando propriedades de métricas de distância, restrições podem ser aplicadas para representar execuções do programa, e restrições sem correspondentes que representam estados concretos possivelmente levam a falhas. E ainda, se uma propriedade de métricas de distânica não é satisfeita, um contraexemplo é gerado pelo verificador de modelos~\cite{Groce:2006}.
 
 \subsection{Localização de Falhas em Programas Sequenciais}\label{sec:sequential-fault-localization}
 

@@ -128,24 +128,24 @@ Cada sistema de tempo discreto linear invariante no tempo pode ser descrito por
 
 \begin{equation}\label{eq:ssed}
 \begin{cases}
-\mathbf{x}(k+1)=\mathbf{A}\mathbf{x}(k)+\mathbf{B}\mathbf{u}(k)\\
-\mathbf{y}(k)=\mathbf{C}\mathbf{x}(k)+\mathbf{D}\mathbf{u}(k)\\
-\mathbf{u}(k)=\mathbf{r}(k)-\mathbf{K}\mathbf{x}(k)
+\mathbf{x}[k+1]=\mathbf{A}\mathbf{x}[k]+\mathbf{B}\mathbf{u}[k]\\
+\mathbf{y}[k]=\mathbf{C}\mathbf{x}[k]+\mathbf{D}\mathbf{u}[k]\\
+\mathbf{u}[k]=\mathbf{r}[k]-\mathbf{K}\mathbf{x}[k]
 \end{cases},
 \end{equation}
 
 \noindent onde $\mathbf{A}$, $\mathbf{B}$, $\mathbf{C}$, $\mathbf{D}$ e $\mathbf{K}$ são matrizes contantes e $\mathbf{r}$ é a referência de entrada. Seja $\hat{\mathbf{x}}(z)$ a transformada ${\displaystyle Z}$  de $\mathbf{x}[k]$ ou
 
 \begin{equation*}
-\hat{\mathbf{x}}(z)=Z[\hat{\mathbf{x}}(k)]:=\sum_{k=0}^{\infty} \mathbf{x}(k)z^{-k}
+\hat{\mathbf{x}}(z)=Z[\hat{\mathbf{x}}[k]]:=\sum_{k=0}^{\infty} \mathbf{x}[k]z^{-k}
 \end{equation*}
 
 \noindent Temos que
 
 \begin{equation*}
 \begin{aligned}
-Z[\hat{\mathbf{x}}(k+1)]=&~\sum_{k=0}^{\infty} \mathbf{x}(k+1)z^{-k} \\
-                        =&~z\left[\sum_{l=1}^{\infty} \mathbf{x}(l)z^{-l}+\mathbf{x}[0]-\mathbf{x}[0]\right]=z\left(\hat{\mathbf{x}}(z)-\mathbf{x}[0]\right)
+Z[\hat{\mathbf{x}}[k+1]]=&~\sum_{k=0}^{\infty} \mathbf{x}[k+1]z^{-k} \\
+                        =&~z\left[\sum_{l=1}^{\infty} \mathbf{x}[l]z^{-l}+\mathbf{x}[0]-\mathbf{x}[0]\right]=z\left(\hat{\mathbf{x}}(z)-\mathbf{x}[0]\right)
 \end{aligned}
 \end{equation*}
 
@@ -181,7 +181,7 @@ Outra forma bastante comum de verificar a estabilidade de m sistema de tempo dis
 
 \subsection{Processo de Discretização}\label{subsec:pd}
 
-Segundo Smith \textit{et al.}~\cite{smith1997scientist}, a maioria dos sinais encontrados diretamente na ciência e na engenharia é contínuo: intensidade da luz que muda com a distância; tensão que varia ao longo do tempo; uma taxa de reação química que depende da temperatura, etc. A Conversão Analógico-Digital (CAD) e a Conversão Digital-para-Analógica (CDA) são os processos que permitem que os computadores digitais interajam com esses sinais cotidianos. A informação digital é diferente de sua contraparte contínua em dois aspectos importantes: é amostrada e quantizada. Ambos restringem a quantidade de informação que um sinal digital pode conter.
+Segundo Smith \textit{et al.}~\cite{smith1997scientist}, a maioria dos sinais encontrados diretamente na ciência e na engenharia é contínuo: intensidade da luz que muda com a distância; tensão que varia ao longo do tempo; uma taxa de reação química que depende da temperatura, etc. A Conversão analógico digital (AD) e a conversão digital analógica (DA) são os processos que permitem que os computadores digitais interajam com esses sinais cotidianos. A informação digital é diferente de sua contraparte contínua em dois aspectos importantes: é amostrada e quantizada. Ambos restringem a quantidade de informação que um sinal digital pode conter.
 
 Considerando o sistema descrito na Equação~\ref{eq:ssec}, se o conjunto de equações é para ser computado em um computador digital, ele deve ser discretizado. Dado que $\dot{\mathbf{x}}(t)=\lim_{T_\mathrm{s}\to 0} \frac{\mathbf{x}(t+T_\mathrm{s})-\mathbf{x}(t)}{T_\mathrm{s}}$, pode-se aproximar Equação~\ref{eq:ssec}, usando $t=kT_\mathrm{s}$, para $k=0,1,\dots$, de
 
@@ -210,8 +210,8 @@ Assim, se uma entrada altera o valor apenas em instantes de tempo discreto $kT$ 
 
 \begin{equation}\label{eq:ssednova}
 \begin{cases}
-\mathbf{x}(k+1)=\mathbf{A}_d\mathbf{x}(k)+\mathbf{B}_d\mathbf{u}(k)\\
-\mathbf{y}(k)=\mathbf{C}_d\mathbf{x}(k)+\mathbf{D}_d\mathbf{u}(k)\\
+\mathbf{x}[k+1]=\mathbf{A}_d\mathbf{x}[k]+\mathbf{B}_d\mathbf{u}[k]\\
+\mathbf{y}[k]=\mathbf{C}_d\mathbf{x}[k]+\mathbf{D}_d\mathbf{u}[k]\\
 \end{cases},
 \end{equation}
 
@@ -232,7 +232,7 @@ A solução das equações de estado para sistemas em tempo discreto pode ser obtida
 
 \subsection{Análise Quantitativa da Resposta ao Degrau}\label{subsec:aqrd}
 
-Dado um sistema linear de entrada/saída (Equação~\ref{eq:ssed}), a forma geral da solução da Equação~\ref{eq:ssed} é dada pela equação de convolução em \eqref{eq:solyd}~\cite{astrom2010feedback}. Vemos a partir da forma dessa equação que a solução consiste em uma resposta de condição inicial e uma resposta de entrada. A resposta de entrada, corresponde aos dois últimos termos da Equação \ref{eq:solyd}, consiste em dois componentes, a resposta transitória e a resposta em estado estacionário. A resposta transitória ocorre no primeiro período de tempo após a entrada ser aplicada e reflete a incompatibilidade entre a condição inicial e a solução de estado estacionário. A resposta de estado estacionário é a parte da resposta de saída que reflete o comportamento de longo prazo do sistema sob as entradas dadas. Para entradas que são periódicas, a resposta em estado estacionário será frequentemente periódica e, para entradas constantes, a resposta será frequentemente constante.
+Dado um sistema linear de entrada/saída, a forma geral da solução da Equação~\ref{eq:ssed} é dada pela equação de convolução em \eqref{eq:solyd}~\cite{astrom2010feedback}. Vemos a partir da forma dessa equação que a solução consiste em uma resposta de condição inicial e uma resposta de entrada. A resposta de entrada, corresponde aos dois últimos termos da Equação \ref{eq:solyd}, consiste em dois componentes, a resposta transitória e a resposta em estado estacionário. A resposta transitória ocorre no primeiro período de tempo após a entrada ser aplicada e reflete a incompatibilidade entre a condição inicial e a solução de estado estacionário. A resposta de estado estacionário é a parte da resposta de saída que reflete o comportamento de longo prazo do sistema sob as entradas dadas. Para entradas que são periódicas, a resposta em estado estacionário será frequentemente periódica e, para entradas constantes, a resposta será frequentemente constante.
 
 Uma forma de entrada particularmente comum é o degrau unitário, que representa uma mudança abrupta na entrada de um valor para outro. Um degrau unitário (às vezes chamada de função de degrau Heaviside~\cite{oppenheim1999discrete}) é definida como
 
@@ -243,17 +243,17 @@ Uma forma de entrada particularmente comum é o degrau unitário, que representa u
   }
 \end{equation*}
 
-Pode-se computar a resposta ao degrau de um sistema linear discreto através da Equação~\ref{eq:solyd}. Usando algumas operações algébricas, podemos chegar a conclusão de que a resposta em estado estacionário ao degrau unitário é dado por
+Pode-se computar a resposta ao degrau de um sistema linear discreto através da Equação~\ref{eq:solyd}. Usando algumas operações algébricas, podemos chegar a conclusão de que a resposta em estado estacionário ao degrau unitário é dado por~\cite{franklin1998digital}
 
 \begin{equation}\label{eq:yss}
 \begin{aligned}
-y_{\mathrm{ss}}=\mathbf{C}(\mathbf{I}-\mathbf{A})^{-1}\mathbf{B}+\mathbf{D}.
+y_{\mathrm{ss}}=\mathbf{C}(\mathbf{I}-\mathbf{A})^{-1}\mathbf{B}+\mathbf{D},
 \end{aligned}
 \end{equation}
 
-\noindent se $\mathbf{A}$ possui autovalores com valor módulo menor ou igual a $1$ (implicando que a origem é um ponto de equilíbrio estável na ausência de qualquer entrada).
+\noindent se $\mathbf{A}$ possui autovalores com valor de magnitude menor ou igual a $1$ (implicando que a origem é um ponto de equilíbrio estável na ausência de qualquer entrada).
 
-A Figura~\ref{fig:output} ilustra a resposta ao degrau de um sistema discreto. Vários termos são usados ao se referir a uma resposta ao degrau. O valor do estado estacionário $y_{\mathrm{ss}}$ de uma resposta ao degrau é o nível final da saída, supondo que converge. O sobressinal $M_\mathrm{p}$ é a porcentagem do valor final pelo qual o sinal inicialmente se eleva acima do valor final. Isso geralmente pressupõe que os valores futuros do sinal não excedem o valor final em mais do que esse transitório inicial, caso contrário, o termo pode ser ambíguo. O tempo de assentamento $k_{\mathrm{s}}$ é o tempo necessário para o sinal ficar dentro de uma faixa de valores compreendidos $p\%$ acima e abaixo do valor final (neste trabalho tratado como região de assentamento $\Pi$) para todos os tempos futuros. O tempo de assentamento também é por vezes definido como atingindo $1\%$ ou $5\%$ do valor final. Em geral, essas medidas de desempenho podem depender da amplitude do degrau de entrada, mas, para sistemas lineares, as duas últimas quantidades definidas acima são independentes do tamanho do degrau. Por último, para este trabalho, definidos também o que chamados de tempo de alcance $k_{\mathrm{r}}$ que é a amostra onde a resposta do sistema alcança pela primeira vez a região de assentamento.
+A Figura~\ref{fig:output} ilustra a resposta ao degrau de um sistema discreto. Vários termos são usados ao se referir a uma resposta ao degrau. O valor do estado estacionário $y_{\mathrm{ss}}$ de uma resposta ao degrau é o nível final da saída, supondo que converge~\cite{ogata2002modern}. O sobressinal $M_\mathrm{p}$ é a porcentagem do valor final pelo qual o sinal inicialmente se eleva acima do valor final~\cite{ogata2002modern}. Isso geralmente pressupõe que os valores futuros do sinal não excedem o valor final em mais do que esse transitório inicial, caso contrário, o termo pode ser ambíguo. Para se chegar ao valor de $M_\mathrm{p}$, precisamos de $y_\mathrm{p}$ que é o valor do maior pico da resposta do sistema, onde esse valor tem o mesmo sinal ($+$ ou $-$) de $y_{\mathrm{ss}}$; e $k_{\mathrm{p}}$ é a amostra onde esse valor de pico está alocado. O tempo de assentamento $k_{\mathrm{s}}$ é o tempo necessário para o sinal ficar dentro de uma faixa de valores compreendidos $p\%$ acima e abaixo do valor final (neste trabalho tratado como região de assentamento $\Pi$) para todos os tempos futuros. O tempo de assentamento também é por vezes definido como atingindo $1\%$ ou $5\%$ do valor final. Em geral, essas medidas de desempenho podem depender da amplitude do degrau de entrada, mas, para sistemas lineares, algumas dessas quantidades definidas acima ($M_\mathrm{p}$ e $k_\mathrm{s}$) são independentes do tamanho do degrau. Por último, para este trabalho, definidos também o que chamados de tempo de alcance $k_{\mathrm{r}}$ que é a amostra onde a resposta do sistema alcança pela primeira vez a região de assentamento.
 
 \begin{figure}[ht]
 	\centering
@@ -272,40 +272,81 @@ Quando projetamos controladores para sistemas em tempo discreto, dispomos de mui
 
 \subsection{Alocação de Polos}\label{subsec:ap}
 
-Dado que o sistema em questão seja descrito como em (\ref{eq:ssed}), assumindo que tenha apenas um sinal de entrada, e o polinômio característico da matrix $\mathbf{A}$ seja $P(z)=z^n+p_\mathrm{1}z^{\mathrm{n-1}}+\dots + p_n$. 
-Assumindo que o sistema em \eqref{eq:ssed} é alcançável, pode-se transformá-lo na forma canônica, mudando as variáveis de estado pela transformação $z=T_\mathrm{s}\mathbf{x}$, e a equação de estado transformado é~\cite{bakshi2008control}
+Dado que o sistema em questão seja descrito como em (\ref{eq:ssed}), assumindo que tenha apenas um sinal de entrada, e o polinômio característico da matrix $\mathbf{A}$ seja $\Delta(z)=z^n+\alpha_\mathrm{1}z^{\mathrm{n-1}}+\dots + \alpha_n$. 
+Deseja-se que o sistema tenha polos em determinada localidade, e o polinômio característico dos polos desejados é dado por $\Delta_\mathrm{d}(z)=z^n+\bar{\alpha}_\mathrm{1}z^{\mathrm{n-1}}+\dots + \bar{\alpha}_n$
 
-\begin{equation}\label{eq:ssed2}
-z(k+1)=\hat{\mathbf{A}}z(k)+\hat{\mathbf{B}}\mathbf{u}(k)
-\end{equation}
+Com o sistema sendo alcançável, existe uma realimentação linear que fornece um sistema em malha fechada com polinômio característico $\Delta_\mathrm{d}(z)$. A realimentação é dada por $\mathbf{u}[k]=-\mathbf{K}\mathbf{x}[k]$.
 
-Com o sistema sendo alcançável, existe uma realimentação linear que fornece um sistema em malha fechada com polinômio característico $P(z)$. A realimentação é dada por $\mathbf{u}[k]=-\mathrm{K}\mathbf{x}[k]$, com
-
-\begin{equation}\label{eq:ctrlD}
-\begin{aligned}
-\mathbf{K}=&~(p_\mathrm{1}-a_\mathrm{1}~p_\mathrm{2}-a_\mathrm{2}~\dots~p_n-a_n)\hat{\mathbf{W}}_c \mathbf{W}_c^{-1} \\
-          =&~(0~\dots~0~1)\mathbf{W}_c^{-1}P(\mathbf{A}) \\
-\end{aligned},
-\end{equation}
-
-\noindent onde $\hat{\mathbf{W}}_c$ e $\mathbf{W}_c$ são as matrizes de alcançabilidade de (\ref{eq:ssed2}) e (\ref{eq:ssed}), respectivamente.
-
-\begin{equation}\label{eq:reachM1}
-\hat{\mathbf{W}}^{-1}_c=\begin{bmatrix}
-1 & a_\mathrm{1} & \dots & a_{n-1} \\
-0 & 1 & \dots & a_{n-2} \\
+Com isso, existe uma matrix de transformação dada por~\cite{chen1995linear}
+\begin{equation*}
+Q:=P^{-1}=[\mathbf{B}~\mathbf{A}\mathbf{B}\dots \mathbf{A}^{n-1}\mathbf{B}]\begin{bmatrix}
+1 & \alpha_\mathrm{1} & \dots & \alpha_{n-1} \\
+0 & 1 & \dots & \alpha_{n-2} \\
 \vdots & \vdots & \ddots & \vdots \\
 0 & 0 & \dots & 1 
 \end{bmatrix}
-\end{equation}
+\end{equation*}
 
-\begin{equation}\label{eq:reachM2}
-\mathbf{W}_c=(\mathbf{B}~\mathbf{A}\mathbf{B}\dots \mathbf{A}^{n-1}\mathbf{B})
-\end{equation}
+Portanto, temos~\cite{chen1995linear}
+
+%\begin{equation*}
+%\bar{A}=PAP^{-1}=\begin{bmatrix}
+%-\alpha_\mathrm{1} & -\alpha_\mathrm{2} & \dots & -\alpha_{n-1} & -\alpha_{n} \\
+%1 & 0 & \dots & 0 & 0 \\
+%\vdots & \vdots & \ddots & \vdots & \vdots \\
+%0 & 0 & \dots & 1 & 0 
+%\end{bmatrix},
+%\end{equation*}
+%
+%\begin{equation*}
+%\bar{B}=P*B=[1~0~\dots~0~0]'
+%\end{equation*}
+%
+%e
+
+\begin{equation*}
+\bar{K}=[\bar{\alpha}_\mathrm{1}-\alpha_\mathrm{1}~\bar{\alpha}_\mathrm{2}-\alpha_\mathrm{2}~\dots~\bar{\alpha}_n-\alpha_n]
+\end{equation*}
+
+\noindent logo,
+
+\begin{equation*}
+\mathbf{K}=\bar{K}P,
+\end{equation*}
+
+%e
+%
+%\begin{equation*}
+%\bar{A}-B
+%\end{equation*}
+%
+%\begin{equation}\label{eq:ctrlD}
+%\begin{aligned}
+%\mathbf{K}=&~[p_\mathrm{1}-a_\mathrm{1}~p_\mathrm{2}-a_\mathrm{2}~\dots~p_n-a_n]\hat{\mathbf{W}}_c \mathbf{W}_c^{-1} \\
+%          =&~[0~\dots~0~1)\mathbf{W}_c^{-1}P(\mathbf{A}] \\
+%\end{aligned},
+%\end{equation}
+%
+%\noindent onde $\hat{\mathbf{W}}_c$ e $\mathbf{W}_c$ são as matrizes de alcançabilidade de (\ref{eq:ssed2}) e (\ref{eq:ssed}), respectivamente.
+%
+%\begin{equation}\label{eq:reachM1}
+%\hat{\mathbf{W}}^{-1}_c=\begin{bmatrix}
+%1 & a_\mathrm{1} & \dots & a_{n-1} \\
+%0 & 1 & \dots & a_{n-2} \\
+%\vdots & \vdots & \ddots & \vdots \\
+%0 & 0 & \dots & 1 
+%\end{bmatrix}
+%\end{equation}
+%
+%\begin{equation}\label{eq:reachM2}
+%\mathbf{W}_c=[\mathbf{B}~\mathbf{A}\mathbf{B}\dots \mathbf{A}^{n-1}\mathbf{B}]
+%\end{equation}
+
+Temos que $\mathbf{K}$ é o controlador que é usado para alocar os polos desejados. Para verificar, basta calcular os polos (autovalores) deste controlador aplicado a planta, ou seja, em $\mathbf{A}-\mathbf{B}\mathbf{K}$.
 
 \subsection{Regulador Quadrático Linear}\label{subsec:rql}
 
-O regulador quadrático linear (LQR) da teoria de controle ótimo pode ser usado para resolver uma família de problemas de projeto do regulador em que o estado é acessível e a regulação e o esforço do atuador são medidos por um desvio médio quadrático. Uma formulação estocástica do problema LQR é conveniente para nós; uma formulação mais usual é como um problema de controle ótimo. O sistema é descrito por
+O regulador quadrático linear (LQR) da teoria de controle ótimo pode ser usado para resolver muitos problemas de projeto do controlador em que o estado é acessível e a regulação e o esforço do atuador são medidos por um desvio médio quadrático. Uma formulação estocástica do problema LQR é conveniente; uma formulação mais usual é como um problema de controle ótimo. O sistema é descrito por~\cite{boyd1991linear}
 
 \begin{equation*}
 \dot{\mathbf{x}}=\mathbf{A}\mathbf{x}+\mathbf{B}\mathbf{u}+\mathbf{w},
@@ -313,16 +354,15 @@ O regulador quadrático linear (LQR) da teoria de controle ótimo pode ser usado p
 
 \noindent onde $w$ é um ruído branco de média zero, isto é, $w$ tem matriz de densidade espectral de potência $S_\mathrm{w} (w) = I$ para todos $w$. O estado $\mathbf{x}$ está disponível para o controlador, então $\mathbf{y} = \mathbf{x}$ nesse \textit{framework}.
 
-A função de custo do LQR é a soma do estado ponderado do quadrado médio do estado estacionário x, e o sinal do atuador ponderado do quadrado médio do estado estacionário u~\cite{boyd1991linear}
+A função de custo do LQR é a soma do estado ponderado do quadrado médio do estado estacionário $\mathbf{x}$, e o sinal do atuador ponderado do quadrado médio do estado estacionário $\mathbf{u}$~\cite{boyd1991linear}
 
 \begin{equation}
 J_\mathrm{lqr} = \lim_{t\to \infty} \mathbf{E}(\mathbf{x}(t)^TQ\mathbf{x}(t)+\mathbf{u}(t)^TR\mathbf{u}(t)),
 \end{equation}
 
-\noindent onde $Q$ e $R$ são matrizes positivas de peso semidefinido; a
-O primeiro termo penaliza os desvios de $\mathbf{x}$ de zero, e o segundo termo representa o custo de usar o sinal do atuador. Podemos expressar esse custo, formando o sinal de saída regulado $ \begin{bmatrix}
-R^{\frac{1}{2}}u &
-Q^{\frac{1}{2}}x 
+\noindent onde $Q$ e $R$ são matrizes de peso semi definido positivos. O primeiro termo penaliza as derivadas de $\mathbf{x}$ de zero, e o segundo termo representa o custo de usar o sinal do atuador. Podemos expressar esse custo, criando o sinal de saída regulado $ \begin{bmatrix}
+R^{\frac{1}{2}}\mathbf{u} &
+Q^{\frac{1}{2}}\mathbf{x} 
 \end{bmatrix} ' $, portanto, $J_\mathrm{lqr} = \lim_{t\to \infty} \mathbf{E}z(t)^Tz(t)$, o desvio quadrático médio de $z$. Como $w$ é um ruído branco, temos $J_\mathrm{lqr}=||H||_2^2$, o quadrado da norma $\mathbf{H}_2$ da matriz de transferência em malha fechada.
 
 A planta para o problema de regulador LQR é dada por: $\mathbf{A_\mathrm{p}=A}$, $\mathbf{B_\mathrm{u}=B}$, $\mathbf{B_\mathrm{w}=I}$, $\mathbf{C_\mathrm{z}}=[0~Q^{\frac{1}{2}}]'$, $\mathbf{C_\mathrm{y}=I}$, $\mathbf{D_\mathrm{zw}=0}$, $\mathbf{D_\mathrm{zu}}=[R^{\frac{1}{2}}~0]'$, $\mathbf{D_\mathrm{yw}=0}$ e $\mathbf{D_\mathrm{yu}=0}$, onde:
@@ -337,7 +377,7 @@ A planta para o problema de regulador LQR é dada por: $\mathbf{A_\mathrm{p}=A}$,
 
 As especificações consideradas são a capacidade de realização e a especificação de desigualdade funcional $||H||_2 \leq \alpha$. As suposições padrão são que $(Q, A)$ é observável, $(A, B)$ é controlável, e $R>0$, caso em que a especificação declarada na última sentença é mais forte do que (\textit{i.e.}, implica) estabilidade interna. Com estas suposições padrão, existe na verdade um controlador que atinge o menor custo possível de LQR, e é uma realimentação de estado constante, $K_\mathrm{lqr}(s)=-K_\mathrm{sfb}$, que pode ser encontrado com~\cite{boyd1991linear}
 
-Dado que $X_\mathrm{lqr}$ tenha única solução positiva definida da equação algébrica de Riccati[] que pode ser encontrada através da matrix Hamiltoniana associada $M$, e depois dada uma matriz $T$, tal que
+Dado que $X_\mathrm{lqr}$ tenha única solução positiva definida da equação algébrica de Riccati~\cite{bittanti2012riccati} que pode ser encontrada através da matrix Hamiltoniana associada $M$~\cite{van1984symplectic}, e depois dada uma matriz $T$, tal que
 
 \begin{equation*}
 T^{-1}MT=\begin{bmatrix}
@@ -375,18 +415,17 @@ Síntese indutiva guiada por contra exemplos (CEGIS) é um processo iterativo para
 
 A Figura~\ref{fig:cegisDiag} mostra a estrutura do CEGIS \cite{abate2018counterexample} e consiste em duas etapas principais: síntese e verificação. A etapa de verificação consiste em verificar a satisfatibilidade dos requerimentos em relação a uma determinada propriedade analisada, caso ela falhe ou seja bem-sucedida. O estágio de síntese, por sua vez, consiste em gerar um programa candidato, a fim de verificar se ele satisfaz uma propriedade analisada.
 
-No estágio de síntese, há um algoritmo de ``aprendizagem'' que aprende com contra exemplos fornecidos por um mecanismo de verificação. O algoritmo de aprendizagem procede pesquisando o espaço de candidatos conceitos para encontrar um que seja consistente com os exemplos vistos até o momento. Pode haver vários conceitos consistentes, e a estratégia de busca determina o candidato escolhido. Esse candidato é então apresentado ao mecanismo de verificação, que verifica o candidato quanto à especificação de correção. Se o candidato estiver correto, o sintetizador finaliza e produz este candidato. Caso contrário, o mecanismo de verificação gera um contra exemplo, gerando o motivo da falha. Esse contra exemplo é retornado ao algoritmo de aprendizagem, que adiciona o contra exemplo ao seu conjunto de exemplos e repete sua pesquisa. É possível que, após algum número de iterações desse loop, o algoritmo de aprendizagem possa ser incapaz de encontrar um candidato consistente; nesse caso, a etapa de aprendizagem e, portanto, o procedimento CEGIS, falha~\cite{alur2013syntax}.
+No estágio de síntese, há um algoritmo de ``aprendizagem'' que aprende com contra exemplos fornecidos por um mecanismo de verificação. O algoritmo de aprendizagem procede pesquisando o espaço de candidatos conceitos para encontrar um que seja consistente com os exemplos vistos até o momento. Pode haver vários conceitos consistentes, e a estratégia de busca determina o candidato escolhido. Esse candidato é então apresentado ao mecanismo de verificação, que verifica o candidato quanto à especificação de correção. Se o candidato estiver correto, o sintetizador finaliza e produz este candidato. Caso contrário, o mecanismo de verificação gera um contra exemplo, gerando o motivo da falha. Esse contra exemplo é retornado ao algoritmo de aprendizagem, que adiciona o contra exemplo ao seu conjunto de exemplos e repete sua pesquisa. É possível que, após algum número de iterações desse \textit{loop}, o algoritmo de aprendizagem possa ser incapaz de encontrar um candidato consistente; nesse caso, a etapa de aprendizagem e, portanto, o procedimento CEGIS, falha~\cite{alur2013syntax}.
 
-Dada a especificação do programa desejado, $\sigma$, o procedimento de síntese indutiva gera um programa candidato $P^*$ que satisfaz $\sigma(P^*, {\vec{x}})$ para um subconjunto ${\vec{x}}_{inpts}$ de todas as entradas possíveis. O programa candidato $P^*$ é passado para o estágio de verificação, que verifica se ele satisfaz a especificação $\sigma(P^*, {\vec{x}})$ para todas as entradas possíveis. A técnica faz isso verificando se $\lnot \sigma (P^*, {\vec{x}})$ é insatisfatório. Se assim for, $\forall {\vec{x}}. \lnot \sigma (P^*, {\vec{x}})$ é válido, e nós sintetizamos com sucesso uma solução e o algoritmo é finalizado. Caso contrário, o verificador produz um contra exemplo ${\vec{c}}$ da atribuição satisfatória, que é então adicionada ao conjunto de entradas passadas para o sintetizador, e o loop é repetido.
+Dada a especificação do programa desejado, $\sigma$, o procedimento de síntese indutiva gera um programa candidato $P^*$ que satisfaz $\sigma(P^*, {\vec{x}})$ para um subconjunto ${\vec{x}}_{inpts}$ de todas as entradas possíveis. O programa candidato $P^*$ é passado para o estágio de verificação, que verifica se ele satisfaz a especificação $\sigma(P^*, {\vec{x}})$ para todas as entradas possíveis. A técnica faz isso verificando se $\lnot \sigma (P^*, {\vec{x}})$ é insatisfatório. Se assim for, $\forall {\vec{x}}. \lnot \sigma (P^*, {\vec{x}})$ é válido, e nós sintetizamos com sucesso uma solução e o algoritmo é finalizado. Caso contrário, o verificador produz um contra exemplo ${\vec{c}}$ da atribuição satisfatória, que é então adicionada ao conjunto de entradas passadas para o sintetizador, e o \textit{loop} é repetido.
 
 O método utilizado nos blocos de síntese e verificação varia em diferentes implementações do CEGIS.
 
 \section{Implementação de Controladores Digitais}\label{subsec:icd}
 
-A implementação das leis de controle usando um computador é discutida neste capítulo. O principal problema é implementar um sistema de tempo discreto. Os princípios para fazer isso foram abordados em detalhes. É simples gerar o código do algoritmo de controle. A importância da pré-filtragem para evitar o aliasing foi mencionada. Filtragem digital não-linear sofisticada para remoção de valores discrepantes também foi discutida. O atraso computacional é influenciado consideravelmente pela organização do código de computador. Dificuldades que surgem da saturação em atuadores e formas de evitar essas dificuldades são discutidas. Isso também fornece automaticamente uma solução para a troca e inicialização de modo.
+A implementação das leis de controle usando um computador possue alguns problemas e dificuldades. O principal problema é implementar um sistema de tempo discreto. Os princípios para fazer isso foram abordados em detalhes. É simples gerar o código do algoritmo de controle. A importância da pré-filtragem para evitar o \textit{aliasing} será mostrada. Filtragem digital não-linear sofisticada para remoção de valores discrepantes também será discutida. O atraso computacional é influenciado consideravelmente pela organização do código de computador. Dificuldades que surgem da saturação em atuadores e formas de evitar essas dificuldades são discutidas. Isso também fornece automaticamente uma solução para a troca e inicialização de modo de operação.
 
-
-Os métodos de projeto baseados em alocação de pólos por realimentação de estado fornecem um controlador da forma
+Os métodos de projeto baseados em alocação de pólos por realimentação de estado fornecem um controlador da forma~\cite{astrom2010feedback}
 
 \begin{equation}\label{eq:imple}
 \begin{aligned}
@@ -401,13 +440,13 @@ A implementação de um sistema de tempo discreto descrito por (\ref{eq:imple}) us
 	\centering
 	\framebox{\parbox{5.0in}{
 			\centering
-			\includegraphics[width=0.8\textwidth]{figures/program.png}}
+			\includegraphics[width=0.6\textwidth]{figures/program.eps}}
 	}
 	\caption{Representações gráficas de um programa usado para implementar um sistema de tempo discreto.}
 	\label{fig:program}
 \end{figure}
 
-O corpo do código é dado na Figura~\ref{fig:codigoEsqueleto}. A conversão analógico-digital é comandada na primeira linha. Os valores apropriados são armazenados nas matrizes \texttt{y} e \texttt{tic}. O sinal de controle $\mathbf{u}$ é calculado na segunda linha usando multiplicação vetor-matriz e adição vetorial. O vetor de estado $\mathbf{x}$ é atualizado na terceira linha e a conversão de digital para analógico é realizada na quarta linha. Para obter um código completo, também é necessário ter declarações de tipo para os vetores \texttt{u}, \texttt{uc}, \texttt{xey} e as matrizes \texttt{F}, \texttt{G}, \texttt{Gc}, \texttt{C}, \texttt{D} e \texttt{Dc}. Também é necessário atribuir valores às matrizes e o valor inicial do estado $\mathbf{x}$. Ao usar linguagens de computador que não possuem operações de matriz, é necessário escrever procedimentos apropriados para gerar operações de matriz usando operações em escalares. Observe que as segunda e terceira linhas do código correspondem exatamente ao algoritmo em (\ref{eq:imple}).
+O corpo do código é dado na Figura~\ref{fig:codigoEsqueleto}. A conversão analógico digital é comandada na primeira linha. Os valores apropriados são armazenados nas matrizes \texttt{y} e \texttt{tic}. O sinal de controle $\mathbf{u}$ é calculado na segunda linha usando multiplicação vetor-matriz e adição vetorial. O vetor de estado $\mathbf{x}$ é atualizado na terceira linha e a conversão digital analógico é realizada na quarta linha. Para obter um código completo, também é necessário ter declarações de tipo para os vetores \texttt{u}, \texttt{uc}, \texttt{x} e \texttt{y}, e as matrizes \texttt{F}, \texttt{G}, \texttt{Gc}, \texttt{C}, \texttt{D} e \texttt{Dc}. Também é necessário atribuir valores às matrizes e o valor inicial do estado $\mathbf{x}$. Ao usar linguagens de computador que não possuem operações de matriz, é necessário escrever procedimentos apropriados para gerar operações de matriz usando operações em escalares. Observe que as segunda e terceira linhas do código correspondem exatamente ao algoritmo em (\ref{eq:imple}).
 
 \begin{figure}[ht]
 \centering
@@ -432,26 +471,26 @@ Para obter um bom sistema de controle, também é necessário considerar
 \begin{itemize}
 \item Pré-filtragem e atraso computacional;
 
-Para evitar o \textit{aliasing}, é necessário usar um pré-filtro analógico para eliminar perturbações com freqüências maiores que a freqüência de Nyquist associada à taxa de amostragem. Em um problema de controle, normalmente há muito mais informação disponível sobre os sinais em termos de equações diferenciais para os modelos de processo e possivelmente também para as perturbações. Geralmente, é útil amostrar os sinais analógicos a uma taxa comparativamente alta e evitar o aliasing por um pré-filtro analógico comum projetado do ponto de vista do processamento do sinal. Como o pré-filtro analógico tem dinâmica, é necessário incluir a dinâmica de filtro no modelo de processo. Se o pré-filtro ou a taxa de amostragem for alterada, os coeficientes da lei de controle devem ser recalculados. Com taxas de amostragem normais, isto é, $15$ a $45$ vezes por período, é necessário considerar a dinâmica do pré-filtro no projeto do controlador.
+Para evitar o \textit{aliasing}, é necessário usar um pré-filtro analógico para eliminar perturbações com freqüências maiores que a frequência de Nyquist associada à taxa de amostragem~\cite{oppenheim1999discrete}. Em um problema de controle, normalmente há muito mais informação disponível sobre os sinais em termos de equações diferenciais para os modelos de processo e possivelmente também para as perturbações. Geralmente, é útil amostrar os sinais analógicos a uma taxa comparativamente alta e evitar o aliasing por um pré-filtro analógico comum projetado do ponto de vista do processamento do sinal. Como o pré-filtro analógico tem dinâmica, é necessário incluir a dinâmica de filtro no modelo de processo. Se o pré-filtro ou a taxa de amostragem for alterada, os coeficientes da lei de controle devem ser recalculados. Com taxas de amostragem normais, isto é, $15$ a $45$ vezes por período, é necessário considerar a dinâmica do pré-filtro no projeto do controlador.
 
-Como as conversões e cálculos AD e DA levam tempo, sempre haverá um atraso quando uma lei de controle for implementada usando um computador. O atraso, que é chamado de atraso computacional, depende de como o algoritmo de controle é implementado. Existem basicamente duas maneiras diferentes de fazer isso. Na primeira, as variáveis medidas lidas no tempo $t_k$ podem ser usadas para calcular o sinal de controle a ser aplicado no tempo $t_{k+1}$. Outra possibilidade é ler as variáveis medidas no tempo $t_k$ e fazer a conversão DA o mais rápido possível.
+Como as conversões e cálculos AD e DA levam tempo, sempre haverá um atraso quando uma lei de controle for implementada usando um computador. O atraso, que é chamado de atraso computacional, depende de como o algoritmo de controle é implementado~\cite{astrom2010feedback}. Existem basicamente duas maneiras diferentes de fazer isso. Na primeira, as variáveis medidas lidas no tempo $t_k$ podem ser usadas para calcular o sinal de controle a ser aplicado no tempo $t_{k+1}$. Outra possibilidade é ler as variáveis medidas no tempo $t_k$ e fazer a conversão DA o mais rápido possível.
 
 \item Não-linearidades do(s) atuador(s);
 
-A teoria linear tem uma ampla aplicabilidade, muitas vezes existem algumas não-linearidades que devem ser levadas em conta. Por exemplo, acontece frequentemente que os atuadores são não-lineares. As válvulas são comumente usadas como atuadores em sistemas de controle de processo. Isto corresponde a uma não-linearidade do tipo saturação, onde os limites correspondem a uma válvula totalmente aberta ou fechada. A não-linearidade é, portanto, importante quando grandes mudanças são feitas. Pode haver dificuldades com o sistema de controle durante a inicialização e o desligamento, bem como durante grandes mudanças, se as não-linearidades não forem consideradas. Um exemplo típico é a integração do integrador. Outras não-linearidades típicas em sistemas do mundo real são limitações de taxa, histerese e \textit{backslash}. A maneira racional de lidar com a saturação é desenvolver uma teoria de projeto que leve em conta a não-linearidade. Isso pode ser feito usando a teoria de controle ótimo. No entanto, tal método de projeto é bastante complicado. A lei de controle correspondente também é complexa. Portanto, é prático usar métodos heurísticos simples.
+A teoria linear tem uma ampla aplicabilidade, muitas vezes existem algumas não-linearidades que devem ser levadas em conta. Por exemplo, acontece frequentemente que os atuadores são não-lineares. As válvulas são comumente usadas como atuadores em sistemas de controle de processo. Isto corresponde a uma não-linearidade do tipo saturação, onde os limites correspondem a uma válvula totalmente aberta ou fechada. A não-linearidade é, portanto, importante quando grandes mudanças são feitas. Pode haver dificuldades com o sistema de controle durante a inicialização e o desligamento, bem como durante grandes mudanças, se as não-linearidades não forem consideradas. Um exemplo típico é a integração do integrador. Outras não-linearidades típicas em sistemas do mundo real são limitações de taxa, histerese e \textit{backslash}~\cite{zhou2007robust}. A maneira racional de lidar com a saturação é desenvolver uma teoria de projeto que leve em conta a não-linearidade. Isso pode ser feito usando a teoria de controle ótimo~\cite{zhou1996robust}. No entanto, tal método de projeto é bastante complicado. A lei de controle correspondente também é complexa. Portanto, é prático usar métodos heurísticos simples.
 
 \item Aspectos operacionais;
 
-Entre o controlador e o operador do sistema de controle existem muitas outras coisas. Isso inclui uma avaliação das informações exibidas ao operador e os mecanismos para o operador alterar os parâmetros do controlador. Para discutir a interface do operador, é necessário considerar como o sistema será utilizado operacionalmente. Primeiro, é importante perceber a ampla variedade de aplicações dos sistemas de controle. Não há como dar um tratamento abrangente. Por exemplo, as demandas são muito diferentes para um piloto automático, uma sala de controle de processos ou uma planta de uma nave espacial. Muitas vezes é desejável ter a possibilidade de executar um sistema controle manualmente. Como o controlador é um sistema dinâmico, o estado do controlador deve ter o valor correto quando o modo é alternado de manual para automático. Se este não for o caso, existe um modo de rastreamento, que ajusta o estado do controlador para que seja compatível com as entradas e saídas do controlador. Um modo de rastreamento pode ser visto como uma implementação de um observador. Com o controle digital, é possível ter muitos outros modos de operação. Estimativa de parâmetros e algoritmos de projeto de controle podem ser incluídos no controlador. Com um controlador sendo um sistema dinâmico, é importante definir o estado do controlador apropriadamente quando o controlador estiver ligado. Com o controle digital, é possível usar uma parametrização no algoritmo de controle e outra na comunicação do operador. Os parâmetros exibidos para o operador podem então estar relacionados ao desempenho do sistema e não aos detalhes do algoritmo de controle. A conversão entre os parâmetros é feita por um algoritmo no computador. É muito importante certificar-se de que um sistema de controle digital funcione com segurança. Idealmente, isso significa que o sistema deve fornecer o resultado correto ou um alarme se não estiver funcionando corretamente.
+Entre o controlador e o operador do sistema de controle existem muitas outras coisas. Isso inclui uma avaliação das informações exibidas ao operador e os mecanismos para o operador alterar os parâmetros do controlador. Para discutir a interface do operador, é necessário considerar como o sistema será utilizado operacionalmente. Primeiro, é importante perceber a ampla variedade de aplicações dos sistemas de controle. Não há como dar um tratamento abrangente. Por exemplo, as demandas são muito diferentes para um piloto automático, uma sala de controle de processos ou uma planta de uma nave espacial. Muitas vezes é desejável ter a possibilidade de executar um sistema controle manualmente. Como o controlador é um sistema dinâmico, o estado do controlador deve ter o valor correto quando o modo é alternado de manual para automático. Se este não for o caso, existe um modo de rastreamento, que ajusta o estado do controlador para que seja compatível com as entradas e saídas do controlador. Um modo de rastreamento pode ser visto como uma implementação de um observador. Com o controle digital, é possível ter muitos outros modos de operação. Estimativa de parâmetros e algoritmos de projeto de controle podem ser incluídos no controlador. Com um controlador sendo um sistema dinâmico, é importante definir o estado do controlador apropriadamente quando o controlador estiver ligado. Com o controle digital, é possível usar uma parametrização no algoritmo de controle e outra na comunicação do operador. Os parâmetros exibidos para o operador podem então estar relacionados ao desempenho do sistema e não aos detalhes do algoritmo de controle. A conversão entre os parâmetros é feita por um algoritmo no computador. É muito importante certificar-se de que um sistema de controle digital funcione com segurança. Idealmente, isso significa que o sistema deve fornecer o resultado correto ou um alarme se não estiver funcionando corretamente~\cite{astrom2010feedback}.
 
 
 \item Realização;
 
-Ao longo deste capítulo, mostraremos como o arredondamento e a quantização nos conversores AD e DA influenciam o comportamento do sistema. Os erros de arredondamento nos cálculos da lei de controle também causam quantização, que pode ser modelada e analisada da mesma forma que a quantização do conversor. A quantização decorrente das computações depende criticamente de como as computações são organizadas, por exemplo, sobre como o controlador de dados amostrados é realizado. Algumas realizações diferentes são: forma direta, forma de companheiro, forma de série (Jordan), forma paralela (diagonal), forma de escada e a forma operador $\delta$.
+Ao longo deste capítulo, mostraremos como o arredondamento e a quantização nos conversores AD e DA influenciam o comportamento do sistema. Os erros de arredondamento nos cálculos da lei de controle também causam quantização, que pode ser modelada e analisada da mesma forma que a quantização do conversor. A quantização decorrente das computações depende criticamente de como as computações são organizadas, por exemplo, sobre como o controlador de dados amostrados é realizado. Algumas realizações diferentes são: forma direta, forma de companheiro, forma de série (Jordan), forma paralela (diagonal), forma de escada e a forma operador $\delta$~\cite{astrom2010feedback}.
 
 \item Aspectos de programação.
 
-Praticamente todos os controladores de tempo discreto são implementados em um sistema operacional de tempo real. Em alguns sistemas, as diferentes partes dos algoritmos podem ser distribuídas entre diferentes processadores. A comunicação pode introduzir atrasos variáveis no tempo (\textit{jitter}) no período de amostragem. A programação é um aspecto importante da implementação de um sistema de controle, tanto no que diz respeito à eficiência do sistema quanto ao tempo necessário para a implementação. O esforço necessário e as abordagens utilizadas dependem do \textit{software} disponível e da natureza do problema de controle. O código é normalmente escrito em C ou C++. Ada, desenvolvida pelo Departamento de Defesa dos EUA para aplicações de controle digital, é a primeira linguagem projetada e desenvolvida para aplicações de tempo real. O caráter e a dificuldade da programação dependem muito da aplicação. Os requisitos sobre as comunicações do operador são críticos. O código necessário para a comunicação do operador é geralmente muito maior que o código de controle puro. A Figura~\ref{fig:codigoEsqueleto2} mostra um exemplo de código embarcado no computador digital para operar um sistema de controle, onde o procedimento \texttt{Regular} é o código necessário para implementar o algoritmo de controle desejado e \texttt{Display} calcula algumas variáveis e as exibe em formato analógico ou digital.
+Praticamente todos os controladores de tempo discreto são implementados em um sistema operacional de tempo real~\cite{astrom2010feedback}. Em alguns sistemas, as diferentes partes dos algoritmos podem ser distribuídas entre diferentes processadores. A comunicação pode introduzir atrasos variáveis no tempo (\textit{jitter}) no período de amostragem. A programação é um aspecto importante da implementação de um sistema de controle, tanto no que diz respeito à eficiência do sistema quanto ao tempo necessário para a implementação. O esforço necessário e as abordagens utilizadas dependem do \textit{software} disponível e da natureza do problema de controle. O código é normalmente escrito em C ou C++. Ada~\cite{cohen1995ada}, desenvolvida pelo Departamento de Defesa dos EUA para aplicações de controle digital, é a primeira linguagem projetada e desenvolvida para aplicações de tempo real. O caráter e a dificuldade da programação dependem muito da aplicação. Os requisitos sobre as comunicações do operador são críticos. O código necessário para a comunicação do operador é geralmente muito maior que o código de controle puro. A Figura~\ref{fig:codigoEsqueleto2} mostra um exemplo de código embarcado no computador digital para operar um sistema de controle, onde o procedimento \texttt{Regular} é o código necessário para implementar o algoritmo de controle desejado e \texttt{Display} calcula algumas variáveis e as exibe em formato analógico ou digital.
 
 \end{itemize}
 
@@ -466,19 +505,19 @@ repita
 sempre
 \end{lstlisting}
 \end{minipage}
-\caption{Esqueleto de código de computador para um loop de controle.}
+\caption{Esqueleto de código de computador para um \textit{loop} de controle.}
 \label{fig:codigoEsqueleto2}
 \end{figure}
 
 \subsection{Efeitos de Tamanho de Palavra Finita}\label{subsec:fwl}
 
-Outra importante propriedade a se considerar na implementação em controle digital é o que a literatura chama de efeitos de palavra finita (FWL, do ingles \textit{finite word length}). Devido ao foco desse trabalho levar em conta essa propriedade que muitas vezes é deixada de lado, falaremos com um pouco mais de detalhes como segue.
+Outra importante propriedade a se considerar na implementação em controle digital é o que a literatura chama de efeitos de palavra finita (FWL, do ingles \textit{finite word length})~\cite{chang1994finite}. Devido ao foco desse trabalho levar em conta essa propriedade que muitas vezes é deixada de lado, falaremos com um pouco mais de detalhes como segue.
 
-Ao implementar um sistema de controle digital, é necessário verificar alguns fatores,tais como: precisão dos conversores, precisão necessária nos cálculos, o método de cálculo (em aritmética de ponto fixo ou ponto flutuante), etc. Com isso, deve-se entender os efeitos das limitações e estimar suas consequências para o sistema de malha fechada. Esta não é uma questão trivial, porque a resposta depende de uma interação complexa drealimentação, do algoritmo e da taxa de amostragem. Felizmente, apenas estimativas brutas devem ser feitas. Por exemplo, a quantidade de bits de resolução (\textit{e.g.} $10$ ou $12$ bits) e o comprimento da palavra (\textit{e.g.} $24$ ou $32$ bits).
+Ao implementar um sistema de controle digital, é necessário verificar alguns fatores,tais como: precisão dos conversores, precisão necessária nos cálculos, o método de cálculo (em aritmética de ponto fixo ou ponto flutuante), etc. Com isso, deve-se entender os efeitos das limitações e estimar suas consequências para o sistema de malha fechada. Esta não é uma questão trivial, porque a resposta depende de uma interação complexa de realimentação, do algoritmo e da taxa de amostragem. Felizmente, apenas estimativas brutas devem ser feitas. Por exemplo, a quantidade de bits de resolução (\textit{e.g.} $10$ ou $12$ bits) e o comprimento da palavra (\textit{e.g.} $24$ ou $32$ bits).
 
 Algoritmos de controle digital são tipicamente implementados em microcontroladores e microprocessadores, que possuem comprimentos de $8$, $16$ ou $32$ bits. Para ilustrar o efeito que o tamanho da palavra podem ocasionar na computação numérica, usamos o produto escalar dos vetores $a=[100~1~100]$ e $b=[100~1~-100]$.O produto escalar é $(a, b)= 1$. Se o produto escalar for calculado em representação de ponto flutuante com uma precisão correspondente a três casas decimais, o resultado será zero porque $100 \cdot 100 + 1 = 1$ é arredondado para $10000$. Observe que o resultado obtido depende da ordem das operações. As operações de comprimento de palavra finita não são associativas nem distributivas.
 
-As dificuldades de implementação podem ser evitadas sem usar o cálculo completo de precisão dupla, adicionando os termos em precisão dupla e arredondando para precisão simples depois. Esse método pode ser aplicado a cálculos de ponto fixo e de ponto flutuante. Observe que a instrução de multiplicação para muitos microprocessadores é implementada para que a operação de multiplicação esteja disponível com precisão dupla. Muitas linguagens de alto nível também possuem construções que suportam esse tipo de cálculo. De um modo geral, arredondamento e quantização darão origem a pequenos erros, ao passo que os efeitos do \textit{overflow} serão desastrosos.
+As dificuldades de implementação podem ser evitadas sem usar o cálculo completo de precisão dupla, adicionando os termos em precisão dupla e arredondando para precisão simples depois. Esse método pode ser aplicado a cálculos de ponto fixo e de ponto flutuante. Observe que a instrução de multiplicação para muitos microprocessadores é implementada para que a operação de multiplicação esteja disponível com precisão dupla. Muitas linguagens de alto nível também possuem construções que suportam esse tipo de cálculo. De um modo geral, arredondamento e quantização darão origem a pequenos erros, ao passo que os efeitos do \textit{overflow}~\cite{hauser1996handling} serão desastrosos.
 
 Outra análise que pode ser feita sobre os efeitos fwl em sistemas em tempo discreto com realimentação de estados é a seguinte:
 
@@ -552,165 +591,7 @@ Supondo que apenas $K$ é digital e implementado com aritmética de ponto fixo, cu
 %
 %Alguns métodos foram propostos, com o objetivo de localizar possíveis causas de falha, usando contraexemplos. Ball {\it et al.}~\cite{Ball:2003} propuseram uma abordagem que tenta isolar possíveis causas de contraexemplos, gerados pelo verificador de modelos SLAM~\cite{Ball:2001}. A ideia é que potenciais linhas defeituosas podem ser isoladas através de uma comparação entre as transições obtidas em contraexemplos e execuções bem-sucedidas, visto que transições não presentes em rastreamentos bem-sucedidos são potenciais causas de erros. Groce {\it et al.}~\cite{Groce:2003} afirmam que se um contraexemplo existe, um caminho similar mas não-defeituoso também existe e pode ser obtido usando técnicas de BMC. Elementos de programa relacionados a uma dada violação são sugeridos pelas diferenças entre tal contraexemplo e um caminho bem-sucedido. Tal abordagem é implementada no verificador de modelos {\it Java PathFinder}~\cite{JPF} e também pode porver caminhos de execução que levam a estados errôneos, com relação a programasa concorrentes ({\it e.g.}, corrida de dados). O conceito chave da abordagem descrita por Groce {\it et al.}~\cite{Groce:2006} é similar ao anterior e usa alinhamento de restrições para associar estados, em um contraexemplo, com os estados correspondentes em uma execução não-defeituosa, os quais são gerados por um solucionador de restrições. Os estados mencionados são estados abstratos sobre predicados, os quais representam estados concretos em uma execução. Usando propriedades de métricas de distância, restrições podem ser aplicadas para representar execuções do programa, e restrições sem correspondentes que representam estados concretos possivelmente levam a falhas. E ainda, se uma propriedade de métricas de distânica não é satisfeita, um contraexemplo é gerado pelo verificador de modelos~\cite{Groce:2006}.
 
-\subsection{Localização de Falhas em Programas Sequenciais}\label{sec:sequential-fault-localization}
-
-Griesmayer {\it et al.}~\cite{Griesmayer:2007} propuseram um método baseado em técnicas de BMC que pode diretamente identificar potenciais falhas em programas. Em particular, o método usa variáveis numéricas adicionais, {\it e.g.} \texttt{diag}, para apontar linhas defeituosas em um dado programa.
-
-Cada linha do programa, representando uma declaração \texttt{S}, é transformada em uma versão lógica de tal declaração. Logo, o valor atribuído a \texttt{S} é ou não-deterministicamente escolhido pelo verificador de modelos (se o valor de \texttt{diag} for o mesmo que o representado pela linha relacionada à declaração \texttt{S}) ou o especificado originalmente. Os valores de \texttt{diag} obtidos pelo verificador de modelos representam linhas do programa e estão estritamente ligados à falha obtida, visto que, corrigindo essa linha no programa original, a falha em questão pode ser evitada. No caso de múltiplos valores de \texttt{diag}, corrigindo tais linhas levam a uma execução bem sucedida do programa. Com o intuito de encontrar o conjunto inteiro de linhas que causam o comportamento defeituoso no programa, uma nova especificação no comando de verificação\footnote{\texttt{assume(diag != a)}} pode ser adicionada ao código-fonte, o qual então é executado novamente pelo verificador de modelos. Esse processo é executado repetidamente até que não sejam obtidos novos valores para \texttt{diag}, {\it i.e.}, a execução não falha~\cite{Griesmayer:2007_2}.
-
-Para ilustrar o funcionamento do método em questão, toma-se como exemplo um controlador digital baseado na fórmula da função horária do movimento retilíneo uniformemente variado (MRUV)~\cite{Ohanian:2006} (veja Equação~\ref{equation:space-equation}). A equação do controlador é definida na Equação~\ref{equation:controller-equation} (os valores foram atribuídos arbritariamente).
-
-\begin{gather}
-  s(t) = at^2/2+v_0t+s_0 \label{equation:space-equation}
-\end{gather}
-
-\begin{gather}
-  c(t) = t^2-3t+2 \label{equation:controller-equation}
-\end{gather}
-
-Um modelo na linguagem C do controlador é modelado como na Figura~\ref{figure:sequential-code}.
-
-\begin{figure}[ht]
-\centering
-\begin{minipage}{0.65\textwidth}
-\begin{lstlisting}
-#include <stdio.h>
-#include <assert.h>
-
-const int A = 1;
-const int B = -2;
-const int C = 2;
-
-int controller(int input) {
-  int output = A * input * input + B * input + C;
-  return output;
-}
-
-int main() {
-  assert(controller(0) == 2 && controller(1) == 0 && controller(2) == 0 && controller(3) == 2);
-  return 0;
-}
-\end{lstlisting}
-\end{minipage}
-\caption{Código sequencial de um controlador qualquer.}
-\label{figure:sequential-code}
-\end{figure}
-
-Pode-se observar que o modelo não está em conformidade com a equação dada, no caso o termo $B$ está com o valor $-2$ ao invés de $-3$. Dessa forma, espera-se que a assertiva falhe ao executar o programa em um verificador de modelos, como pode ser observado no trecho da Figura~\ref{figure:counterexample-model} (o contraexemplo completo está disponível no Apêndice~\ref{appendix:counterexample-1}).
-
-\begin{figure}[ht]
-\centering
-\begin{minipage}{0.65\textwidth}
-\begin{lstlisting}
-...
-Violated property:
-  file model.c line 14 function main
-  assertion 
-  FALSE
-
-VERIFICATION FAILED
-\end{lstlisting}
-\end{minipage}
-\caption{Trecho do contraexemplo para o modelo.}
-\label{figure:counterexample-model}
-\end{figure}
-
-Usando o ESMBC como verificador de modelos, o código instrumentado não-determinístico obtido é como na Figura~\ref{figure:griesmayer-method-applied-code}.
-
-\begin{figure}[ht]
-\centering
-\begin{minipage}{0.65\textwidth}
-\begin{lstlisting}
-#include <stdio.h>
-#include <assert.h>
-const int A = 1;
-const int B = -2;
-const int C = 2;
-int nondet(int i) {
-  int ret;
-  __ESBMC_assume(ret != i);
-  return ret;
-}
-int controller(int input) {
-  int diag = nondet(0);
-  int ta = (diag == 1 ? nondet(A) : A) * input * input;
-  int tb = (diag == 2 ? nondet(B) : B) * input;
-  int tc = (diag == 3 ? nondet(C) : C);
-  int output = ta + tb + tc;
-  return output;
-}
-int main() {
-  __ESBMC_assume(controller(0) == 2 && controller(1) == 0 && controller(2) == 0 && controller(3) == 2);
-  assert(0);
-  return 0;
-}
-\end{lstlisting}
-\end{minipage}
-\caption{Código sequencial instrumentado com o método descrito aplicado.}
-\label{figure:griesmayer-method-applied-code}
-\end{figure}
-
-Ao executar o código da Figura~\ref{figure:griesmayer-method-applied-code} no ESBMC sucessivamente, \textit{i.e.}, até que não sejam encontrados novos valores para $diag$, obtém-se os valores presentes na Figura~\ref{figure:faulty-lines-griesmayer} (o contraexemplo completo está disponível no Apêndice~\ref{appendix:counterexample-2}).
-
-\begin{figure}[ht]
-\centering
-\begin{minipage}{0.65\textwidth}
-\begin{lstlisting}
-griesmayer::controller::1::diag=-2012462479 (-2012462479)
-griesmayer::controller::1::diag=2 (2)
-griesmayer::controller::1::diag=2 (2)
-griesmayer::controller::1::diag=2 (2)
-\end{lstlisting}
-\end{minipage}
-\caption{Linhas defeituosas obtidas pela execução do código~\ref{figure:griesmayer-method-applied-code}.}
-\label{figure:faulty-lines-griesmayer}
-\end{figure}
-
-Segundo o contraexemplo obtido com o ESBMC, pode-se observar que o valor de $diag$ é $2$ em três casos e um inteiro negativo em um caso. Logo, o problema está no cálculo do segundo termo, como esperado. O contraexemplo completo mostra que o valor para corrigir tal falha é $-3$. Assim, pode-se corrigir a falha apontada e reexecutar o código no verificador de modelos.
-
-\begin{figure}[ht]
-\centering
-\begin{minipage}{0.65\textwidth}
-\begin{lstlisting}
-#include <stdio.h>
-#include <assert.h>
-const int A = 1;
-const int B = -3;
-const int C = 2;
-int controller(int input) {
-  int output = A * input * input + B * input + C;
-  return output;
-}
-int main() {
-  assert(controller(0) == 2 && controller(1) == 0 && controller(2) == 0 && controller(3) == 2);
-  return 0;
-}
-\end{lstlisting}
-\end{minipage}
-\caption{Código sequencial corrigido.}
-\label{figure:corrected-sequential-code}
-\end{figure}
-
-Após a correção do problema apontado, executa-se o código corrigido~\ref{figure:corrected-sequential-code} no ESBMC e obtém-se as linhas presentes na Figura~\ref{figure:correct-faulty-lines-griesmayer} (o contraexemplo completo está disponível no Apêndice~\ref{appendix:counterexample-3}). Em controladores digitais, é importante que os modelos sejam precisamente especificados para evitar falhas durante o funcionamento em ambiente real, visto que podem levar ao mal-funcionamento do equipamento e até danos, aumentando o custo do mesmo.
-
-\begin{figure}[ht]
-\centering
-\begin{minipage}{0.65\textwidth}
-\begin{lstlisting}
-griesmayer::controller::1::diag=-934770697 (-934770697)
-griesmayer::controller::1::diag=-1 (-1)
-griesmayer::controller::1::diag=-1 (-1)
-griesmayer::controller::1::diag=-1 (-1)
-\end{lstlisting}
-\end{minipage}
-\caption{Linhas defeituosas obtidas pela execução do código~\ref{figure:corrected-sequential-code}.}
-\label{figure:correct-faulty-lines-griesmayer}
-\end{figure}
-
-Dessa forma, foi possível observar o método proposto por Griesmayer {\it et al.}~\cite{Griesmayer:2007} aplicado em um programa sequencial.
-
-Este método foi escolhido para ser utilizado neste trabalho, pois além de ser simples a sua implementação, ele aponta não só linhas que contém defeitos, como também possíveis valores que levam a uma execução bem-sucedida do programa original.
 
 \section{Resumo}\label{sec:chap-2-summary}
 
-Neste capítulo, foram introduzidos os conceitos básicos para o entendimento desta dissertação, relacionadas à verificação de modelos. Mais especificamente, explicou-se o conceito de verificação de modelos limitada usando teorias de módulo da satisfiabilidade (SMT) com o verificador de modelos ESBMC ({\it Efficient SMT-based Context-Bounded Model Checker}), que verifica propriedades de programas sequenciais e concorrentes. Também foram mostradas discussões sobre o uso de contraexemplos para auxiliar no processo de localização de falhas. Por fim, foi apresentado um método para localizar falhas em programas sequenciais, usando não-determinismo para instrumentar atribuições, de forma que o verificador de modelos escolhe o valor para cada variável do programa para que propriedade (em forma de assertiva) presente no código seja satisfeita. Como resultado, o contéudo deste capítulo fornece todo o embasamento necessário para compreensão do trabalho desenvolvido, que será descrito nas seções subsequentes.
+Neste capítulo, foram introduzidos os conceitos básicos para o entendimento desta dissertação, relacionadas a basicamente sintese de controladores digitais através de métodos formais e das técnicas tradicionais de sistemas de controle. Mais especificamente, explicou-se conceitos básicos de verificação formal e suas técnicas mais utilizadas, com o objetivo de se chegar em invariantes. Também foram mostradas discussões sobre representações de sistemas dinâmicos lineares. Outra ponto que foi discutido, foi a respeito das técnicas de projeto de controle para sistemas em tempo discreto. Por fim, foi apresentado uma introdução a forma como controladores digitais são implementados em um microprocessador e também a respeito de efeitos FWL nesses controladores. Como resultado, o contéudo deste capítulo fornece todo o embasamento necessário para compreensão do trabalho desenvolvido, que será descrito nas seções seguintes.

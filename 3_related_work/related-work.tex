@@ -52,11 +52,11 @@ Jose {\it et al.}~\cite{Jose:2011} discutem sobre um algoritmo para localização 
 
 O algoritmo apresentado é capaz de localizar linhas defeituosas e os autores também realizaram experimentos para sugerir reparos de atribuições aritméticas e troca de operadores de comparação no código original. Apesar dessa abordagem ser útil para localizar linhas defeituosas, ela ainda depende de uma execução malsucedida, e funciona apenas para para programas ANSI-C padrão.
 
-\section{\textit{Mutation-Based Fault Localization for Real-World Multilingual Programs}}
+\section{\textit{Automated Formal Synthesis of Digital Controllers for State-Space Physical Plants}}
 
-Hong {\it et al.}~\cite{Hong:2015} propõem uma técnica de localização de falhas baseada em mutantes para programas multilinguais, \textit{i.e.}, programas escritos em mais de uma linguagem que provêm interfaces para comunicação, chamado \textsc{Museum}. Os autores desenvolveram um novo conjunto de operadores de mutação que, junto aos convencionais, são capazes de localizar instruções defeituosas em todos os benchmarks adotados, o que melhora a acurácia ao se tratar de falhas multilinguais. Logo, ao usar esse conjunto de operadores mutantes extendido e métricas de suspeita apropriadas, o \textsc{Museum} é capaz de identificar defeitos em programas JNI.
+Hong {\it et al.}~\cite{abate2017automated} propõem uma abordagem sólida e automatizada para sintetizar controladores digitais com realimentação seguros para plantas físicas representadas como modelos lineares invariantes no tempo. Os autores utilizaram síntese indutiva guiada por contra-exemplo (CEGIS) o qual possui duas fases: síntese de um controlador de realimentação estático que estabiliza o sistema, mas que pode não ser seguro para todas as condições iniciais. A segurança é então verificada via verificação de modelos limitada (BMC, do inglês \textit{bounded model checking}) ou aceleração abstrata; se a etapa de verificação falhar, um contra-exemplo é fornecido ao mecanismo de síntese e o processo itera até que um controlador seguro seja obtido.
 
-A avaliação empírica mostra que o \textsc{Museum} é mais preciso e eficaz que técnicas estado-da-arte de localização de falhas baseadas em espectro. No entanto, a técnica proposta precisa de ao menos um caso de teste que falha e ainda não foi avaliada com programas concorrentes.
+O trabalho em questão apresenta excelentes resultados, porém ainda deixa de considerar aspectos desempenho de projeto de controladores, considerando somente a estabilidade dos mesmos. Um bom aspecto é que a metodologia considera fragilidade na implementação dos controladores digitais.
 
 \section{\textit{Metallaxis-FL: Mutation-Based Fault Localization}}
 

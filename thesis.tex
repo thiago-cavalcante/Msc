@@ -18,7 +18,8 @@
 \usepackage{pbox}
 \usepackage{subcaption}
 \usepackage{epstopdf}
-\usepackage[portuges]{babel}
+\usepackage[portuguese]{babel}
+\selectlanguage{portuguese}
 \usepackage[
     a4paper,
     portuguese,
@@ -47,6 +48,27 @@
 \SetKwIF{Se}{Senão se}{Senão}{se}{então}{senão se}{senão}{fim se}%
 \SetKwFor{Eq}{Enquanto}{faça}{fim enquanto}%
 \SetKwFunction{KwPr}{estimate\_maxPeak\_value}%
+
+
+%\ifthenelse{\boolean{algocf@optonelanguage}\AND\equal{\algocf@languagechoosen}{portuguese}}{%
+\SetKwInput{KwIn}{Entrada}%
+\SetKwInput{KwOut}{Saída}%
+\SetKwInput{KwData}{Dados}%
+\SetKwInput{KwResult}{Resultado}%
+\SetKw{KwTo}{a}%
+\SetKw{KwRet}{retorne}%
+\SetKw{Return}{retorne}%
+\SetKwBlock{Begin}{início}{fim}%
+\SetKwRepeat{Repeat}{repetir}{até}%
+%
+\SetKwIF{If}{ElseIf}{Else}{se}{ent\~{a}o}{sen\~{a}o se}{caso contr\'{a}rio}{fim se}
+\SetKwSwitch{Switch}{Case}{Other}{selecionar}{fa\c{c}a}{caso}{sen\~{a}o}{fim caso}{fim selecionar}
+\SetKwFor{For}{para}{fa\c{c}a}{fim para}%
+\SetKwFor{ForPar}{par}{hacer in paralelo}{fin para}%
+\SetKwFor{ForEach}{para cada}{fa\c{c}a}{fim para cada}
+\SetKwFor{ForAll}{para todo}{fa\c{c}a}{fim para todo}
+\SetKwFor{While}{enquanto}{fa\c{c}a}{fim enquanto}
+%}{}%
 
 \DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
 

@@ -19,82 +19,42 @@ Aqui, o método proposto é descrito brevemente, como mostrado na Figura~\ref{figu
 \label{sec:verification}
 %-------------------------------------------------------------------
 
-As we described, in this work we use a variation of CEGIS synthesis to synthesize a controller in order to satisfy performance requirements in digital control systems such as settling-time and maximum overshoot. In CEGIS strategy of we have basically two main stages: synthesis and verification. In this section we show the verification method of settling-time and maximum overshoot of digital control systems.
+Neste trabalho utilizamos uma variação da síntese do CEGIS para sintetizar um controlador digital, a fim de satisfazer os requmáximo sobressinal. Na estratégia do CEGIS, temos basicamente duas etapas principais: síntese e verificação. Nesta seção, mostramos o método de verificação do tempo de assentamento e do máximo sobressinal dos sistemas de controle digital.
 %--------------------------------------------------------------------------------
-\subsection{Maximum Overshooting Estimation}
+\subsection{Estimativa do Máximo Sobressinal}
 \label{sec:modformver}
 %--------------------------------------------------------------------------------
 
-Algorithm~\ref{alg:overshootEst} describes a procedure for estimating $y_{\mathrm{p}}$ (maximum peak value in a system's response) and $k_{\mathrm{p}}$ (sample where $y_{\mathrm{p}}$ is located), in order to find a formal approach to verify the maximum overshoot used in our CEGIS approach.
-
-%\begin{algorithm}
-%    \caption{Estimation of $y_{\mathrm{p}}$ and $k_{\mathrm{p}}$}
-%    \label{alg:overshootEst}
-%    \begin{algorithmic}[1] % The number tells where the line numbering should start
-%        \Procedure{estimate\_maxPeak\_value}{$   $}
-%          \State $y_\mathrm{p} \gets y(k)$
-%          \State $lastGrad \gets 1$
-%          \Loop
-%            \If {$|y(k+1)|>|y(k)|$}
-%              \State $gradient = (gradient>0)?(gradient+1):1$
-%              \If {$|y(k+1)| != |y(k)|$}
-%                \State $firstGradSample = y(k+1)$
-%                \State $firstGradSampleIdx = k+1$
-%              \EndIf
-%            \Else
-%              \State $gradient = (gradient<0)?(gradient-1):-1$
-%            \EndIf
-%            \If {$(lastGrad>0) ~and~ (gradient < 0)$}
-%              \If {$|firstGradSample| <= |k_\mathrm{p}|$}
-%                \State increment $numBadPeaks$
-%                \If {$numBadPeaks > 2$}
-%                  \State $exit(\textbf{loop})$
-%                \Else
-%                  \State $y_\mathrm{p} = firstGradSample$
-%                  \State $k_\mathrm{p} = firstGradSampleIdx$
-%                \EndIf
-%              \ElsIf {$(grad > 10) ~and~ (|(y(k+1)-yss)/yss| < 0.001)$}
-%                \If {$|yss|>|y_\mathrm{p}|$}
-%                  \State $y_\mathrm{p} = yss$
-%                  \State $k_\mathrm{p} = 0$
-%                \EndIf
-%                \State $exit(\textbf{loop})$
-%              \EndIf
-%            \EndIf
-%            \State $lastGrad = grad$
-%            \State increment $k$
-%          \EndLoop
-%        \EndProcedure
-%    \end{algorithmic}
-%\end{algorithm}
+Algoritmo~\ref{alg:overshootEst} descreve um procedimento para estimar $y_{\mathrm{p}}$ (valor máximo de pico na resposta de um sistema) e $k_{\mathrm{p}}$ (amostra onde $y_{\mathrm{p}}$ está localizado), a fim de encontrar uma abordagem formal para verificar o máximo sobressinal usado em nossa abordagem CEGIS.
 
 \begin{algorithm}[H]
-  \renewcommand{\algorithmcfname}{Algorítmo}%
+\footnotesize
+  \renewcommand{\algorithmcfname}{Algoritmo}%
   \SetAlgoLined
-  \KwPr{}
-  $y_\mathrm{p} \gets y(k)$
-  $lastGrad \gets 1$
-  \Eq{infinito}{
-  \eSe{$|y(k+1)|>|y(k)|$}{
+  %\KwPr{}
+  $y_\mathrm{p} \gets y(k)$\;
+  $lastGrad \gets 1$\;
+  \While{verdadeiro}{
+  \eIf{$|y(k+1)|>|y(k)|$}{
      $gradient = (gradient>0)?(gradient+1):1$\;
-     \Se{$|y(k+1)| != |y(k)|$}{
+     \If{$|y(k+1)| != |y(k)|$}{
       $firstGradSample = y(k+1)$\;
       $firstGradSampleIdx = k+1$\;
     }
   }{
     $gradient = (gradient<0)?(gradient-1):-1$\;
   }
-  \Se{$(lastGrad>0) ~and~ (gradient < 0)$}{
-     \eSe{$|firstGradSample| <= |k_\mathrm{p}|$}{
+  \If{$(lastGrad>0) ~and~ (gradient < 0)$}{
+     \uIf{$|firstGradSample| <= |k_\mathrm{p}|$}{
        increment $numBadPeaks$\;
-       \eSe{$numBadPeaks > 2$}{
+       \eIf{$numBadPeaks > 2$}{
          $exit(\textbf{loop})$\;
        }{
          $y_\mathrm{p} = firstGradSample$\;
          $k_\mathrm{p} = firstGradSampleIdx$\;
        }
-     }\SenãoSe{$(grad > 10) ~and~ (|(y(k+1)-yss)/yss| < 0.001)$}{
-       \eSe{$|yss|>|y_\mathrm{p}|$}{
+     }\uElseIf{$(grad > 10) ~and~ (|(y(k+1)-yss)/yss| < 0.001)$}{
+       \eIf{$|yss|>|y_\mathrm{p}|$}{
          $y_\mathrm{p} = yss$\;
          $k_\mathrm{p} = 0$\;
        }{
@@ -105,20 +65,23 @@ Algorithm~\ref{alg:overshootEst} describes a procedure for estimating $y_{\mathr
   $lastGrad = grad$\;
   increment $k$\;
   }
-  \caption{Estimation of $y_{\mathrm{p}}$ and $k_{\mathrm{p}}$}\label{alg:overshootEst}
+  \caption{\texttt{estimate\_maxPeak\_value} - Estimation of $y_{\mathrm{p}}$ and $k_{\mathrm{p}}$}\label{alg:overshootEst}
 \end{algorithm}
 
-The procedure basically looks for the maximum peak value in the output response of a system, using the concept of gradient to check if there is a peak. We start at the first sample of the output system, and compare the next samples, and then we proceed to find the largest peak (with the same sign of $y_\mathrm{ss}$) which is our maximum peak value $y_p$.
+The procedure basically looks for the maximum peak value in the output response of a system, using the concept of gradient to check if there is a peak. We start at the first sample of the output system, and compare the next samples, and then we proceed to find the largest peak (with the same sign of $y_\mathrm{ss}$) which is our maximum peak value $y_\mathrm{p}$.
+
+O procedimento basicamente procura o valor de pico máximo na resposta da saída de um sistema, usando o conceito de gradiente para verificar se há um pico. Começamos na primeira amostra do sistema de saída e comparamos as amostras subsequentes, e então continuamos a encontrar o maior pico (com o mesmo sinal de $y_mathrm{ss}$) que é o nosso valor máximo de pico $y_\mathrm{p}$.
 
 
 %--------------------------------------------------------------------------------
-\subsection{Maximum Settling-Time Invariant Estimation}
+\subsection{Estimação da Invariante de Máximo Tempo de Assentamento}
 \label{sec:modformver}
 %--------------------------------------------------------------------------------
 
-In this study, we aim to check whether a given digital control system meets a required settling-time and, as a consequence, we need to model its behavior. In addition, we use $\hat{k}$ as an invariant for settling-time verification. A mapping $\phi$ of a given collection $M$ of mathematical objects endowed with a fixed equivalence relation $\rho$, into another collection $N$ of mathematical objects, that is constant on the equivalence classes of $M$, with respect to $\rho$ (more precisely, that is an invariant of the equivalence relation $\rho$ on $M$). If $X$ is an object in $M$, then one can often says that $\phi(M)$ is an invariant of the object $X$~\cite{springer2006invariant}. In other words, once we calculate $\hat{k}$, it will remain unchanged. 
+Neste trabalho, desejamos verificar se um determinado sistema de controle digital atende a um tempo de assentamento requerido e, como consequência, precisamos modelar seu comportamento. Além disso, usamos $\hat{k}$ como uma invariante para a verificação de tempo de assentamento. Um mapeamento $\phi$ de uma dada coleção $M$ de objetos matemáticos dotados de uma relação de equivalência fixa $\rho$, em outra coleção $N$ de objetos matemáticos, que é constante nas classes de equivalência de $M$, com relação a $\rho$ (mais precisamente, isso é uma invariante da relação de equivalência $\rho$ em $M$). Se $X$ é um objeto em $M$, então pode-se dizer que $\phi(M)$ é uma invariante do objeto $X$~\cite{springer2006invariant}. Em outras palavras, uma vez que calculamos $\hat{k}$, ele permanecerá inalterado.
 
-In that sense, let $S_1=\{|\lambda_{\mathrm{1}}|,|\lambda_{\mathrm{2}}|,\dots,|\lambda_n|\}$ be the set of absolute values of eigenvalues \cite{chen1995linear} of system $\Omega$ and $\overline{\lambda}=\max(S_{\mathrm{1}})$. We can now define a heuristic function that represents the output response of $\bar{\Omega}$ as
+Nesse sentido, dado que $S_\mathrm{1}=\{|\lambda_{\mathrm{1}},|\lambda_{\mathrm{2}},\dots,|\lambda_n|\}$ seja o conjunto de valores absolutos de autovalores~\cite{chen1995linear} do sistema $\Omega$ e $\overline{\lambda} = \max(S_{\mathrm{1}})$. Podemos agora definir uma função heurística que representa a resposta de saída de $\bar{\Omega}$ como
+
 \begin{equation}\label{eq:saidaNova}
 \overline{y}(k)=y_{\mathrm{ss}}+\overline{c}\overline{\lambda}^{k}~,
 \end{equation}
@@ -129,6 +92,12 @@ In summary, we can find a heuristic function based on the largest eigenvalue of 
 
 In order to verify the settling-time of a system, we indicate a settling-time region as a percentage $p$, usually between $0\%$ and $5\%$~\cite{dorf2011modern}, so its upper and lower limits are,
 
+\noindent onde $\overline{c}$ é uma constante que faz $\overline{y}(k)$ entrar na região de assentamento $\Pi$. Na verdade, a função heurística acima usa o autovalor mais ´´lento'' $\bar{\lambda}$, garantindo que $\bar{\Omega}$ sempre alcance a região assentamento após $\Omega$.
+
+Em resumo, podemos encontrar uma função heurística baseada no maior autovalor de $ Omega$, em termos de magnitude, e então verificar o momento em que ela entra em uma região assentamento porque se isso acontecer antes do tempo de assentamento requerido, isso também é válido para $\Omega$.
+
+Para verificar o tempo de assentamento de um sistema, indicamos uma região de assentamento como uma porcentagem $ p $, geralmente entre $ 0 \% $ e $ 5 \% $~\cite{dorf2011modern}, portanto seus limites superior e inferior são,
+
 \begin{equation}\label{eq:lupp}
 L_{\mathrm{upp}}=\left(1+\frac{p}{100}\right) y_{\mathrm{ss}}
 \end{equation}
@@ -138,7 +107,8 @@ L_{\mathrm{upp}}=\left(1+\frac{p}{100}\right) y_{\mathrm{ss}}
 L_{\mathrm{low}}=\left(1-\frac{p}{100}\right) y_{\mathrm{ss}},
 \end{equation}
 
-\noindent respectively. The instant (${\hat{k}}$) when a system enters its settling-time region can be found by simply making Eq.~\eqref{eq:saidaNova} equal to Eq.~\eqref{eq:lupp}, due to the form of the curve in Eq.~\eqref{eq:saidaNova}, as follows:
+\noindent respectivamente. O instante ($\hat{k}$) quando um sistema entra em sua região de assentamento pode ser encontrado simplesmente fazendo com que Eq.~\eqref{eq:saidaNova} seja igual a Eq.~\eqref{eq:lupp} , devido à forma da curva na Eq.~\eqref{eq:saidaNova}, como segue:
+
 \begin{center}
 \begin{equation*}
 \begin{aligned}
@@ -156,7 +126,7 @@ y_{\mathrm{ss}}+\frac{p}{100}y_{\mathrm{ss}}=y_{\mathrm{ss}}+\overline{c}\overli
 \end{equation}
 \end{center}
 
-The largest peak of the output system $y_p$ can be obtained for computing $\overline{c}$ and, as a consequence, with Eq.~\eqref{eq:saidaNova}, we make
+O maior pico da saída do sistema, $y_\mathrm{p}$, pode ser obtido para calcular $\overline{c}$ e, como consequência, com Eq.~\eqref{eq:saidaNova}, fazemos
 
 \begin{equation}\label{eq:cbar}
 \begin{aligned}
@@ -165,14 +135,14 @@ y_{\mathrm{p}}=&~y_{\mathrm{ss}}+\bar{c}{\bar{\lambda}}^{k_{\mathrm{p}}} \\
 \end{aligned}
 \end{equation}
 
-\noindent $y_{\mathrm{p}}$ can be obtained by checking a system's output, in order to find the largest absolute value with the same sign of $y_{\mathrm{ss}}$, and $k_{\mathrm{p}}$ is the sample where $y_{\mathrm{p}}$ is located. 
+\noindent $y_\mathrm{p}$ pode ser obtido, verificando a saída do sistema para encontrar o maior valor em magnitude com o mesmo sinal de $y_\mathrm{ss}$ e $k_\mathrm{p}$ é a amostra em que $y_\mathrm{p}$ está localizado.
 
-\subsection{Overshoot Verification Algorithm}
+\subsection{Algoritmo de Verificação de Sobressinal}
 \label{subsec:overshootAlg}
 
-In this section, we explain our overshoot verification technique, which consists in checking if the required percentage overshoot is under or equal to the actual percentage overshoot (calculated).
+Nesta seção, explicamos nossa técnica de verificação de máximo sobressinal, que consiste em verificar se o percentual exigido de sobressinal é menor ou igual ao percentual de sobressinal real (calculado).
 
-The maximum overshoot ($M_{\mathrm{p}}$) is the maximum transient value that exceeds $y_{\mathrm{ss}}$. In order to find the overshoot percentage, we perform the following computation:
+O máximo sobressinal ($M_{\mathrm{p}}$) é o valor máximo transitório que excede $y_{\mathrm{ss}}$. A fim de encontrar a porcentagem de sobressinal, nós executamos a seguinte computação:
 
 \begin{equation}
 \begin{aligned}
@@ -181,10 +151,9 @@ PO =&~ 100\times\frac{M_{\mathrm{p}}}{y_{\mathrm{ss}}},
 \end{aligned}
 \label{eq:perc_overshoot}
 \end{equation}
-\noindent  where $y_{\mathrm{p}}$ can be obtained from Algorithm~\ref{alg:overshootEst}.
+\noindent  onde $y_{\mathrm{p}}$ pode ser obtido do Algoritmo~\ref{alg:overshootEst}.
 
-Figure~\ref{fig:overshootDiag} shows the proposed overshoot verification methodology, which was implemented in DSVerifier. Firstly, a
-control system's model (\texttt{Step 1}) is determined and then a controller is designed, for closed-loop (\texttt{Step 2}). After that, the FWL implementation (\texttt{Step 3}) and the required overshoot to be verified (\texttt{Step 4}) are defined, which are then used for creating file \texttt{SpecsFile.ss}. Next, system's stability is checked and if it is stable, the overshoot specification is evaluated.
+A Figura~\ref{fig:overshootDiag} mostra a metodologia de verificação de sobressinal proposta, que foi implementada no DSVerifier. Em primeiro lugar, o modelo de um sistema de controle (\texttt{Step 1}) é determinado e, em seguida, um controlador é projetado em malha fechada (\texttt{Step 2}). Depois disso, a implementação de FWL (\texttt{Step 3}) e o máximo sobressinal requerido para ser verificado (\texttt{Step 4}) são definidos, os quais são então usados para criar o arquivo \texttt{SpecsFile.ss}. Em seguida, a estabilidade do sistema é verificada e, se for estável, a especificação do máximo sobressinal é avaliada.
   
 \begin{figure}[H]
 \begin{center}
@@ -194,7 +163,7 @@ control system's model (\texttt{Step 1}) is determined and then a controller is 
 \end{center}
 \end{figure}
 
-Overshoot verification consists basically in checking if the computed percentage overshoot $P.O.$ (Eq.~\ref{eq:perc_overshoot}) is less than the required percentage overshoot ($P.O._{\mathrm{r}}$). If that is the case, it returns \texttt{Verification SUCCESSFUL}; otherwise, \texttt{Verification FAILED} is output, as illustrated in Algorithm~\ref{alg:overshootReal}.
+A verificação de máximo sobressinal consiste basicamente em verificar se a porcentagem de sobressinall computada $P.O.$ (Eq.~\ref{eq:perc_overshoot}) é menor do que o percentual de sobressinal requerido ($P.O._{\mathrm{r}}$). Se for esse o caso, ele retorna \texttt{Verification SUCCESSFUL}; caso contrário, \texttt{Verification FAILED} será exibido, conforme ilustrado no Algorithm~\ref{alg:overshootReal}.
 
 %\begin{algorithm}[H]
 %\caption{Verify Overshoot }
@@ -218,7 +187,7 @@ Overshoot verification consists basically in checking if the computed percentage
 %\end{algorithm}
 
 \begin{algorithm}[H]
-  \renewcommand{\algorithmcfname}{Algorítmo}%
+  \renewcommand{\algorithmcfname}{Algoritmo}%
   \SetAlgoLined
 %  \KwPr{}
   \KwData{$y_{\mathrm{ss}}$, $PO_{\mathrm{r}}$}
@@ -234,10 +203,10 @@ Overshoot verification consists basically in checking if the computed percentage
 \end{algorithm}
 
 
-\subsection{Settling-Time Verification Algorithm}
+\subsection{Algoritmo de Verificação de Tempo de Assentamento}
 \label{subsec:settime-alg}
 
-In this section, we show our algorithm for settling-time verification, where we use the invariant $\hat{k}$ (see section \ref{sec:modformver}). Our methodology, which is illustrated in Figure \ref{fig:diag1}, provides settling-time verification in open- and closed-loop systems; however, the former do not present controllers and, consequently, FWL effects are not taken into account for it. Its first step consists in obtaining the necessary input parameters, {\it i.e.}, state-space matrices $A$, $B$, $C$, and $D$ and a system's input $u$, which is followed by digital controller design, if a close-loop system is considered (\texttt{Step 2}). Then, the required settling-time $t_{\mathrm{sr}}$, the percentage $p$ of the settling-time region, and the sampling time $T_\mathrm{s}$ are defined (\texttt{Step 4}), which is followed by an FWL implementation, when in closed-loop (\texttt{Step 3}). After that, steps \texttt{A} to \texttt{E} are executed, {\it i.e.}, computation of FWL controller, if closed-loop is chosen (\texttt{Step A}), and steady-state value ($y_{\mathrm{ss}}$), as described in Eq.~\eqref{eq:yss2} (\texttt{Step B}), estimation of the largest peak-values of the system's output ($y_{\mathrm{p}}$) and sample $k_{\mathrm{p}}$ where $y_{\mathrm{p}}$ is located (\texttt{Step C}), and, finally, computation of $\overline{\lambda}$ (\texttt{Step D}), $\overline{c}$ and $\hat{k}$ (\texttt{Step E}).
+Nesta seção, mostramos nosso algoritmo para verificação de tempo de assentamento, onde usamos o invariante $\hat{k}$ (veja a seção \ref{sec:modformver}). Nossa metodologia, que é ilustrada na Figura\ref{fig:diag1}, fornece verificação de tempo de assentamento em sistemas em malha aberta e fechada; no entanto, os primeiros não apresentam controladores e, consequentemente, os efeitos de FWL não são levados em conta. A primeira etapa consiste em obter os parâmetros de entrada necessários, matrizes de espaço de estados $ A $, $ B $, $ C $ e $ D $ e uma entrada do sistema $ u $, que é seguida por um controlador digital, se um sistema em malha fechada for considerado (\texttt{Step 2}). Então, o tempo de assentamento requerido $t_{\mathrm{sr}}$, a porcentagem $ p $ da região de assentamento e o tempo de amostragem $T_\mathrm{s}$ são definidos (\texttt{Step 4 }), que é seguido por uma implementação de FWL, quando em malha fechada (\texttt{Step 3}). Depois disso, os passos \texttt{A} a \texttt{E} são executados, {\it i.e.}, cálculo do controlador com FWL, se for escolhido em malha fechada (\texttt{Step A}) e valor de estado estacionário ($y_{\mathrm{ss}}$), como descrito em Eq.~\eqref{eq:yss2} (\texttt{Step B}), estimativa dos maiores valores de pico da saída do sistema ($y_{\mathrm{p}}$) e a amostra $k_{\mathrm{p}}$ onde $y_{\mathrm{p}} $ está localizado (\texttt{Step C}) e, finalmente, computação de $\overline{\lambda}$ (\texttt{Step D}), $\overline{c}$ e $\hat{k}$ (\texttt{Step E}).
 
 %\begin{algorithm}
 %    \caption{Procedure to find the instant $k_\mathrm{r}$}
@@ -253,7 +222,7 @@ In this section, we show our algorithm for settling-time verification, where we 
 %\end{algorithm}
 
 \begin{algorithm}[H]
-  \renewcommand{\algorithmcfname}{Algorítmo}%
+  \renewcommand{\algorithmcfname}{Algoritmo}%
   \SetAlgoLined
   \Eq{$y(k) \not\subset \Pi$}{
     incrementar $k$\;
@@ -272,7 +241,9 @@ In this section, we show our algorithm for settling-time verification, where we 
 \end{figure*}
 
 
-The proposed procedure for verifying settling-times, which is described in Algorithm~\ref{alg:settlingtime}, consists in first checking if $\hat{k}$, which was previously computed and used as parameter, is lower than the required settling-time $k_{\mathrm{sr}}=\frac{t_{\mathrm{sr}}}{T_\mathrm{s}}$, which can also be checked through $\hat{k} \times T_{\mathrm{s}} \leq t_{\mathrm{sr}}$ (as used in Algorithm~\ref{alg:settlingtime}). If that is the case, we can assure that the output signal is within $\Pi$ (see Section \ref{sec:modformver}) after $t_{\mathrm{sr}}$ and, as a consequence, the associated verification is already successful; otherwise, we still need to check if $y$ remains within $\Pi$ from $k_{\mathrm{sr}}$ to $\hat{k}$ and, if the latter is not true for any sample $y$, the resulting verification fails. 
+The proposed procedure for verifying settling-times, which is described in Algorithm~\ref{alg:settlingtime}, consists in first checking if $\hat{k}$, which was previously computed and used as parameter, is lower than the required settling-time $k_{\mathrm{sr}}=\frac{t_{\mathrm{sr}}}{T_\mathrm{s}}$, which can also be checked through $\hat{k} \times T_{\mathrm{s}} \leq t_{\mathrm{sr}}$ (as used in Algorithm~\ref{alg:settlingtime}). If that is the case, we can assure that the output signal is within $\Pi$ (see Section \ref{sec:modformver}) after $t_{\mathrm{sr}}$ and, as a consequence, the associated verification is already successful; otherwise, we still need to check if $y$ remains within $\Pi$ from $k_{\mathrm{sr}}$ to $\hat{k}$ and, if the latter is not true for any sample $y$, the resulting verification fails.
+
+O procedimento proposto para verificar os tempos de assentamento, que é descrito no Algoritmo~\ref{alg:settlingtime}, consiste em primeiro verificar se $\hat{k}$, que foi previamente calculado e usado como parâmetro, é menor que tempo de assentamento requerido $k_{\mathrm{sr}} = \frac{t_{\mathrm{sr}}} {T_\mathrm{s}}$, que também pode ser verificado através de $\hat{k} \times T_{\mathrm{s}} \leq t_{\mathrm{sr}}$ (como usado no Algorithm~\ref{alg:settlingtime}). Se este for o caso, podemos assegurar que o sinal de saída está dentro de $\Pi$ (veja Seção \ref{sec:modformver}) após $t_{\mathrm{sr}}$ e, como consequência, a verificação associada já é bem sucedido; caso contrário, ainda precisamos verificar se $y$ permanece dentro de $\Pi$ de $k_{\mathrm{sr}}$ a $\hat{k}$ e, se este último não for verdadeiro para qualquer amostra $y$, a verificação resultante falha.
 
 
 %\begin{algorithm}[H]
@@ -317,7 +288,7 @@ The proposed procedure for verifying settling-times, which is described in Algor
 %\end{algorithm}
 
 \begin{algorithm}[H]
-  \renewcommand{\algorithmcfname}{Algorítmo}%
+  \renewcommand{\algorithmcfname}{Algoritmo}%
   \SetAlgoLined
   \eSe{$y_\mathrm{p} \subset \Pi$}{
      $\hat{k} \gets k_\mathrm{r}$\;
@@ -346,7 +317,8 @@ The proposed procedure for verifying settling-times, which is described in Algor
 \subsection{Verification Example}
 \label{subsec:under_examp}
 
-In order to provide a deeper understanding about the algorithms for overshoot and settling-time verification, we give a practical example, as follows. Starting with the proposed methodology for overshoot verification, we have to define a system and then analyze it, according to our approach:
+A fim de fornecer uma compreensão mais profunda sobre os algoritmos de verificação de máximo sobressinal e tempo de assentamento, a seguir é apresentado um exemplo prático. Começando com a metodologia proposta para a verificação de máximo sobressinal, temos que definir um sistema e depois analisá-lo, de acordo com a nossa abordagem:
+
 
 \begin{equation}
 \label{eq:discsystemcomplete3}
@@ -367,26 +339,27 @@ u(k)=r(k)-Kx(k)
 \end{cases},
 \end{equation}
 %
-\noindent \text{where} $r(k)=u_{\mathrm{-1}}$ \text{is the unit step}. 
+\noindent onde $r(k)=u_{\mathrm{-1}}$ é o degrau unitário.
 
-This way, \texttt{Step 1} is ready and \texttt{Step 2} is then considered, where a controller matrix $K$ is not defined, due to open-loop operation. Consequently, an FWL implementation (\texttt{Step 3}) is not provided either. Next, the desired requirements are defined, such as $PO_{\mathrm{r}}=9$, in \texttt{Step 4}, using a specification file \texttt{SpecsFile.ss}.
+Desta forma, \texttt{Step 1} está pronto e \texttt{Step 2} é então considerado, onde uma matriz do controlador $K$ não está definida, devido à operação em malha aberta. Consequentemente, uma implementação de FWL (\texttt{Step 3}) também não é fornecida. Em seguida, os requisitos desejados são definidos, como $PO_{\mathrm{r}} = 9$, em \texttt{Step 4}, usando um arquivo de especificação \texttt{SpecsFile.ss}.
 
-Given that open-loop was considered, this system is evaluated with ``\texttt{dsverifier SpecsFile.ss --property OVERSHOOT}'' and, as a consequence, ``\texttt{Verification FAILED}'' is returned, because the evaluated system is unstable and, consequently, there is no overshoot. One may notice that the proposed method always checks whether a system is stable.
+Dado que a operaço em malha aberta foi considerada, este sistema é avaliado com ``\texttt{dsverifier SpecsFile.ss - property OVERSHOOT}'' e, como consequência, ``\texttt{Verification FAILED}'' é retornado, porque o sistema avaliado é instável e, consequentemente, não há sobressinal. Pode-se notar que o método proposto sempre verifica se um sistema é estável.
 
-As the chosen system is unstable, we can go back to \texttt{Step 2} and design a controller, in order to stabilize it and satisfy the required percentage overshoot ($PO_{\mathrm{r}}$), by using Lyapunov design~\cite{chen1995linear}. In that case, we use a controller matrix $K = [-0.7351~-5.0045~-18.5371]$ in \texttt{SpecsFile.ss}. Next, we run this experiment again, but now with option ``\texttt{--closed-loop}'' and still without FWL effects (\texttt{--no-fwl}), which results in \texttt{Verification SUCCESSFUL}, since DSVerifier returned $PO=2.6228$ that is less than $PO_{\mathrm{r}}=9$. 
+Como o sistema escolhido é instável, podemos voltar para \texttt{Step 2} e projetar um controlador, a fim de estabilizá-lo e satisfazer o percentual de sobressinal requido ($PO_{\mathrm{r}}$), usando a técnica de Lyapunov~\cite{chen1995linear}. Nesse caso, usamos um controlador $K = [-0.7351 ~ -5.0045 ~ -18.5371]$ em \texttt{SpecsFile.ss}. Em seguida, executamos esse experimento novamente, mas agora com a opção ``\texttt{--closed-loop}'' e ainda sem efeitos FWL (\texttt{--no-fwl}), o que resulta em \texttt{Verification SUCCESSFUL}, desde que o DSVerifier retornou $PO = 2.6228$ que é menor que $PO_{\mathrm{r}} = 9$.
 
-Finally, this experiment can consider FWL effects. That is accomplished by using format $\langle 4,4 \rangle$, controller matrix $K_{\mathrm{FWL}} = [-0.6875 ~-5.0~-18.5]$, and omitting \texttt{--no-fwl} (\texttt{Step A}), which results in ``\texttt{Verification FAILED}'', due to the fact that the system is still unstable. In order to evaluate other formats, $\langle 8,8 \rangle $ and $\langle 16,16 \rangle$ were considered, in \texttt{Step 2}. As a consequence, $\langle 8,8 \rangle $ ($K_{\mathrm{FWL}} = [-0.7344~-5.0039~-18.5352]$) resulted in ``\texttt{Verification SUCCESSFUL}'', given that DSVerifier returned $PO=1.6153$, which is lower than $PO_{\mathrm{r}}=9$, and $\langle 16,16 \rangle$ ($K_{\mathrm{FWL}} = [-0.7351~-5.0045~-18.5370]$) also resulted in ``\texttt{Verification SUCCESSFUL}'', because our methodology provided $PO=2.6253$, which is again lower than the required value. 
+Finalmente, consideramos os efeitos de FWL nesse experimento. Isso é feito usando o formato $ \langle 4,4 \rangle $, a matriz do controlador $K_{\mathrm{FWL}} = [-0.6875 ~ -5.0 ~ -18.5] $ e omitindo \texttt{--no-fwl} (\texttt{Step A}), que resulta em ``\texttt{Verification FAILED}'', devido ao fato de o sistema ainda estar instável. Para avaliar outros formatos, $ \langle 8,8 \rangle $ e $ \langle 16,16 \rangle $ foram considerados, em \texttt{Step 2}. Como consequência, $ \langle 8,8 \rangle $ ($K_{\mathrm{FWL}} = [-0.7344 ~ -5,0039 ~ -18.5352] $) resultou em ``\texttt{Verification SUCCESSFUL}'', dado que o DSVerifier retornou $ PO = 1.6153 $, que é menor que $ PO_{\mathrm{r}} = 9 $ e $ \langle 16,16 \rangle $ ($ K_{\mathrm{FWL}} = [-0.7351 ~ -5.0045 ~ -18.5370] $) também resultou em ``\texttt{Verification SUCCESSFUL}'', porque nossa metodologia forneceu $ PO = 2.6253 $, que é novamente menor que o valor requerido.
 
+Agora, analisamos nossa abordagem de verificação de tempo de assentamento, seguindo os passos da Figura~\ref{fig:diag1}. Desta forma, \texttt{Step 1} está pronto e \texttt{Step 2} é então considerado, onde uma matriz do controlador $ K $ não está definida, devido à operação em malha aberta. Consequentemente, uma implementação de FWL (\texttt{Step 3}) também não é fornecida. Em seguida, os requisitos desejados são definidos, ou seja, $ t_{\mathrm{sr}} = 10s $, $ p = 5 $ e $ T_{\mathrm{s}} = 0.5s $, em \texttt{Step 4}, usando um arquivo de especificação \texttt{SpecsFile.ss}.
 
-Now, we analyze our settling-time verification approach, by following the steps in Figure~\ref{fig:diag1}. This way, \texttt{Step 1} is ready and \texttt{Step 2} is then considered, where a controller matrix $K$ is not defined, due to open-loop operation. Consequently, an FWL implementation (\texttt{Step 3}) is not provided either. Next, the desired requirements are defined, that is, $t_{\mathrm{sr}}=10s$, $p=5$, and $T_{\mathrm{s}}=0.5s$, in \texttt{Step 4}, using a specification file \texttt{SpecsFile.ss}.
+Finalmente, considerando que a operação em malha aberta foi considerada, este sistema é avaliado com ``\texttt{dsverifier SpecsFile.ss - property SETTLING\_TIME}''. \texttt{Steps A} a \texttt{E} da metodologia proposta são automaticamente executados pelo DSVerifier, considerando uma implementação em malha aberta, e, como consequência, ``\texttt{Verification FAILED}'' é retornado, porque o sistema avaliado é instável, pois seus autovalores são maiores que $ 1 $ ($ \lambda = 1.5 $, devido à Eq.~\eqref{lamb}). Pode-se notar que o método proposto primeiro verifica se um sistema é estável, entre \texttt{Steps A} e \texttt{B}.
 
-Finally, given that open-loop operation was considered, this system is evaluated with ``\texttt{dsverifier SpecsFile.ss --property SETTLING\_TIME}''. \texttt{Steps A} to \texttt{E} of the proposed methodology are automatically performed by DSVerifier, considering an open-loop implementation, and, as a consequence, `` \texttt{Verification FAILED}'' is returned, because the evaluated system is unstable, since its eigenvalues are greater than $1$ ($\lambda=1.5$, due to Eq. \eqref{lamb}). One may notice that the proposed method first checks whether a system is stable, between \texttt{Steps A} and \texttt{B}.
+Como o sistema escolhido é instável, podemos voltar para o \texttt{Step 2} e projetar um controlador, a fim de estabilizá-lo e satisfazer o tempo de assentamento requerido, usando o Lyapunov~\cite{chen1995linear}. Nesse caso, usamos a mesma matriz do controlador $ K = [-0.7351 ~ -5.0045 ~ -18.5371] $ em \texttt{SpecsFile.ss}, como explicado em Seção~\ref{subsec:overshootAlg}. Como esse controlador foi projetado para satisfazer ambas as propriedades (tempo de assentamento e sobressinal), esse experimento é executado novamente, mas agora com a opção ``\texttt{--closed-loop}'' e ainda sem efeitos FWL (\texttt{--no-fwl}), que resulta em ``\texttt{Verification SUCCESSFUL}'', como pode ser visto na Figura~\ref{fig:stmethod}(a), onde a resposta ao degrau não deixa a região de assentamento entre $ k_{\mathrm{sr}} $ e $ \hat{k}$.
 
-As the chosen system is unstable, we can go back to \texttt{Step 2} and design a controller, in order to stabilize it and satisfy the required settling time, by using Lyapunov design~\cite{chen1995linear}. In that case, we use the same controller matrix $K = [-0.7351~-5.0045~-18.5371]$ in \texttt{SpecsFile.ss}, as  explained in Section~\ref{subsec:overshootAlg}. Since that controller was designed to satisfy both properties (settling-time and overshoot), this experiment is run again, but now with option ``\texttt{--closed-loop}'' and still without FWL effects (\texttt{--no-fwl}), which results in ``\texttt{Verification SUCCESSFUL}'', as can be seen in Figure~\ref{fig:stmethod}(a), where the step response does not leave the settling-time region between $k_{sr}$ and $\hat{k}$.
+Finalmente, esse experimento pode considerar os efeitos de FWL. Isso é feito usando o formato $ \langle 4,4 \rangle $, a matriz do controlador $ K_{\mathrm {FWL}} = [-0.6875 ~ -5.0 ~ -18.5] $ e omitindo \texttt{--no-fwl} (\texttt{Step A}), que resulta em ``\texttt{Verification FAILED}'', como mostrado na Figura~\ref{fig:stmethod}(b), onde o sistema se torna instável. Vale a pena notar que a matriz do controlador $ K $ em \texttt{SpecsFile.ss} não é modificada e $ K_{\mathrm {FWL}} $ é internamente calculado pelo DSVerifier.
 
-Finally, this experiment can consider FWL effects. That is accomplished by using format $\langle 4,4 \rangle$, controller matrix $K_{FWL} = [-0.6875 ~-5.0~-18.5]$, and omitting \texttt{--no-fwl} (\texttt{Step A}), which results in ``\texttt{Verification FAILED}'', as shown in Figure~\ref{fig:stmethod}(b), where the system becomes unstable. It is worth noticing that controller matrix $K$ in \texttt{SpecsFile.ss} is not modified and $K_{\mathrm{FWL}}$ is internally computed by DSVerifier.
+In order to evaluate other formats, $\langle 8,8 \rangle $ and $\langle 16,16 \rangle$ are considered in \texttt{Step 2}. As a consequence, $K_{\mathrm{FWL}} = [-0.7344~-5.0039~-18.5352]$ with ``\texttt{Verification FAILED}'', because the step response left the settling-time region between $k_{\mathrm{sr}}$ and $\hat{k}$, and $K_{\mathrm{FWL}} = [-0.7351~-5.0045~-18.5370]$ with ``\texttt{Verification SUCCESSFUL}'', because the step response did not leave the settling-time region between $k_{\mathrm{sr}}$ and $\hat{k}$, are respectively obtained, as can be seen in Figures~\ref{fig:stmethod}(c) and (d).
+Para avaliar outros formatos, $ \langle 8,8 \rangle $ e $ \langle 16,16 \rangle $ são considerados em \texttt{Step 2}. Como consequência, $ K_{\mathrm{FWL}} = [-0.7344 ~ -5.0039 ~ -18.5352] $ com ``\texttt{Verification FAILED}'', porque a resposta ao degrau deixou a região de assentamento entre $ k_{\mathrm{sr}} $ e $ \hat{k} $ e $ K_{\mathrm{FWL}} = [-0.7351 ~ -5.0045 ~ -18.5370] $ com ``\texttt{Verification SUCCESSFUL}'', porque a resposta ao degrau não deixou a região de assentamento entre $ k_{\mathrm{sr}} $ e $ \hat{k} $, são respectivamente obtidas, como pode ser visto nas Figuras~\ref{fig:stmethod} (c) e (d).
 
-In order to evaluate other formats, $\langle 8,8 \rangle $ and $\langle 16,16 \rangle$ are considered in \texttt{Step 2}. As a consequence, $K_{\mathrm{FWL}} = [-0.7344~-5.0039~-18.5352]$ with ``\texttt{Verification FAILED}'', because the step response left the settling-time region between $k_{\mathrm{sr}}$ and $\hat{k}$, and $K_{\mathrm{FWL}} = [-0.7351~-5.0045~-18.5370]$ with ``\texttt{Verification SUCCESSFUL}'', because the step response did not leave the settling-time region between $k_{\mathrm{sr}}$ and $\hat{k}$, are respectively obtained, as can be seen in Figures~\ref{fig:stmethod}(c) and (d). 
 
 \begin{figure}[ht]
    \centering
@@ -399,12 +372,13 @@ In order to evaluate other formats, $\langle 8,8 \rangle $ and $\langle 16,16 \r
    \label{fig:stmethod}
 \end{figure}
 
-The number of bits heavily influence settling-times in real implementations, due to FWL effects. In addition, ``\texttt{Verification FAILED}'' was obtained for an intermediate format $\langle 8,8 \rangle $, while it was successful with $\langle 16,16 \rangle $. Indeed, given that the resulting settling-time is mostly dependent on the fastest natural response and its damping ratio \cite{boyd1991linear}, the interaction between them after quantization may cause such a behavior, which further reinforces the use of the proposed methodology, during design phases.
+O número de bits influencia fortemente os tempos de assentamento em implementações reais, devido a efeitos de FWL. Além disso, ``\texttt{Verification FAILED}'' foi obtido para um formato intermediário $ \langle 8,8 \rangle $, enquanto foi bem sucedido com $ \langle 16,16 \rangle $. De fato, dado que o tempo de assentamento resultante é principalmente dependente da resposta natural mais rápida e sua taxa de amortecimento, a interação entre eles após a quantificação pode causar tal comportamento, o que reforça ainda mais o uso da metodologia proposta, durante fases de projeto.
 
-One may also notice that the properties tackled during design phases are also modified, due to changes in coefficients and computation results. In particular, overshoot was affected in different ways, which means that if a property fails, the other may not, as can be seen for format $\langle 8,8 \rangle $.
-
+Pode-se notar também que as propriedades abordadas durante as fases de projeto também são modificadas, devido a mudanças nos coeficientes e nos resultados de cálculo. Em particular, o sobressinal foi afetado de maneiras diferentes, o que significa que, se uma propriedade falhar, a outra talvez não falhe, como pode ser visto no formato $ \langle 8,8 \rangle $.
 
 One may notice that $t_{\mathrm{sr}}=10s$ is the sample $n=20$, discretized at $T_{\mathrm{s}}=0.5s$. Figure~\ref{fig:stmethod}(a) shows that $k_{\mathrm{sr}}=t_{\mathrm{sr}}/T_{\mathrm{s}}=20$ is less than the calculated $\hat{k}=37$ (Eq.~\ref{eq:kbar}) and, as a consequence, for this required settling-time, the system is already in the settling time region, so that settling-time is doable in that case. Finally, the same reasoning is valid for Figures~\ref{fig:stmethod}(b), (c) and (d), where we can analyze responses and check them according to Algorithm~\ref{alg:settlingtime}.
+Pode-se notar que $ t_{\mathrm{sr}} = 10s $ é a amostra $ n = 20 $, discretizada em $ T_{\mathrm{s}} = 0.5s $. A Figura~\ref{fig:stmethod} (a) mostra que $ k_{\mathrm{sr}} = t_{\mathrm{sr}} / T_{\mathrm{s}} = 20 $ é menor que o $\hat{k} = 37 $ calculado (Eq.~\ref{eq:kbar}) e, como consequência, para este tempo de assentamento requerido, o sistema já está na região de assentamento, para que o tempo de assentamento seja possível nesse caso. Finalmente, o mesmo raciocínio é válido para as Figuras~\ref{fig:stmethod} (b), (c) e (d), onde podemos analisar as respostas e verificá-las de acordo com o Algoritmo~\ref{alg:settlingtime}.
+
 
 %-------------------------------------------------------------------
 \section{Synthesis of Non-fragile Performance Specification Requirements}
@@ -417,7 +391,7 @@ In Figure~\ref{fig:SynthArch}, we show the proposed synthesis architecture in a 
 
 \begin{figure}[ht]
 \begin{center}
-\includegraphics[trim={0.0cm 0.0cm 0.0cm 0cm}, clip,width=0.35\textwidth]{figures/FlowchartArch.eps}
+\includegraphics[trim={0.0cm 0.0cm 0.0cm 0cm}, clip,width=0.45\textwidth]{figures/FlowchartArch.eps}
 \caption{Proposed synthesis architecture.} 
 \label{fig:SynthArch}
 \end{center}

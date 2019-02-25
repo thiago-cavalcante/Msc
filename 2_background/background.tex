@@ -519,11 +519,11 @@ Algoritmos de controle digital são tipicamente implementados em microcontrolador
 
 As dificuldades de implementação podem ser evitadas sem usar o cálculo completo de precisão dupla, adicionando os termos em precisão dupla e arredondando para precisão simples depois. Esse método pode ser aplicado a cálculos de ponto fixo e de ponto flutuante. Observe que a instrução de multiplicação para muitos microprocessadores é implementada para que a operação de multiplicação esteja disponível com precisão dupla. Muitas linguagens de alto nível também possuem construções que suportam esse tipo de cálculo. De um modo geral, arredondamento e quantização darão origem a pequenos erros, ao passo que os efeitos do \textit{overflow}~\cite{hauser1996handling} serão desastrosos.
 
-Outra análise que pode ser feita sobre os efeitos fwl em sistemas em tempo discreto com realimentação de estados é a seguinte:
+Outra análise que pode ser feita sobre os efeitos FWL em sistemas em tempo discreto com realimentação de estados é a seguinte:
 
-A matriz do controlador de realimentação de estado estático $K$ de um sistema digital como~\eqref{eq:ssed} é fortemente afetada pelos efeitos de fwl, que podem comprometer algumas propriedades do sistema e devem ser manipuladas durante as fases de projeto.
+A matriz do controlador de realimentação de estado estático $K$ de um sistema digital como~\eqref{eq:ssed} é fortemente afetada pelos efeitos de FWL, que podem comprometer algumas propriedades do sistema e devem ser manipuladas durante as fases de projeto.
 
-Os efeitos da fwl nos coeficientes do controlador são descritos da seguinte forma
+Os efeitos da FWL nos coeficientes do controlador são descritos da seguinte forma
 
 \begin{equation}
 \mathcal{FWL}_{\langle I,F \rangle}[\cdot]:\R^{m\times n} \rightarrow \R^{m\times n}_{Q}~,
@@ -531,7 +531,7 @@ Os efeitos da fwl nos coeficientes do controlador são descritos da seguinte form
 
 \noindent onde $\R^{m\times n}_{Q}$ é o conjunto discreto de matrizes $m \times n$ composto pelos elementos $\R^{m \times n}$, que podem ser representados em o formato de ponto fixo $\langle I, F \rangle$ e $I$ e $F$ são o número de bits das partes inteiras e fracionárias, respectivamente.
 
-Supondo que apenas $K$ é digital e implementado com aritmética de ponto fixo, cujos coeficientes estão sujeitos a efeitos fwl, um sistema dinâmico diferente de espaço de estados digital de ordem $n$ com controlador de realimentação de estado $\Omega_{\mathrm{fwl}}$ similar a \eqref{eq:ssed} tal como o sinal de controle é $\mathbf{u}(k) = \mathbf{r}(k)-\mathbf{K}_{\mathrm{fwl}}\mathbf{x}(k)$, onde a matriz $\mathbf{K}_{fwl}:= \mathcal{FWL}_{\langle I; F \rangle}[\mathbf{K}]$ é a matriz do controlador que sofre efeitos de fwl. Como consequência, tais efeitos de fwl podem influenciar os parâmetros de resposta a degraus do sistema, podendo não atender às especificações.
+Supondo que apenas $K$ é digital e implementado com aritmética de ponto fixo, cujos coeficientes estão sujeitos a efeitos FWL, um sistema dinâmico diferente de espaço de estados digital de ordem $n$ com controlador de realimentação de estado $\Omega_{\mathrm{fwl}}$ similar a \eqref{eq:ssed} tal como o sinal de controle é $\mathbf{u}(k) = \mathbf{r}(k)-\mathbf{K}_{\mathrm{fwl}}\mathbf{x}(k)$, onde a matriz $\mathbf{K}_{fwl}:= \mathcal{FWL}_{\langle I; F \rangle}[\mathbf{K}]$ é a matriz do controlador que sofre efeitos de FWL. Como consequência, tais efeitos de FWL podem influenciar os parâmetros de resposta a degraus do sistema, podendo não atender às especificações.
 %
 %SMT (\textit{Satisfiability Modulo Theories}) verifica a satisfatibilidade de fórmulas de primeira ordem a partir de uma ou mais teorias de fundamentação, que são compostas por um conjunto de sentenças. De modo formal, $\sigma$ -- \textit{theory} é uma coleção de sentenças sobre a assinatura $\sigma$. Dada uma teoria $T$, diz-se que $\varphi$ é um módulo satisfatível de $T$ se $T \subset {\phi}$. Em outra definição, pode-se dizer que uma teoria $T$ é definida como uma classe de estruturas e $\varphi$ é um módulo satisfatível se existe uma estrutura $M$ em $T$ que satisfaz $\varphi$ (\textit{i.e.}, $M \models \varphi$)~\cite{Moura:2009}.
 %

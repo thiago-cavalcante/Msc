@@ -2,30 +2,30 @@
 
 Neste capítulo, a metodologia proposta para sintetizar controlodores digitais com realimentação de estados, considerando fragilidade e especificações de desempenho será completamente descrita. Primeiramente, mostraremos as metodologias formalizadas para verificar sistemas de controle digital, com respeito a especificações de performance, no caso máximo tempo de assentamento e máximo sobressinal. A formalização utilizada para estimar o máximo sobressinal, bem como a invariante formalizada para verificar o máximo tempo de assentamento. Também são descritos os algoritmos criados para fazer a devida verificação das mesmas. Finalmente, a descrição completa da técnica que utilizamos para realizar o processo de síntese.
 
-\section{Visão Geral do Método}
-\label{sec:method-overview}
-
-Aqui, o método proposto é descrito brevemente, como mostrado na Figura~\ref{figure:methodology}, e uma explicação mais detalhada é exposta nas seções seguitnes. Dado um programa concorrente $P$, primeiramente checa-se se ele apresenta uma execução mal-sucedida com relação a uma determinada intercalação. Para realizar tal tarefa, $P$ é executado em um verificador de modelos duas vezes: a primeira execução verifica se existe algum bloqueio fatal e a segunda é responsável por outros tipos de violação, tais como erros de aquisição de semáforo, divisão por zero, segurança de ponteiros, estouro aritmético e violação de limites de vetores. Não é possível verificá-lo apenas uma vez porque os verificadores de modelos separam essas verificações, \textit{i.e.}, é necessário adicionar uma opção de linha de comando para habilitar a detecção de bloqueios fatais e ignorar violações devido a assertivas. Caso um contraexemplo possa ser obtido nesse passo, é possível prosseguir com o método. Então, o próximo passo define as regras de transformação, que são as instruções sequenciais que substituirão as originais concorrentes, e um arcabouço sequencial, o qual tem como objetivo simular a execução concorrente da intercalação mal-sucedida. O terceiro passo consiste em usar o método proposto por Griesmayer~\cite{Griesmayer:2007} para instrumentar atribuições e expressões, de forma a apontar locais e instruções defeituosas do programa. Tal programa instrumentado pode então ser executado, usando um verificador de modelos, e é possível coletar as linhas defeituosas, até que a verificação associada não produza diferentes elementos. Essa iteração é descrita na Figura~\ref{figure:methodology} por meio dos passos $3$, $4$, já que o método busca novos contraexemplos, com o intuito de encontrar novas linhas defeituosas. Finalmente, as linhas defeituosas são obtidas, assim como atribuições necessárias para produzir uma execução bem-sucedida de $P$.
-
-\begin{figure}[ht]
-  \centering
-  \includegraphics[scale=0.35]{figures/methodology}
-  \caption{Metodologia proposta.}
-  \label{figure:methodology}
-\end{figure}
+%\section{Visão Geral do Método}
+%\label{sec:method-overview}
+%
+%Aqui, o método proposto é descrito brevemente, como mostrado na Figura~\ref{figure:methodology}, e uma explicação mais detalhada é exposta nas seções seguitnes. Dado um programa concorrente $P$, primeiramente checa-se se ele apresenta uma execução mal-sucedida com relação a uma determinada intercalação. Para realizar tal tarefa, $P$ é executado em um verificador de modelos duas vezes: a primeira execução verifica se existe algum bloqueio fatal e a segunda é responsável por outros tipos de violação, tais como erros de aquisição de semáforo, divisão por zero, segurança de ponteiros, estouro aritmético e violação de limites de vetores. Não é possível verificá-lo apenas uma vez porque os verificadores de modelos separam essas verificações, \textit{i.e.}, é necessário adicionar uma opção de linha de comando para habilitar a detecção de bloqueios fatais e ignorar violações devido a assertivas. Caso um contraexemplo possa ser obtido nesse passo, é possível prosseguir com o método. Então, o próximo passo define as regras de transformação, que são as instruções sequenciais que substituirão as originais concorrentes, e um arcabouço sequencial, o qual tem como objetivo simular a execução concorrente da intercalação mal-sucedida. O terceiro passo consiste em usar o método proposto por Griesmayer~\cite{Griesmayer:2007} para instrumentar atribuições e expressões, de forma a apontar locais e instruções defeituosas do programa. Tal programa instrumentado pode então ser executado, usando um verificador de modelos, e é possível coletar as linhas defeituosas, até que a verificação associada não produza diferentes elementos. Essa iteração é descrita na Figura~\ref{figure:methodology} por meio dos passos $3$, $4$, já que o método busca novos contraexemplos, com o intuito de encontrar novas linhas defeituosas. Finalmente, as linhas defeituosas são obtidas, assim como atribuições necessárias para produzir uma execução bem-sucedida de $P$.
+%
+%\begin{figure}[ht]
+%  \centering
+%  \includegraphics[scale=0.35]{figures/methodology}
+%  \caption{Metodologia proposta.}
+%  \label{figure:methodology}
+%\end{figure}
 
 %-------------------------------------------------------------------
 \section{Verifying Non-fragile Performance Specification Requirements}
 \label{sec:verification}
 %-------------------------------------------------------------------
 
-Neste trabalho utilizamos uma variação da síntese do CEGIS para sintetizar um controlador digital, a fim de satisfazer os requmáximo sobressinal. Na estratégia do CEGIS, temos basicamente duas etapas principais: síntese e verificação. Nesta seção, mostramos o método de verificação do tempo de assentamento e do máximo sobressinal dos sistemas de controle digital.
+Neste trabalho utilizamos uma variação da síntese de CEGIS para sintetizar um controlador digital, a fim de satisfazer os requisitos de máximo sobressinal e de máximo tempo de assentamento. Na estratégia do CEGIS, temos basicamente duas etapas principais: síntese e verificação. Nesta seção, mostramos o método de verificação do tempo de assentamento e do máximo sobressinal dos sistemas de controle digital.
 %--------------------------------------------------------------------------------
 \subsection{Estimativa do Máximo Sobressinal}
 \label{sec:modformver}
 %--------------------------------------------------------------------------------
 
-Algoritmo~\ref{alg:overshootEst} descreve um procedimento para estimar $y_{\mathrm{p}}$ (valor máximo de pico na resposta de um sistema) e $k_{\mathrm{p}}$ (amostra onde $y_{\mathrm{p}}$ está localizado), a fim de encontrar uma abordagem formal para verificar o máximo sobressinal usado em nossa abordagem CEGIS.
+Algoritmo~\ref{alg:overshootEst} descreve um procedimento para estimar $y_{\mathrm{p}}$ (valor máximo de pico na resposta de um sistema) e $k_{\mathrm{p}}$ (amostra onde $y_{\mathrm{p}}$ está localizado), a fim de encontrar uma abordagem formal para verificar o máximo sobressinal usado em nossa abordagem de CEGIS.
 
 \begin{algorithm}[H]
 \footnotesize
@@ -48,7 +48,7 @@ Algoritmo~\ref{alg:overshootEst} descreve um procedimento para estimar $y_{\math
      \uIf{$|firstGradSample| <= |k_\mathrm{p}|$}{
        increment $numBadPeaks$\;
        \eIf{$numBadPeaks > 2$}{
-         $exit(\textbf{loop})$\;
+         termina\;
        }{
          $y_\mathrm{p} = firstGradSample$\;
          $k_\mathrm{p} = firstGradSampleIdx$\;
@@ -58,17 +58,15 @@ Algoritmo~\ref{alg:overshootEst} descreve um procedimento para estimar $y_{\math
          $y_\mathrm{p} = yss$\;
          $k_\mathrm{p} = 0$\;
        }{
-         $exit(\textbf{loop})$\;
+         termina\;
        }
      }
   }
   $lastGrad = grad$\;
-  increment $k$\;
+  incrementar $k$\;
   }
   \caption{\texttt{estimate\_maxPeak\_value} - Estimation of $y_{\mathrm{p}}$ and $k_{\mathrm{p}}$}\label{alg:overshootEst}
 \end{algorithm}
-
-The procedure basically looks for the maximum peak value in the output response of a system, using the concept of gradient to check if there is a peak. We start at the first sample of the output system, and compare the next samples, and then we proceed to find the largest peak (with the same sign of $y_\mathrm{ss}$) which is our maximum peak value $y_\mathrm{p}$.
 
 O procedimento basicamente procura o valor de pico máximo na resposta da saída de um sistema, usando o conceito de gradiente para verificar se há um pico. Começamos na primeira amostra do sistema de saída e comparamos as amostras subsequentes, e então continuamos a encontrar o maior pico (com o mesmo sinal de $y_mathrm{ss}$) que é o nosso valor máximo de pico $y_\mathrm{p}$.
 
@@ -78,7 +76,7 @@ O procedimento basicamente procura o valor de pico máximo na resposta da saída d
 \label{sec:modformver}
 %--------------------------------------------------------------------------------
 
-Neste trabalho, desejamos verificar se um determinado sistema de controle digital atende a um tempo de assentamento requerido e, como consequência, precisamos modelar seu comportamento. Além disso, usamos $\hat{k}$ como uma invariante para a verificação de tempo de assentamento. Um mapeamento $\phi$ de uma dada coleção $M$ de objetos matemáticos dotados de uma relação de equivalência fixa $\rho$, em outra coleção $N$ de objetos matemáticos, que é constante nas classes de equivalência de $M$, com relação a $\rho$ (mais precisamente, isso é uma invariante da relação de equivalência $\rho$ em $M$). Se $X$ é um objeto em $M$, então pode-se dizer que $\phi(M)$ é uma invariante do objeto $X$~\cite{springer2006invariant}. Em outras palavras, uma vez que calculamos $\hat{k}$, ele permanecerá inalterado.
+Nesta etapa deste trabalho, desejamos verificar se um determinado sistema de controle digital atende a um tempo de assentamento requerido e, como consequência, precisamos modelar seu comportamento. Além disso, usamos $\hat{k}$ como uma invariante para a verificação de tempo de assentamento. Um mapeamento $\phi$ de uma dada coleção $M$ de objetos matemáticos dotados de uma relação de equivalência fixa $\rho$, em outra coleção $N$ de objetos matemáticos, que é constante nas classes de equivalência de $M$, com relação a $\rho$ (mais precisamente, isso é uma invariante da relação de equivalência $\rho$ em $M$). Se $X$ é um objeto em $M$, então pode-se dizer que $\phi(M)$ é uma invariante do objeto $X$~\cite{springer2006invariant}. Em outras palavras, uma vez que calculamos $\hat{k}$, ele permanecerá inalterado.
 
 Nesse sentido, dado que $S_\mathrm{1}=\{|\lambda_{\mathrm{1}},|\lambda_{\mathrm{2}},\dots,|\lambda_n|\}$ seja o conjunto de valores absolutos de autovalores~\cite{chen1995linear} do sistema $\Omega$ e $\overline{\lambda} = \max(S_{\mathrm{1}})$. Podemos agora definir uma função heurística que representa a resposta de saída de $\bar{\Omega}$ como
 
@@ -86,13 +84,7 @@ Nesse sentido, dado que $S_\mathrm{1}=\{|\lambda_{\mathrm{1}},|\lambda_{\mathrm{
 \overline{y}(k)=y_{\mathrm{ss}}+\overline{c}\overline{\lambda}^{k}~,
 \end{equation}
 
-\noindent where $\overline{c}$ is a constant that makes $\overline{y}(k)$ enter the settling-time region. Indeed, the heuristic function above uses the slowest eigenvalue $\bar{\lambda}$, ensuring that $\bar{\Omega}$ always reaches the settling-time region after $\Omega$.
-
-In summary, we can find a heuristic function based on the largest eigenvalue of $\Omega$ and then check the moment it enters a settling-time region, because if that happens before the required settling-time, that is also true for $\Omega$.
-
-In order to verify the settling-time of a system, we indicate a settling-time region as a percentage $p$, usually between $0\%$ and $5\%$~\cite{dorf2011modern}, so its upper and lower limits are,
-
-\noindent onde $\overline{c}$ é uma constante que faz $\overline{y}(k)$ entrar na região de assentamento $\Pi$. Na verdade, a função heurística acima usa o autovalor mais ´´lento'' $\bar{\lambda}$, garantindo que $\bar{\Omega}$ sempre alcance a região assentamento após $\Omega$.
+\noindent onde $\overline{c}$ é uma constante que faz $\overline{y}(k)$ entrar na região de assentamento $\Pi$. Na verdade, a função heurística acima usa o autovalor mais ``lento'' $\bar{\lambda}$, garantindo que $\bar{\Omega}$ sempre alcance a região assentamento após $\Omega$.
 
 Em resumo, podemos encontrar uma função heurística baseada no maior autovalor de $ Omega$, em termos de magnitude, e então verificar o momento em que ela entra em uma região assentamento porque se isso acontecer antes do tempo de assentamento requerido, isso também é válido para $\Omega$.
 
@@ -102,12 +94,12 @@ Para verificar o tempo de assentamento de um sistema, indicamos uma região de as
 L_{\mathrm{upp}}=\left(1+\frac{p}{100}\right) y_{\mathrm{ss}}
 \end{equation}
 
-\noindent and
+\noindent e
 \begin{equation}
 L_{\mathrm{low}}=\left(1-\frac{p}{100}\right) y_{\mathrm{ss}},
 \end{equation}
 
-\noindent respectivamente. O instante ($\hat{k}$) quando um sistema entra em sua região de assentamento pode ser encontrado simplesmente fazendo com que Eq.~\eqref{eq:saidaNova} seja igual a Eq.~\eqref{eq:lupp} , devido à forma da curva na Eq.~\eqref{eq:saidaNova}, como segue:
+\noindent respectivamente. O instante ($\hat{k}$) quando um sistema entra em sua região de assentamento pode ser encontrado simplesmente fazendo com que Eq.~\eqref{eq:saidaNova} seja igual a Eq.~\eqref{eq:lupp}, devido à forma da curva na Eq.~\eqref{eq:saidaNova}, como segue:
 
 \begin{center}
 \begin{equation*}
@@ -157,8 +149,8 @@ A Figura~\ref{fig:overshootDiag} mostra a metodologia de verificação de sobressi
   
 \begin{figure}[H]
 \begin{center}
-\includegraphics[trim={0.0cm 0.0cm 0.0cm 0cm}, clip,width=0.5\textwidth]{figures/ArchOverShooting.eps}
-\caption{Overshoot verification.} 
+\includegraphics[trim={0.0cm 0.0cm 0.0cm 0cm}, clip,width=0.7\textwidth]{figures/ArchOverShooting.eps}
+\caption{Verificação de Sobressinal.} 
 \label{fig:overshootDiag}
 \end{center}
 \end{figure}
@@ -235,13 +227,10 @@ Nesta seção, mostramos nosso algoritmo para verificação de tempo de assentamento
 \begin{figure*}[ht]
 \begin{center}
 \includegraphics[trim={0.0cm 0.0cm 0.0cm 0cm}, clip,width=0.7\textwidth]{figures/Archstever.eps}
-\caption{The proposed settling-time verification methodology.} 
+\caption{Metodologia de Verificação de Tempo de Assentamento.} 
 \label{fig:diag1}
 \end{center}
 \end{figure*}
-
-
-The proposed procedure for verifying settling-times, which is described in Algorithm~\ref{alg:settlingtime}, consists in first checking if $\hat{k}$, which was previously computed and used as parameter, is lower than the required settling-time $k_{\mathrm{sr}}=\frac{t_{\mathrm{sr}}}{T_\mathrm{s}}$, which can also be checked through $\hat{k} \times T_{\mathrm{s}} \leq t_{\mathrm{sr}}$ (as used in Algorithm~\ref{alg:settlingtime}). If that is the case, we can assure that the output signal is within $\Pi$ (see Section \ref{sec:modformver}) after $t_{\mathrm{sr}}$ and, as a consequence, the associated verification is already successful; otherwise, we still need to check if $y$ remains within $\Pi$ from $k_{\mathrm{sr}}$ to $\hat{k}$ and, if the latter is not true for any sample $y$, the resulting verification fails.
 
 O procedimento proposto para verificar os tempos de assentamento, que é descrito no Algoritmo~\ref{alg:settlingtime}, consiste em primeiro verificar se $\hat{k}$, que foi previamente calculado e usado como parâmetro, é menor que tempo de assentamento requerido $k_{\mathrm{sr}} = \frac{t_{\mathrm{sr}}} {T_\mathrm{s}}$, que também pode ser verificado através de $\hat{k} \times T_{\mathrm{s}} \leq t_{\mathrm{sr}}$ (como usado no Algorithm~\ref{alg:settlingtime}). Se este for o caso, podemos assegurar que o sinal de saída está dentro de $\Pi$ (veja Seção \ref{sec:modformver}) após $t_{\mathrm{sr}}$ e, como consequência, a verificação associada já é bem sucedido; caso contrário, ainda precisamos verificar se $y$ permanece dentro de $\Pi$ de $k_{\mathrm{sr}}$ a $\hat{k}$ e, se este último não for verdadeiro para qualquer amostra $y$, a verificação resultante falha.
 
@@ -343,7 +332,7 @@ u(k)=r(k)-Kx(k)
 
 Desta forma, \texttt{Step 1} está pronto e \texttt{Step 2} é então considerado, onde uma matriz do controlador $K$ não está definida, devido à operação em malha aberta. Consequentemente, uma implementação de FWL (\texttt{Step 3}) também não é fornecida. Em seguida, os requisitos desejados são definidos, como $PO_{\mathrm{r}} = 9$, em \texttt{Step 4}, usando um arquivo de especificação \texttt{SpecsFile.ss}.
 
-Dado que a operaço em malha aberta foi considerada, este sistema é avaliado com ``\texttt{dsverifier SpecsFile.ss - property OVERSHOOT}'' e, como consequência, ``\texttt{Verification FAILED}'' é retornado, porque o sistema avaliado é instável e, consequentemente, não há sobressinal. Pode-se notar que o método proposto sempre verifica se um sistema é estável.
+Dado que a operação em malha aberta foi considerada, este sistema é avaliado com ``\texttt{dsverifier SpecsFile.ss - property OVERSHOOT}'' e, como consequência, ``\texttt{Verification FAILED}'' é retornado, porque o sistema avaliado é instável e, consequentemente, não há sobressinal. Pode-se notar que o método proposto sempre verifica se um sistema é estável.
 
 Como o sistema escolhido é instável, podemos voltar para \texttt{Step 2} e projetar um controlador, a fim de estabilizá-lo e satisfazer o percentual de sobressinal requido ($PO_{\mathrm{r}}$), usando a técnica de Lyapunov~\cite{chen1995linear}. Nesse caso, usamos um controlador $K = [-0.7351 ~ -5.0045 ~ -18.5371]$ em \texttt{SpecsFile.ss}. Em seguida, executamos esse experimento novamente, mas agora com a opção ``\texttt{--closed-loop}'' e ainda sem efeitos FWL (\texttt{--no-fwl}), o que resulta em \texttt{Verification SUCCESSFUL}, desde que o DSVerifier retornou $PO = 2.6228$ que é menor que $PO_{\mathrm{r}} = 9$.
 
@@ -512,4 +501,4 @@ Neste caso, queremos minimizar as funções multi-objetivo ($ \mathbf{f}_\mathrm{1
 
 \section{Resumo}\label{chap-4-summary}
 
-Neste capítulo foi apresesentado o método proposto para localizar falhas em programas concorrentes usando técnicas de verificação de modelos e sequencialização, sendo esta a contribuição maior do presente trabalho. Foi dada uma explicação detalhada das transformações necessárias, assim como um exemplo para ilustrar melhor o processo de localização de falhas. Mostrou-se também a importância do contraexemplo obtido antes da aplicação do método proposto, visto que o mesmo contém a ordem das {\it threads} executadas e os pontos onde trocas de contexto ocorreram. A modelagem necessária para transformar declarações de programa concorrentes em sequenciais também foi explicada, assim como a estrutura fixa necessária para reproduzir a mesma ordem de execução do programa original. Por fim, um método sequencial pode ser aplicado no novo código para obter as linhas que levam às falhas do programa. Como resultado, tem-se o embasamento para a avaliação experimental realizada no próximo capítulo.
+Neste capítulo foi apresesentado a metodologia proposta para sintetizar controladores digitais satisfazendo restrições de especificação de desempenho da resposta ao degrau,c onsiderando os efeitos de FWL, sendo esta a contribuição maior do presente trabalho. Foi dada uma explicação detalhada de todo o processo de síntese a qual foi baseada na técnica de CEGIS. A técnica de síntese empregada neste trabalha possui uma etapa de verificação, onde mostramos a metodologia que criamos para fazer a devida verificação de especificações de desemprenho (máximo sobressinal e máximo tempo de assentamento). Mostrou-se também um exemplo prático do funcionamento dos verificadores aplicado ao sistema de controle do mundo real. Por fim, mostrou-se como foi idealizada a etapa de síntese, onde modelamos nosso problema como um problema de otimização e utlizamos algoritmo genético para resolver. Como resultado, tem-se o embasamento para a avaliação experimental realizada no próximo capítulo.

@@ -314,7 +314,7 @@ O procedimento proposto para verificar os tempos de assentamento, que é descrito
 \end{algorithm}
 
 
-\subsection{Verification Example}
+\subsection{Exemplo de Verificação}
 \label{subsec:under_examp}
 
 A fim de fornecer uma compreensão mais profunda sobre os algoritmos de verificação de máximo sobressinal e tempo de assentamento, a seguir é apresentado um exemplo prático. Começando com a metodologia proposta para a verificação de máximo sobressinal, temos que definir um sistema e depois analisá-lo, de acordo com a nossa abordagem:
@@ -357,7 +357,6 @@ Como o sistema escolhido é instável, podemos voltar para o \texttt{Step 2} e pro
 
 Finalmente, esse experimento pode considerar os efeitos de FWL. Isso é feito usando o formato $ \langle 4,4 \rangle $, a matriz do controlador $ K_{\mathrm {FWL}} = [-0.6875 ~ -5.0 ~ -18.5] $ e omitindo \texttt{--no-fwl} (\texttt{Step A}), que resulta em ``\texttt{Verification FAILED}'', como mostrado na Figura~\ref{fig:stmethod}(b), onde o sistema se torna instável. Vale a pena notar que a matriz do controlador $ K $ em \texttt{SpecsFile.ss} não é modificada e $ K_{\mathrm {FWL}} $ é internamente calculado pelo DSVerifier.
 
-In order to evaluate other formats, $\langle 8,8 \rangle $ and $\langle 16,16 \rangle$ are considered in \texttt{Step 2}. As a consequence, $K_{\mathrm{FWL}} = [-0.7344~-5.0039~-18.5352]$ with ``\texttt{Verification FAILED}'', because the step response left the settling-time region between $k_{\mathrm{sr}}$ and $\hat{k}$, and $K_{\mathrm{FWL}} = [-0.7351~-5.0045~-18.5370]$ with ``\texttt{Verification SUCCESSFUL}'', because the step response did not leave the settling-time region between $k_{\mathrm{sr}}$ and $\hat{k}$, are respectively obtained, as can be seen in Figures~\ref{fig:stmethod}(c) and (d).
 Para avaliar outros formatos, $ \langle 8,8 \rangle $ e $ \langle 16,16 \rangle $ são considerados em \texttt{Step 2}. Como consequência, $ K_{\mathrm{FWL}} = [-0.7344 ~ -5.0039 ~ -18.5352] $ com ``\texttt{Verification FAILED}'', porque a resposta ao degrau deixou a região de assentamento entre $ k_{\mathrm{sr}} $ e $ \hat{k} $ e $ K_{\mathrm{FWL}} = [-0.7351 ~ -5.0045 ~ -18.5370] $ com ``\texttt{Verification SUCCESSFUL}'', porque a resposta ao degrau não deixou a região de assentamento entre $ k_{\mathrm{sr}} $ e $ \hat{k} $, são respectivamente obtidas, como pode ser visto nas Figuras~\ref{fig:stmethod} (c) e (d).
 
 
@@ -376,18 +375,18 @@ O número de bits influencia fortemente os tempos de assentamento em implementaçõ
 
 Pode-se notar também que as propriedades abordadas durante as fases de projeto também são modificadas, devido a mudanças nos coeficientes e nos resultados de cálculo. Em particular, o sobressinal foi afetado de maneiras diferentes, o que significa que, se uma propriedade falhar, a outra talvez não falhe, como pode ser visto no formato $ \langle 8,8 \rangle $.
 
-One may notice that $t_{\mathrm{sr}}=10s$ is the sample $n=20$, discretized at $T_{\mathrm{s}}=0.5s$. Figure~\ref{fig:stmethod}(a) shows that $k_{\mathrm{sr}}=t_{\mathrm{sr}}/T_{\mathrm{s}}=20$ is less than the calculated $\hat{k}=37$ (Eq.~\ref{eq:kbar}) and, as a consequence, for this required settling-time, the system is already in the settling time region, so that settling-time is doable in that case. Finally, the same reasoning is valid for Figures~\ref{fig:stmethod}(b), (c) and (d), where we can analyze responses and check them according to Algorithm~\ref{alg:settlingtime}.
 Pode-se notar que $ t_{\mathrm{sr}} = 10s $ é a amostra $ n = 20 $, discretizada em $ T_{\mathrm{s}} = 0.5s $. A Figura~\ref{fig:stmethod} (a) mostra que $ k_{\mathrm{sr}} = t_{\mathrm{sr}} / T_{\mathrm{s}} = 20 $ é menor que o $\hat{k} = 37 $ calculado (Eq.~\ref{eq:kbar}) e, como consequência, para este tempo de assentamento requerido, o sistema já está na região de assentamento, para que o tempo de assentamento seja possível nesse caso. Finalmente, o mesmo raciocínio é válido para as Figuras~\ref{fig:stmethod} (b), (c) e (d), onde podemos analisar as respostas e verificá-las de acordo com o Algoritmo~\ref{alg:settlingtime}.
 
 
 %-------------------------------------------------------------------
-\section{Synthesis of Non-fragile Performance Specification Requirements}
+\section{Síntese de Requisitos de Especificações de Desempenho Não Frágil}
 \label{sec:synthesis}
 %-------------------------------------------------------------------
 
-In this section, we show our proposed synthesis methodology based on performance specification requirements for digital control systems. In particular, we analyze settling-time and maximum overshoot specifications, for digital state-feedback control systems. The proposed synthesis approach, which employs our verification methodologies for settling-time and overshoot, as explained in Sections~\ref{subsec:overshootAlg} and \ref{subsec:settime-alg}, is based on the CEGIS synthesis technique, where there are two stages: verification and learning (where the synthesizer is located) as we can see in Figure~\ref{fig:cegisDiag}. In the learning stage, we generate a controller $K$ in order to satisfy our required parameter (settling-time and/or overshoot), using genetic algorithms~\cite{deb2004introduction}, where we take the system's definitions and the requirements as constraints. After generating the controller $K$, there is the verification stage where it gets the controller $K$ and verifies if meets the requirements, according to our verification methodologies, and if it fails in that stage, it goes back to learning stage and keep work in that loop, until it get success in the verification or the synthesizer reaches a maximum number of attempts.
+Nesta seção, mostramos a metodologia de síntese proposta com base nos requisitos de especificação de desempenho para sistemas de controle digital. Em particular, analisamos as especificações de tempo de assentamento e máximo sobressinal, para sistemas de controle com realimentação de estado digital. A abordagem de síntese proposta, que emprega nossas metodologias de verificação para o máximo tempo de assentamento e máximo sobressinal, como explicado nas seções~\ref{subsec:overshootAlg} e \ref{subsec:settime-alg}, é baseada na técnica de síntese CEGIS, onde são dois estágios: verificação e aprendizado (onde o sintetizador está localizado) como podemos ver no diagrama da Figura~\ref{fig: cegisDiag}. No estágio de aprendizado, geramos um controlador $ K $ para satisfazer nosso parâmetro requerido (tempo de assentamento e/ou sobressinal), usando algoritmos genéticos~\cite{deb2004introduction}, onde tomamos as definições do sistema e os requisitos como restrições. Depois de gerar o controlador $ K $, há o estágio de verificação onde ele pega o controlador $ K $ e verifica se atende aos requisitos, de acordo com nossas metodologias de verificação, e se falhar nessa etapa, ele volta ao estágio de aprendizado e se mantém nesse cciclo, até obter sucesso na verificação ou o sintetizador atingir um número máximo de tentativas.
 
-In Figure~\ref{fig:SynthArch}, we show the proposed synthesis architecture in a general form, where system definitions represent the system as a whole (state-space matrices, inputs, etc), requirements are the requirements to be synthesized, \texttt{total\_attempts} is the total number of attempts of synthesize a controller, \texttt{attempts} represents the number of attempts without change any synthesis parameter (genetic algorithm), GA is the block that performs the generation of a candidate controller though genetic algorithm (GA), \texttt{verify()} is the verification engine (Sections~\ref{subsec:overshootAlg} and \ref{subsec:settime-alg}) which rely on what we are synthesizing (settling-time and/or overshoot), \texttt{MAXATT} is the maximum number of attempts to synthesize a controller (informed by the user), \texttt{MAXINNERATT} represents the maximum number of attempts without change any GA parameter, \texttt{popsize} is the population size of the genetic algorithm and \texttt{STEP} is the step to increment the GA population.
+Na Figura~\ref{fig:SynthArch}, mostramos a arquitetura de síntese proposta de uma forma geral, onde as definições do sistema representam o sistema como um todo (matrizes de espaço de estados, entradas, etc), os requisitos a serem sintetizados, \texttt{total\_attempts} é o número total de tentativas de sintetizar um controlador, \texttt{tentativas} representa o número de tentativas sem alterar qualquer parâmetro de síntese (algoritmo genético), GA é o bloco que realiza a geração de um controlador candidato através de algoritmo genético (\textit{Genetic Algorithms} - GA), \texttt{verify()} é o mecanismo de verificação (Seções~\ref{subsec:overshootAlg} e \ref{subsec:settime-alg}) que dependem do que estamos sintetizando (tempo de assentamento e/ou sobressinal), \texttt{MAXATT} é o número máximo de tentativas de sintetizar um controlador (informado pelo usuário), \texttt{MAXINNERATT} representa o número máximo de tentativas sem alterar nenhum parâmetro do GA, \texttt{popsize} é o tamanho da população do algoritmo genético e \texttt{STEP} é o passo para incrementar a população GA na \textit{egine} de síntese desenvolvida neste trabalho.
+
 
 \begin{figure}[ht]
 \begin{center}
@@ -397,7 +396,7 @@ In Figure~\ref{fig:SynthArch}, we show the proposed synthesis architecture in a 
 \end{center}
 \end{figure}
 
-Our proposed synthesis methodology works as follows. We first define the system to be synthesized (plant, inputs, etc) and the requirements to be met (settling-time/overshoot), and then we choose what we want meet in the synthesis process. Additionaly, we run the genetic algorithm using the required constraints (settling-time and/or overshoot), so we generate a candidate controller $K$. Now, we perform the verification process (according to the property we chose to synthesize); if the verification has success, the synthesis is successfuly and it finishes the process. Otherwise the verification fails and we check if the total number of attempts exceeded the maximum number of attempts, if yes, the synthesis process fails and it finishes, contrarily, we check if the number of attempts without change any GA parameter exceeded the maximum number defined for that, if no it goes back to run the GA again (and continues the process again), on the other hand, we increment the population size of the GA, by a step fixed, and after that we re-execute the GA and continue the process again.
+Nossa metodologia de síntese proposta funciona da seguinte maneira. Primeiro definimos o sistema a ser sintetizado (planta, entradas, etc) e os requisitos a serem atendidos (tempo de assentamento/sobressinal), e então escolhemos o que queremos satisfazer no processo de síntese. Além disso, executamos o algoritmo genético usando as restrições necessárias (tempo de assentação e/ou sobressinal), então geramos um controlador candidato $ K $. Em seguida, realizamos o processo de verificação (de acordo com a propriedade que escolhemos sintetizar); se a verificação for bem sucedida, a síntese é bem sucedida e termina o processo. Caso contrário, a verificação falha e nós verificamos se o número total de tentativas excedeu o número máximo de tentativas, se sim, o processo de síntese falha e termina; caso contrário, verificamos se o número de tentativas, sem mudança qualquer parâmetro do GA, excedeu o número máximo definido para isso, se não voltar a executar o GA novamente (e continuar o processo novamente); caso contrário, incrementamos o tamanho da população do GA, por um passo fixo, e depois disso re-executamos o GA e o processo continua.
 
 %\begin{tikzpicture}[node distance=1cm]
 %\node (start) [startstop] {Start};
@@ -432,11 +431,11 @@ Our proposed synthesis methodology works as follows. We first define the system 
 
 
 %--------------------------------------------------------------
-\subsection{Generating candidate controller $K$}
+\subsection{Geração do Controlador Candidato $K$}
 \label{subsec:genK}
 %--------------------------------------------------------------
 
-In our CEGIS synthesis methodology, we use genetic algorithms to generate a candidate controller $K$, in order to satisfy the desired requirements (overshoot and settling-time). Our methodology uses a multi-objective functions to solve three separated problems: synthesize for overshoot, settling-time or both. The multi-objective functions are:
+Em nossa metodologia de síntese baseada em CEGIS, usamos algoritmos genéticos para gerar um controlador candidato $ K $, a fim de satisfazer os requisitos desejados (tempo de assentamento e overshoot). A metodologia usa uma função multi-objetivo para resolver três problemas separados: sintetizar para sobressinal, tempo de assentamento ou ambos. As funções multi-objetivo são:
 \begin{equation}
 	\label{eq:objfuncSumK}
 	\begin{array}{ccc}
@@ -453,13 +452,13 @@ In our CEGIS synthesis methodology, we use genetic algorithms to generate a cand
 	\end{array}
 \end{equation}
 
-\noindent where $K$ is the controller matrix and $\hat{k}$ is given by Eq.~\ref{eq:kbar}.
+\noindent onde $K$ é o controlador e $\hat{k}$ é dado por Eq.~\ref{eq:kbar}.
 
-\subsubsection{Optimization problem for overshoot}
+\subsubsection{Problema de Otimização para Sobressinal}
 \label{ssubsec:genKover}
-With the goal of generating a controller matrix $K$ through genetic algorithms, in order to satisfy overshoot requirements, we have used the following problem formulation.
+Com o objetivo de gerar uma matriz de controlador $ K $ através de algoritmos genéticos, a fim de satisfazer os requisitos de sobressinal, utilizamos a seguinte formulação do problema.
 
-The optimization problem consists in minimizing $\mathbf{f}_\mathrm{1}$ and $\mathbf{f}_\mathrm{2}$ with respect to the decision variable $K$. Thus, the optimization problem is represented as follows:
+O problema de otimização consiste em minimizar $\mathbf{f}_\mathrm{1}$ e $\mathbf{f}_\mathrm{2}$ em relação à variável de decisão $ K $. Assim, o problema de otimização é representado da seguinte forma:
 %
 \begin{equation}
 	\label{eq:optproblemOS}
@@ -472,14 +471,12 @@ The optimization problem consists in minimizing $\mathbf{f}_\mathrm{1}$ and $\ma
 	\end{array}
 \end{equation}
 
-The first constraint means that the actual percentage overshoot must be smaller than the required percentage overshoot ($PO_{r}$. The second constraint is related to system's stability, where $\bar{\lambda}$ is the maximum absolute value among the system's eigenvalues (Section~\ref{sec:modformver}) and this value must be smaller than $1$, otherwise, the system is unstable.
+A primeira restrição significa que a porcentagem real de sobressinal deve ser menor que a porcentagem requerida ($ PO_{\mathrm{r}} $. A segunda restrição está relacionada à estabilidade do sistema, onde $ \bar{\lambda} $ é o valor absoluto máximo entre os autovalores do sistema (Seção~\ref{sec:modformver}) e este valor deve ser menor que $1$, caso contrário, o sistema é instável~\cite{chen1995linear}.
 
-\subsubsection{Optimization problem for settling-time}
+\subsubsection{Problema de Otimização para Tempo de Assentamento}
 \label{ssubsec:genKst}
 
-We formulate an optimization problem to generate $K$ in order to satisfies settling-time requirements.
-
-The optimization problem consists in minimizing $\mathbf{f}_\mathrm{1}$ and $\mathbf{f}_\mathrm{2}$ with respect to the decision variable $K$. Thus, the optimization problem is represented as follows:
+Desta vez, queremos otimizar o problema utlizando os requisitos de tempo de assentamento. Para isso, utilizamos amesma função multi-objetivo, onde queremos minimizar $ \mathbf{f}_\mathrm{1} $ e $ \mathbf{f}_\mathrm{2}$ em relação à variável de decisão $ K $. Assim, o problema de otimização é representado da seguinte forma:
 %
 \begin{equation}
 	\label{eq:optproblemST}
@@ -492,12 +489,12 @@ The optimization problem consists in minimizing $\mathbf{f}_\mathrm{1}$ and $\ma
 	\end{array}
 \end{equation}
 
-In this optimization problem, the first constraint means that $\hat{k}$ must be smaller than the required settling-time in discrete-time ($k_{sr}$, because as we can see in Algorithm~\ref{alg:settlingtime}, when that happens the verification is successful which mean that the system meets the required settling-time. The second constraint is related to system's stability, where $\bar{\lambda}$ is the maximum absolute value among the system's eigenvalues (Section~\ref{sec:modformver}) and this value must be smaller than $1$, otherwise, the system is unstable.
+Neste problema de otimização, a primeira restrição significa que $ \hat{k} $ deve ser menor que o tempo de assentamento requerido em tempo discreto ($ k_{sr} $, porque como podemos ver no Algoritmo~\ref{alg:settlingtime}, quando isso acontece, a verificação é bem sucedida, o que significa que o sistema atende ao máximo tempo de assentamento exigido. A segunda restrição está relacionada à estabilidade do sistema, da mesma forma como mostramos no problema em \ref{ssubsec:genKst}.
 
-\subsubsection{Optimization problem to meet overshoot and settling-time}
+\subsubsection{Problema de Otimização para Satisfazer Sobressinal e Tempo de Assentamento}
 \label{ssubsec:genKovst}
 
-In order to generate a controller $K$ using genetic algorithm that satisfies both overshoot and settling-time requirements, we formulate the following optimization problem.
+A fim de gerar um controlador $ K $ usando algoritmo genético que satisfaça tanto os requisitos de sobressinal quanto de tempo de assentamento, formulamos o seguinte problema de otimização.
 
 \begin{equation}
 	\label{eq:optproblemOVST}
@@ -511,7 +508,7 @@ In order to generate a controller $K$ using genetic algorithm that satisfies bot
 	\end{array}
 \end{equation}
 
-In this case, we want no minimize hte multi-objective functions ($\mathbf{f}_\mathrm{1}$ and $\mathbf{f}_\mathrm{2}$) constrained to: $\hat{k} \leq k_\mathrm{sr}$, $PO \leq PO_{\mathrm{r}}$ and $\bar{\lambda} \leq 1$. The first constraint garantee that the system meets the settling-time requirement, since $ k_\mathrm{sr} \geq \hat{k}$ (cf. Algorithm~\ref{alg:settlingtime}). The second constraint assure the maximum percentage overshoot required (cf. Algorithm~\ref{alg:overshootReal}).  Finally, the third constraint ensure that controller $K$ will keep the system stable, in consideration of $\bar{\lambda}$ being the largest absolute eigenvalue and that being smaller than $1$ provides stability.
+Neste caso, queremos minimizar as funções multi-objetivo ($ \mathbf{f}_\mathrm{1} $ e $ \mathbf{f}_\mathrm{2} $) restritas a: $ \hat{k} \leq k_\mathrm{sr} $, $ PO \leq PO_{\mathrm{r}} $ e $ \bar{\lambda} \leq 1 $. A primeira restrição garante que o sistema atenda ao requisito de tempo de assentamento, já que $ k_\mathrm{sr} \geq \hat{k} $ (cf. Algoritmo~\ref{alg:settlingtime}). A segunda restrição assegura o percentual máximo de sobressinal exigido (cf. Algoritmo~\ref{alg:overshootReal}). Finalmente, a terceira restrição assegura que o controlador $ K $ mantenha o sistema estável, considerando que $ \bar{\lambda} $ é o maior valor absoluto entres os autovalores e que este sendo menor que $ 1 $ proporciona estabilidade.
 
 \section{Resumo}\label{chap-4-summary}
 

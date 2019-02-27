@@ -176,7 +176,15 @@ Diz-se que um sistema é BIBO estável se toda sequência de entrada limitada excit
 
 O sistema em tempo discreto mostrado em \eqref{eq:dtsx} é dito ser marginalmente estável ou estável no sentido de Lyapunov se todo estado inicial finito $\mathbf{x}_o$ excita uma resposta limitada~\cite{chen1995linear}. É assintoticamente estável se todo estado inicial finito excita uma resposta limitada, que, além disso, se aproxima de $0$ como $k \rightarrow \infty$~\cite{chen1995linear}.
 
-Outra forma bastante comum de verificar a estabilidade de m sistema de tempo discreto é através da avaliação dos seus autovalores, ou seja, caso a magnitude dos autovalores da matrix de estado $\mathbf{A}$ for menor que $1$, o sistema é dito estável~\cite{chen1995linear}. Se analisarmos o sistema resultante no domínio da frequência, os autovalores em malha fechada correspondem aos pólos da função de transferência em malha fechada.
+Outra forma bastante comum de verificar a estabilidade de um sistema de tempo discreto é através da avaliação dos seus autovalores, ou seja, caso a magnitude dos autovalores da matrix de estado $\mathbf{A}$ for menor que $1$, o sistema é dito estável~\cite{chen1995linear}, o que pode ser verificado por
+
+\begin{equation}\label{eq:lamb}
+\textrm{det}(\mathbf{A} \lambda-I)=0,
+\end{equation}
+
+\noindent onde resolvendo a equação, consegue-se encontrar os autovalores de $\mathbf{A}$.
+
+Se analisarmos o sistema resultante no domínio da frequência, os autovalores em malha fechada correspondem aos pólos da função de transferência em malha fechada.
 
 
 \subsection{Processo de Discretização}\label{subsec:pd}

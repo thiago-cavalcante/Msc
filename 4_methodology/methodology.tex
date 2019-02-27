@@ -15,7 +15,7 @@ Neste capítulo, a metodologia proposta para sintetizar controlodores digitais co
 %\end{figure}
 
 %-------------------------------------------------------------------
-\section{Verifying Non-fragile Performance Specification Requirements}
+\section{Verificação de Requisitos de Especificação de Desempenho Não-frágil}
 \label{sec:verification}
 %-------------------------------------------------------------------
 
@@ -86,7 +86,7 @@ Nesse sentido, dado que $S_\mathrm{1}=\{|\lambda_{\mathrm{1}},|\lambda_{\mathrm{
 
 \noindent onde $\overline{c}$ é uma constante que faz $\overline{y}(k)$ entrar na região de assentamento $\Pi$. Na verdade, a função heurística acima usa o autovalor mais ``lento'' $\bar{\lambda}$, garantindo que $\bar{\Omega}$ sempre alcance a região assentamento após $\Omega$.
 
-Em resumo, podemos encontrar uma função heurística baseada no maior autovalor de $ Omega$, em termos de magnitude, e então verificar o momento em que ela entra em uma região assentamento porque se isso acontecer antes do tempo de assentamento requerido, isso também é válido para $\Omega$.
+Em resumo, podemos encontrar uma função heurística baseada no maior autovalor de $\Omega$, em termos de magnitude, e então verificar o momento em que ela entra em uma região assentamento porque se isso acontecer antes do tempo de assentamento requerido, isso também é válido para $\Omega$.
 
 Para verificar o tempo de assentamento de um sistema, indicamos uma região de assentamento como uma porcentagem $ p $, geralmente entre $ 0 \% $ e $ 5 \% $~\cite{dorf2011modern}, portanto seus limites superior e inferior são,
 
@@ -149,7 +149,7 @@ A Figura~\ref{fig:overshootDiag} mostra a metodologia de verificação de sobressi
   
 \begin{figure}[H]
 \begin{center}
-\includegraphics[trim={0.0cm 0.0cm 0.0cm 0cm}, clip,width=0.7\textwidth]{figures/ArchOverShooting.eps}
+\includegraphics[trim={0.0cm 0.0cm 0.0cm 0cm}, clip,width=0.8\textwidth]{figures/ArchOverShooting.eps}
 \caption{Verificação de Sobressinal.} 
 \label{fig:overshootDiag}
 \end{center}
@@ -226,13 +226,13 @@ Nesta seção, mostramos nosso algoritmo para verificação de tempo de assentamento
 
 \begin{figure*}[ht]
 \begin{center}
-\includegraphics[trim={0.0cm 0.0cm 0.0cm 0cm}, clip,width=0.7\textwidth]{figures/Archstever.eps}
+\includegraphics[trim={0.0cm 0.0cm 0.0cm 0cm}, clip,width=0.8\textwidth]{figures/Archstever.eps}
 \caption{Metodologia de Verificação de Tempo de Assentamento.} 
 \label{fig:diag1}
 \end{center}
 \end{figure*}
 
-O procedimento proposto para verificar os tempos de assentamento, que é descrito no Algoritmo~\ref{alg:settlingtime}, consiste em primeiro verificar se $\hat{k}$, que foi previamente calculado e usado como parâmetro, é menor que tempo de assentamento requerido $k_{\mathrm{sr}} = \frac{t_{\mathrm{sr}}} {T_\mathrm{s}}$, que também pode ser verificado através de $\hat{k} \times T_{\mathrm{s}} \leq t_{\mathrm{sr}}$ (como usado no Algorithm~\ref{alg:settlingtime}). Se este for o caso, podemos assegurar que o sinal de saída está dentro de $\Pi$ (veja Seção \ref{sec:modformver}) após $t_{\mathrm{sr}}$ e, como consequência, a verificação associada já é bem sucedido; caso contrário, ainda precisamos verificar se $y$ permanece dentro de $\Pi$ de $k_{\mathrm{sr}}$ a $\hat{k}$ e, se este último não for verdadeiro para qualquer amostra $y$, a verificação resultante falha.
+O procedimento proposto para verificar os tempos de assentamento, que é descrito no Algoritmo~\ref{alg:settlingtime}, consiste em primeiro verificar se $\hat{k}$, que foi previamente calculado e usado como parâmetro, é menor que tempo de assentamento requerido $k_{\mathrm{sr}} = \ceil{\frac{t_{\mathrm{sr}}} {T_\mathrm{s}}}$, que também pode ser verificado através de $\hat{k} \times T_{\mathrm{s}} \leq t_{\mathrm{sr}}$ (como usado no Algorithm~\ref{alg:settlingtime}). Se este for o caso, podemos assegurar que o sinal de saída está dentro de $\Pi$ (veja Seção \ref{sec:modformver}) após $t_{\mathrm{sr}}$ e, como consequência, a verificação associada já é bem sucedido; caso contrário, ainda precisamos verificar se $y$ permanece dentro de $\Pi$ de $k_{\mathrm{sr}}$ a $\hat{k}$ e, se este último não for verdadeiro para qualquer amostra $y$, a verificação resultante falha.
 
 
 %\begin{algorithm}[H]
@@ -330,31 +330,31 @@ u(k)=r(k)-Kx(k)
 %
 \noindent onde $r(k)=u_{\mathrm{-1}}$ é o degrau unitário.
 
-Desta forma, \texttt{Step 1} está pronto e \texttt{Step 2} é então considerado, onde uma matriz do controlador $K$ não está definida, devido à operação em malha aberta. Consequentemente, uma implementação de FWL (\texttt{Step 3}) também não é fornecida. Em seguida, os requisitos desejados são definidos, como $PO_{\mathrm{r}} = 9$, em \texttt{Step 4}, usando um arquivo de especificação \texttt{SpecsFile.ss}.
+Desta forma, \texttt{Step 1} está pronto e \texttt{Step 2} é então considerado, onde uma matriz do controlador $\mathbf{K}$ não está definida, devido à operação em malha aberta. Consequentemente, uma implementação de FWL (\texttt{Step 3}) também não é fornecida. Em seguida, os requisitos desejados são definidos, como $PO_{\mathrm{r}} = 9$, em \texttt{Step 4}, usando um arquivo de especificação \texttt{SpecsFile.ss}.
 
 Dado que a operação em malha aberta foi considerada, este sistema é avaliado com ``\texttt{dsverifier SpecsFile.ss - property OVERSHOOT}'' e, como consequência, ``\texttt{Verification FAILED}'' é retornado, porque o sistema avaliado é instável e, consequentemente, não há sobressinal. Pode-se notar que o método proposto sempre verifica se um sistema é estável.
 
-Como o sistema escolhido é instável, podemos voltar para \texttt{Step 2} e projetar um controlador, a fim de estabilizá-lo e satisfazer o percentual de sobressinal requido ($PO_{\mathrm{r}}$), usando a técnica de Lyapunov~\cite{chen1995linear}. Nesse caso, usamos um controlador $K = [-0.7351 ~ -5.0045 ~ -18.5371]$ em \texttt{SpecsFile.ss}. Em seguida, executamos esse experimento novamente, mas agora com a opção ``\texttt{--closed-loop}'' e ainda sem efeitos FWL (\texttt{--no-fwl}), o que resulta em \texttt{Verification SUCCESSFUL}, desde que o DSVerifier retornou $PO = 2.6228$ que é menor que $PO_{\mathrm{r}} = 9$.
+Como o sistema escolhido é instável, podemos voltar para \texttt{Step 2} e projetar um controlador, a fim de estabilizá-lo e satisfazer o percentual de sobressinal requido ($PO_{\mathrm{r}}$), usando a técnica de Lyapunov~\cite{chen1995linear}. Nesse caso, usamos um controlador $\mathbf{K} = [-0.7351 ~ -5.0045 ~ -18.5371]$ em \texttt{SpecsFile.ss}. Em seguida, executamos esse experimento novamente, mas agora com a opção ``\texttt{---closed-loop}'' e ainda sem efeitos FWL (\texttt{---no-fwl}), o que resulta em \texttt{Verification SUCCESSFUL}, desde que o DSVerifier retornou $PO = 2.6228$ que é menor que $PO_{\mathrm{r}} = 9$.
 
-Finalmente, consideramos os efeitos de FWL nesse experimento. Isso é feito usando o formato $ \langle 4,4 \rangle $, a matriz do controlador $K_{\mathrm{FWL}} = [-0.6875 ~ -5.0 ~ -18.5] $ e omitindo \texttt{--no-fwl} (\texttt{Step A}), que resulta em ``\texttt{Verification FAILED}'', devido ao fato de o sistema ainda estar instável. Para avaliar outros formatos, $ \langle 8,8 \rangle $ e $ \langle 16,16 \rangle $ foram considerados, em \texttt{Step 2}. Como consequência, $ \langle 8,8 \rangle $ ($K_{\mathrm{FWL}} = [-0.7344 ~ -5,0039 ~ -18.5352] $) resultou em ``\texttt{Verification SUCCESSFUL}'', dado que o DSVerifier retornou $ PO = 1.6153 $, que é menor que $ PO_{\mathrm{r}} = 9 $ e $ \langle 16,16 \rangle $ ($ K_{\mathrm{FWL}} = [-0.7351 ~ -5.0045 ~ -18.5370] $) também resultou em ``\texttt{Verification SUCCESSFUL}'', porque nossa metodologia forneceu $ PO = 2.6253 $, que é novamente menor que o valor requerido.
+Finalmente, consideramos os efeitos de FWL nesse experimento. Isso é feito usando o formato $ \langle 4,4 \rangle $, a matriz do controlador $\mathbf{K}_{\mathrm{FWL}} = [-0.6875 ~ -5.0 ~ -18.5] $ e omitindo \texttt{---no-fwl} (\texttt{Step A}), que resulta em ``\texttt{Verification FAILED}'', devido ao fato de o sistema ainda estar instável. Para avaliar outros formatos, $ \langle 8,8 \rangle $ e $ \langle 16,16 \rangle $ foram considerados, em \texttt{Step 2}. Como consequência, $ \langle 8,8 \rangle $ ($\mathbf{K}_{\mathrm{FWL}} = [-0.7344 ~ -5,0039 ~ -18.5352] $) resultou em ``\texttt{Verification SUCCESSFUL}'', dado que o DSVerifier retornou $ PO = 1.6153 $, que é menor que $ PO_{\mathrm{r}} = 9 $ e $ \langle 16,16 \rangle $ ($ \mathbf{K}_{\mathrm{FWL}} = [-0.7351 ~ -5.0045 ~ -18.5370] $) também resultou em ``\texttt{Verification SUCCESSFUL}'', porque nossa metodologia forneceu $ PO = 2.6253 $, que é novamente menor que o valor requerido.
 
-Agora, analisamos nossa abordagem de verificação de tempo de assentamento, seguindo os passos da Figura~\ref{fig:diag1}. Desta forma, \texttt{Step 1} está pronto e \texttt{Step 2} é então considerado, onde uma matriz do controlador $ K $ não está definida, devido à operação em malha aberta. Consequentemente, uma implementação de FWL (\texttt{Step 3}) também não é fornecida. Em seguida, os requisitos desejados são definidos, ou seja, $ t_{\mathrm{sr}} = 10s $, $ p = 5 $ e $ T_{\mathrm{s}} = 0.5s $, em \texttt{Step 4}, usando um arquivo de especificação \texttt{SpecsFile.ss}.
+Agora, analisamos nossa abordagem de verificação de tempo de assentamento, seguindo os passos da Figura~\ref{fig:diag1}. Desta forma, \texttt{Step 1} está pronto e \texttt{Step 2} é então considerado, onde uma matriz do controlador $ \mathbf{K} $ não está definida, devido à operação em malha aberta. Consequentemente, uma implementação de FWL (\texttt{Step 3}) também não é fornecida. Em seguida, os requisitos desejados são definidos, ou seja, $ t_{\mathrm{sr}} = 10s $, $ p = 5 $ e $ T_{\mathrm{s}} = 0.5s $, em \texttt{Step 4}, usando um arquivo de especificação \texttt{SpecsFile.ss}.
 
-Finalmente, considerando que a operação em malha aberta foi considerada, este sistema é avaliado com ``\texttt{dsverifier SpecsFile.ss - property SETTLING\_TIME}''. \texttt{Steps A} a \texttt{E} da metodologia proposta são automaticamente executados pelo DSVerifier, considerando uma implementação em malha aberta, e, como consequência, ``\texttt{Verification FAILED}'' é retornado, porque o sistema avaliado é instável, pois seus autovalores são maiores que $ 1 $ ($ \lambda = 1.5 $, devido à Eq.~\eqref{lamb}). Pode-se notar que o método proposto primeiro verifica se um sistema é estável, entre \texttt{Steps A} e \texttt{B}.
+Finalmente, considerando que a operação em malha aberta foi considerada, este sistema é avaliado com ``\texttt{dsverifier SpecsFile.ss - property SETTLING\_TIME}''. \texttt{Steps A} a \texttt{E} da metodologia proposta são automaticamente executados pelo DSVerifier, considerando uma implementação em malha aberta, e, como consequência, ``\texttt{Verification FAILED}'' é retornado, porque o sistema avaliado é instável, pois seus autovalores são maiores que $ 1 $ ($ \lambda = 1.5 $, devido à Eq.~\eqref{eq:lamb}). Pode-se notar que o método proposto primeiro verifica se um sistema é estável, entre \texttt{Steps A} e \texttt{B}.
 
-Como o sistema escolhido é instável, podemos voltar para o \texttt{Step 2} e projetar um controlador, a fim de estabilizá-lo e satisfazer o tempo de assentamento requerido, usando o Lyapunov~\cite{chen1995linear}. Nesse caso, usamos a mesma matriz do controlador $ K = [-0.7351 ~ -5.0045 ~ -18.5371] $ em \texttt{SpecsFile.ss}, como explicado em Seção~\ref{subsec:overshootAlg}. Como esse controlador foi projetado para satisfazer ambas as propriedades (tempo de assentamento e sobressinal), esse experimento é executado novamente, mas agora com a opção ``\texttt{--closed-loop}'' e ainda sem efeitos FWL (\texttt{--no-fwl}), que resulta em ``\texttt{Verification SUCCESSFUL}'', como pode ser visto na Figura~\ref{fig:stmethod}(a), onde a resposta ao degrau não deixa a região de assentamento entre $ k_{\mathrm{sr}} $ e $ \hat{k}$.
+Como o sistema escolhido é instável, podemos voltar para o \texttt{Step 2} e projetar um controlador, a fim de estabilizá-lo e satisfazer o tempo de assentamento requerido, usando o Lyapunov~\cite{chen1995linear}. Nesse caso, usamos a mesma matriz do controlador $ \mathbf{K} = [-0.7351 ~ -5.0045 ~ -18.5371] $ em \texttt{SpecsFile.ss}, como explicado em Seção~\ref{subsec:overshootAlg}. Como esse controlador foi projetado para satisfazer ambas as propriedades (tempo de assentamento e sobressinal), esse experimento é executado novamente, mas agora com a opção ``\texttt{---closed-loop}'' e ainda sem efeitos FWL (\texttt{---no-fwl}), que resulta em ``\texttt{Verification SUCCESSFUL}'', como pode ser visto na Figura~\ref{fig:stmethod}(a), onde a resposta ao degrau não deixa a região de assentamento entre $ k_{\mathrm{sr}} $ e $ \hat{k}$.
 
-Finalmente, esse experimento pode considerar os efeitos de FWL. Isso é feito usando o formato $ \langle 4,4 \rangle $, a matriz do controlador $ K_{\mathrm {FWL}} = [-0.6875 ~ -5.0 ~ -18.5] $ e omitindo \texttt{--no-fwl} (\texttt{Step A}), que resulta em ``\texttt{Verification FAILED}'', como mostrado na Figura~\ref{fig:stmethod}(b), onde o sistema se torna instável. Vale a pena notar que a matriz do controlador $ K $ em \texttt{SpecsFile.ss} não é modificada e $ K_{\mathrm {FWL}} $ é internamente calculado pelo DSVerifier.
+Finalmente, esse experimento pode considerar os efeitos de FWL. Isso é feito usando o formato $ \langle 4,4 \rangle $, a matriz do controlador $ \mathbf{K}_{\mathrm {FWL}} = [-0.6875 ~ -5.0 ~ -18.5] $ e omitindo \texttt{---no-fwl} (\texttt{Step A}), que resulta em ``\texttt{Verification FAILED}'', como mostrado na Figura~\ref{fig:stmethod}(b), onde o sistema se torna instável. Vale a pena notar que a matriz do controlador $ \mathbf{K} $ em \texttt{SpecsFile.ss} não é modificada e $ \mathbf{K}_{\mathrm {FWL}} $ é internamente calculado pelo DSVerifier.
 
-Para avaliar outros formatos, $ \langle 8,8 \rangle $ e $ \langle 16,16 \rangle $ são considerados em \texttt{Step 2}. Como consequência, $ K_{\mathrm{FWL}} = [-0.7344 ~ -5.0039 ~ -18.5352] $ com ``\texttt{Verification FAILED}'', porque a resposta ao degrau deixou a região de assentamento entre $ k_{\mathrm{sr}} $ e $ \hat{k} $ e $ K_{\mathrm{FWL}} = [-0.7351 ~ -5.0045 ~ -18.5370] $ com ``\texttt{Verification SUCCESSFUL}'', porque a resposta ao degrau não deixou a região de assentamento entre $ k_{\mathrm{sr}} $ e $ \hat{k} $, são respectivamente obtidas, como pode ser visto nas Figuras~\ref{fig:stmethod} (c) e (d).
+Para avaliar outros formatos, $ \langle 8,8 \rangle $ e $ \langle 16,16 \rangle $ são considerados em \texttt{Step 2}. Como consequência, $ \mathbf{K}_{\mathrm{FWL}} = [-0.7344 ~ -5.0039 ~ -18.5352] $ com ``\texttt{Verification FAILED}'', porque a resposta ao degrau deixou a região de assentamento entre $ k_{\mathrm{sr}} $ e $ \hat{k} $ e $ \mathbf{K}_{\mathrm{FWL}} = [-0.7351 ~ -5.0045 ~ -18.5370] $ com ``\texttt{Verification SUCCESSFUL}'', porque a resposta ao degrau não deixou a região de assentamento entre $ k_{\mathrm{sr}} $ e $ \hat{k} $, são respectivamente obtidas, como pode ser visto nas Figuras~\ref{fig:stmethod} (c) e (d).
 
 
 \begin{figure}[ht]
    \centering
-   \subfloat[][]{\includegraphics[trim={0.4cm 0cm 3cm 0cm}, clip,width=.4\textwidth]{figures/exDM13cl.eps}}\quad
-   \subfloat[][]{\includegraphics[trim={2cm 0cm 3cm 0cm}, clip,width=.4\textwidth]{figures/exDM13cl8b.eps}}\\
-   \subfloat[][]{\includegraphics[trim={0.5cm 0cm 3cm 0cm}, clip,width=.4\textwidth]{figures/exDM13cl16b.eps}}\quad
-   \subfloat[][]{\includegraphics[trim={0.5cm 0cm 3cm 0cm}, clip,width=.4\textwidth]{figures/exDM13cl32b.eps}}
+   \subfloat{\includegraphics[trim={0.4cm 0cm 3cm 0cm}, clip,width=.45\textwidth]{figures/exDM13cl.eps}}\quad
+   \subfloat{\includegraphics[trim={2cm 0cm 3cm 0cm}, clip,width=.45\textwidth]{figures/exDM13cl8b.eps}}\\
+   \subfloat{\includegraphics[trim={0.5cm 0cm 3cm 0cm}, clip,width=.45\textwidth]{figures/exDM13cl16b.eps}}\quad
+   \subfloat{\includegraphics[trim={0.5cm 0cm 3cm 0cm}, clip,width=.45\textwidth]{figures/exDM13cl32b.eps}}
    \caption{Settling-time verification for the example system, (a) without FWL effects and with formats (b) $\langle 4,4 \rangle$, (c) $\langle 8,8 \rangle$, and (d) $\langle 16,16 \rangle$.
    }
    \label{fig:stmethod}
@@ -364,7 +364,7 @@ O número de bits influencia fortemente os tempos de assentamento em implementaçõ
 
 Pode-se notar também que as propriedades abordadas durante as fases de projeto também são modificadas, devido a mudanças nos coeficientes e nos resultados de cálculo. Em particular, o sobressinal foi afetado de maneiras diferentes, o que significa que, se uma propriedade falhar, a outra talvez não falhe, como pode ser visto no formato $ \langle 8,8 \rangle $.
 
-Pode-se notar que $ t_{\mathrm{sr}} = 10s $ é a amostra $ n = 20 $, discretizada em $ T_{\mathrm{s}} = 0.5s $. A Figura~\ref{fig:stmethod} (a) mostra que $ k_{\mathrm{sr}} = t_{\mathrm{sr}} / T_{\mathrm{s}} = 20 $ é menor que o $\hat{k} = 37 $ calculado (Eq.~\ref{eq:kbar}) e, como consequência, para este tempo de assentamento requerido, o sistema já está na região de assentamento, para que o tempo de assentamento seja possível nesse caso. Finalmente, o mesmo raciocínio é válido para as Figuras~\ref{fig:stmethod} (b), (c) e (d), onde podemos analisar as respostas e verificá-las de acordo com o Algoritmo~\ref{alg:settlingtime}.
+Pode-se notar que $ t_{\mathrm{sr}} = 10s $ é a amostra $ n = 20 $, discretizada em $ T_{\mathrm{s}} = 0.5s $. A Figura~\ref{fig:stmethod} (a) mostra que $ k_{\mathrm{sr}} = \ceil{t_{\mathrm{sr}} / T_{\mathrm{s}}} = 20 $ é menor que o $\hat{k} = 37 $ calculado (Eq.~\ref{eq:kbar}) e, como consequência, para este tempo de assentamento requerido, o sistema já está na região de assentamento, para que o tempo de assentamento seja possível nesse caso. Finalmente, o mesmo raciocínio é válido para as Figuras~\ref{fig:stmethod} (b), (c) e (d), onde podemos analisar as respostas e verificá-las de acordo com o Algoritmo~\ref{alg:settlingtime}.
 
 
 %-------------------------------------------------------------------
@@ -372,20 +372,20 @@ Pode-se notar que $ t_{\mathrm{sr}} = 10s $ é a amostra $ n = 20 $, discretizada
 \label{sec:synthesis}
 %-------------------------------------------------------------------
 
-Nesta seção, mostramos a metodologia de síntese proposta com base nos requisitos de especificação de desempenho para sistemas de controle digital. Em particular, analisamos as especificações de tempo de assentamento e máximo sobressinal, para sistemas de controle com realimentação de estado digital. A abordagem de síntese proposta, que emprega nossas metodologias de verificação para o máximo tempo de assentamento e máximo sobressinal, como explicado nas seções~\ref{subsec:overshootAlg} e \ref{subsec:settime-alg}, é baseada na técnica de síntese CEGIS, onde são dois estágios: verificação e aprendizado (onde o sintetizador está localizado) como podemos ver no diagrama da Figura~\ref{fig: cegisDiag}. No estágio de aprendizado, geramos um controlador $ K $ para satisfazer nosso parâmetro requerido (tempo de assentamento e/ou sobressinal), usando algoritmos genéticos~\cite{deb2004introduction}, onde tomamos as definições do sistema e os requisitos como restrições. Depois de gerar o controlador $ K $, há o estágio de verificação onde ele pega o controlador $ K $ e verifica se atende aos requisitos, de acordo com nossas metodologias de verificação, e se falhar nessa etapa, ele volta ao estágio de aprendizado e se mantém nesse cciclo, até obter sucesso na verificação ou o sintetizador atingir um número máximo de tentativas.
+Nesta seção, mostramos a metodologia de síntese proposta com base nos requisitos de especificação de desempenho para sistemas de controle digital. Em particular, analisamos as especificações de tempo de assentamento e máximo sobressinal, para sistemas de controle com realimentação de estado digital. A abordagem de síntese proposta, que emprega nossas metodologias de verificação para o máximo tempo de assentamento e máximo sobressinal, como explicado nas seções~\ref{subsec:overshootAlg} e \ref{subsec:settime-alg}, é baseada na técnica de síntese CEGIS, onde são dois estágios: verificação e aprendizado (onde o sintetizador está localizado) como podemos ver no diagrama da Figura~\ref{fig:cegisDiag}. No estágio de aprendizado, geramos um controlador $ \mathbf{K} $ para satisfazer nosso parâmetro requerido (tempo de assentamento e/ou sobressinal), usando algoritmos genéticos~\cite{deb2004introduction}, onde tomamos as definições do sistema e os requisitos como restrições. Depois de gerar o controlador $ \mathbf{K} $, há o estágio de verificação onde ele pega o controlador $ \mathbf{K} $ e verifica se atende aos requisitos, de acordo com nossas metodologias de verificação, e se falhar nessa etapa, ele volta ao estágio de aprendizado e se mantém nesse cciclo, até obter sucesso na verificação ou o sintetizador atingir um número máximo de tentativas.
 
-Na Figura~\ref{fig:SynthArch}, mostramos a arquitetura de síntese proposta de uma forma geral, onde as definições do sistema representam o sistema como um todo (matrizes de espaço de estados, entradas, etc), os requisitos a serem sintetizados, \texttt{total\_attempts} é o número total de tentativas de sintetizar um controlador, \texttt{tentativas} representa o número de tentativas sem alterar qualquer parâmetro de síntese (algoritmo genético), GA é o bloco que realiza a geração de um controlador candidato através de algoritmo genético (\textit{Genetic Algorithms} - GA), \texttt{verify()} é o mecanismo de verificação (Seções~\ref{subsec:overshootAlg} e \ref{subsec:settime-alg}) que dependem do que estamos sintetizando (tempo de assentamento e/ou sobressinal), \texttt{MAXATT} é o número máximo de tentativas de sintetizar um controlador (informado pelo usuário), \texttt{MAXINNERATT} representa o número máximo de tentativas sem alterar nenhum parâmetro do GA, \texttt{popsize} é o tamanho da população do algoritmo genético e \texttt{STEP} é o passo para incrementar a população GA na \textit{egine} de síntese desenvolvida neste trabalho.
+Na Figura~\ref{fig:SynthArch}, mostramos a arquitetura de síntese proposta de uma forma geral, onde as definições do sistema representam o sistema como um todo (matrizes de espaço de estados, entradas, etc), os requisitos a serem sintetizados, \texttt{total\_attempts} é o número total de tentativas de sintetizar um controlador, \texttt{tentativas} representa o número de tentativas sem alterar qualquer parâmetro de síntese (algoritmo genético), GA é o bloco que realiza a geração de um controlador candidato através de algoritmo genético (\textit{Genetic Algorithms} - GA), \texttt{verify()} é o mecanismo de verificação (Seções~\ref{subsec:overshootAlg} e \ref{subsec:settime-alg}) que dependem do que estamos sintetizando (tempo de assentamento e/ou sobressinal), \texttt{MAXATT} é o número máximo de tentativas de sintetizar um controlador (informado pelo usuário), \texttt{MAXINNERATT} representa o número máximo de tentativas sem alterar nenhum parâmetro do GA, \texttt{popsize} é o tamanho da população do algoritmo genético e \texttt{STEP} é o passo para incrementar a população GA na \textit{engine} de síntese desenvolvida neste trabalho.
 
 
 \begin{figure}[ht]
 \begin{center}
-\includegraphics[trim={0.0cm 0.0cm 0.0cm 0cm}, clip,width=0.45\textwidth]{figures/FlowchartArch.eps}
+\includegraphics[trim={0.0cm 0.0cm 0.0cm 0cm}, clip,width=0.5\textwidth]{figures/FlowchartArch.eps}
 \caption{Proposed synthesis architecture.} 
 \label{fig:SynthArch}
 \end{center}
 \end{figure}
 
-Nossa metodologia de síntese proposta funciona da seguinte maneira. Primeiro definimos o sistema a ser sintetizado (planta, entradas, etc) e os requisitos a serem atendidos (tempo de assentamento/sobressinal), e então escolhemos o que queremos satisfazer no processo de síntese. Além disso, executamos o algoritmo genético usando as restrições necessárias (tempo de assentação e/ou sobressinal), então geramos um controlador candidato $ K $. Em seguida, realizamos o processo de verificação (de acordo com a propriedade que escolhemos sintetizar); se a verificação for bem sucedida, a síntese é bem sucedida e termina o processo. Caso contrário, a verificação falha e nós verificamos se o número total de tentativas excedeu o número máximo de tentativas, se sim, o processo de síntese falha e termina; caso contrário, verificamos se o número de tentativas, sem mudança qualquer parâmetro do GA, excedeu o número máximo definido para isso, se não voltar a executar o GA novamente (e continuar o processo novamente); caso contrário, incrementamos o tamanho da população do GA, por um passo fixo, e depois disso re-executamos o GA e o processo continua.
+Nossa metodologia de síntese proposta funciona da seguinte maneira. Primeiro definimos o sistema a ser sintetizado (planta, entradas, etc) e os requisitos a serem atendidos (tempo de assentamento/sobressinal), e então escolhemos o que queremos satisfazer no processo de síntese. Além disso, executamos o algoritmo genético usando as restrições necessárias (tempo de assentação e/ou sobressinal), então geramos um controlador candidato $ \mathbf{K} $. Em seguida, realizamos o processo de verificação (de acordo com a propriedade que escolhemos sintetizar); se a verificação for bem sucedida, a síntese é bem sucedida e termina o processo. Caso contrário, a verificação falha e nós verificamos se o número total de tentativas excedeu o número máximo de tentativas, se sim, o processo de síntese falha e termina; caso contrário, verificamos se o número de tentativas, sem mudança qualquer parâmetro do GA, excedeu o número máximo definido para isso, se não voltar a executar o GA novamente (e continuar o processo novamente); caso contrário, incrementamos o tamanho da população do GA, por um passo fixo, e depois disso re-executamos o GA e o processo continua.
 
 %\begin{tikzpicture}[node distance=1cm]
 %\node (start) [startstop] {Start};
@@ -420,15 +420,15 @@ Nossa metodologia de síntese proposta funciona da seguinte maneira. Primeiro def
 
 
 %--------------------------------------------------------------
-\subsection{Geração do Controlador Candidato $K$}
+\subsection{Geração do Controlador Candidato $\mathbf{K}$}
 \label{subsec:genK}
 %--------------------------------------------------------------
 
-Em nossa metodologia de síntese baseada em CEGIS, usamos algoritmos genéticos para gerar um controlador candidato $ K $, a fim de satisfazer os requisitos desejados (tempo de assentamento e overshoot). A metodologia usa uma função multi-objetivo para resolver três problemas separados: sintetizar para sobressinal, tempo de assentamento ou ambos. As funções multi-objetivo são:
+Em nossa metodologia de síntese baseada em CEGIS, usamos algoritmos genéticos para gerar um controlador candidato $ \mathbf{K} $, a fim de satisfazer os requisitos desejados (tempo de assentamento e overshoot). A metodologia usa uma função multi-objetivo para resolver três problemas separados: sintetizar para sobressinal, tempo de assentamento ou ambos. As funções multi-objetivo são:
 \begin{equation}
 	\label{eq:objfuncSumK}
 	\begin{array}{ccc}
-		\mathbf{f}_\mathrm{1}(K)=K \times K^T\\
+		\mathbf{f}_\mathrm{1}(\mathbf{K})=\mathbf{K} \times \mathbf{K}^T\\
 	\end{array}
 \end{equation}
 
@@ -437,22 +437,22 @@ Em nossa metodologia de síntese baseada em CEGIS, usamos algoritmos genéticos pa
 \begin{equation}
 	\label{eq:objfuncST}
 	\begin{array}{ccc}
-		\mathbf{f}_\mathrm{2}(K)=\hat{k}\\
+		\mathbf{f}_\mathrm{2}(\mathbf{K})=\hat{k}\\
 	\end{array}
 \end{equation}
 
-\noindent onde $K$ é o controlador e $\hat{k}$ é dado por Eq.~\ref{eq:kbar}.
+\noindent onde $\mathbf{K}$ é o controlador e $\hat{k}$ é dado por Eq.~\ref{eq:kbar}.
 
 \subsubsection{Problema de Otimização para Sobressinal}
 \label{ssubsec:genKover}
-Com o objetivo de gerar uma matriz de controlador $ K $ através de algoritmos genéticos, a fim de satisfazer os requisitos de sobressinal, utilizamos a seguinte formulação do problema.
+Com o objetivo de gerar uma matriz de controlador $ \mathbf{K} $ através de algoritmos genéticos, a fim de satisfazer os requisitos de sobressinal, utilizamos a seguinte formulação do problema.
 
-O problema de otimização consiste em minimizar $\mathbf{f}_\mathrm{1}$ e $\mathbf{f}_\mathrm{2}$ em relação à variável de decisão $ K $. Assim, o problema de otimização é representado da seguinte forma:
+O problema de otimização consiste em minimizar $\mathbf{f}_\mathrm{1}$ e $\mathbf{f}_\mathrm{2}$ em relação à variável de decisão $ \mathbf{K} $. Assim, o problema de otimização é representado da seguinte forma:
 %
 \begin{equation}
 	\label{eq:optproblemOS}
 	\begin{array}{ccc}
-		\min & (\mathbf{f}_\mathrm{1}(K),\mathbf{f}_\mathrm{2}(K)),  \\
+		\min & (\mathbf{f}_\mathrm{1}(\mathbf{K}),\mathbf{f}_\mathrm{2}(\mathbf{K})),  \\
   \\
 		\textrm{ s.t. } & PO \leq PO_{\mathrm{r}}, \\
                         & \bar{\lambda} \leq 1      
@@ -460,17 +460,17 @@ O problema de otimização consiste em minimizar $\mathbf{f}_\mathrm{1}$ e $\mathb
 	\end{array}
 \end{equation}
 
-A primeira restrição significa que a porcentagem real de sobressinal deve ser menor que a porcentagem requerida ($ PO_{\mathrm{r}} $. A segunda restrição está relacionada à estabilidade do sistema, onde $ \bar{\lambda} $ é o valor absoluto máximo entre os autovalores do sistema (Seção~\ref{sec:modformver}) e este valor deve ser menor que $1$, caso contrário, o sistema é instável~\cite{chen1995linear}.
+A primeira restrição significa que a porcentagem real de sobressinal deve ser menor que a porcentagem requerida ($ PO_{\mathrm{r}} $). A segunda restrição está relacionada à estabilidade do sistema, onde $ \bar{\lambda} $ é o valor absoluto máximo entre os autovalores do sistema (Seção~\ref{sec:modformver}) e este valor deve ser menor que $1$, caso contrário, o sistema é instável~\cite{chen1995linear}.
 
 \subsubsection{Problema de Otimização para Tempo de Assentamento}
 \label{ssubsec:genKst}
 
-Desta vez, queremos otimizar o problema utlizando os requisitos de tempo de assentamento. Para isso, utilizamos amesma função multi-objetivo, onde queremos minimizar $ \mathbf{f}_\mathrm{1} $ e $ \mathbf{f}_\mathrm{2}$ em relação à variável de decisão $ K $. Assim, o problema de otimização é representado da seguinte forma:
+Desta vez, queremos otimizar o problema utlizando os requisitos de tempo de assentamento. Para isso, utilizamos amesma função multi-objetivo, onde queremos minimizar $ \mathbf{f}_\mathrm{1} $ e $ \mathbf{f}_\mathrm{2}$ em relação à variável de decisão $ \mathbf{K} $. Assim, o problema de otimização é representado da seguinte forma:
 %
 \begin{equation}
 	\label{eq:optproblemST}
 	\begin{array}{ccc}
-		\min & (\mathbf{f}_\mathrm{1}(K),\mathbf{f}_\mathrm{2}(K)),  \\
+		\min & (\mathbf{f}_\mathrm{1}(\mathbf{K}),\mathbf{f}_\mathrm{2}(\mathbf{K})),  \\
   \\
 		\textrm{ s.t. } & {\hat{k}} \leq k_{\mathrm{sr}}, \\
                         & \bar{\lambda} \leq 1
@@ -478,17 +478,17 @@ Desta vez, queremos otimizar o problema utlizando os requisitos de tempo de asse
 	\end{array}
 \end{equation}
 
-Neste problema de otimização, a primeira restrição significa que $ \hat{k} $ deve ser menor que o tempo de assentamento requerido em tempo discreto ($ k_{sr} $, porque como podemos ver no Algoritmo~\ref{alg:settlingtime}, quando isso acontece, a verificação é bem sucedida, o que significa que o sistema atende ao máximo tempo de assentamento exigido. A segunda restrição está relacionada à estabilidade do sistema, da mesma forma como mostramos no problema em \ref{ssubsec:genKst}.
+Neste problema de otimização, a primeira restrição significa que $ \hat{k} $ deve ser menor que o tempo de assentamento requerido em tempo discreto ($ k_{sr} $), porque como podemos ver no Algoritmo~\ref{alg:settlingtime}, quando isso acontece, a verificação é bem sucedida, o que significa que o sistema atende ao máximo tempo de assentamento exigido. A segunda restrição está relacionada à estabilidade do sistema, da mesma forma como mostramos no problema em \ref{ssubsec:genKst}.
 
 \subsubsection{Problema de Otimização para Satisfazer Sobressinal e Tempo de Assentamento}
 \label{ssubsec:genKovst}
 
-A fim de gerar um controlador $ K $ usando algoritmo genético que satisfaça tanto os requisitos de sobressinal quanto de tempo de assentamento, formulamos o seguinte problema de otimização.
+A fim de gerar um controlador $ \mathbf{K} $ usando algoritmo genético que satisfaça tanto os requisitos de sobressinal quanto de tempo de assentamento, formulamos o seguinte problema de otimização.
 
 \begin{equation}
 	\label{eq:optproblemOVST}
 	\begin{array}{ccc}
-		\min & (\mathbf{f}_\mathrm{1}(K),\mathbf{f}_\mathrm{2}(K)),  \\
+		\min & (\mathbf{f}_\mathrm{1}(\mathbf{K}),\mathbf{f}_\mathrm{2}(\mathbf{K})),  \\
   \\
 		\textrm{ s.t. } & {\hat{k}} \leq k_{\mathrm{sr}}, \\
                         & PO \leq PO_{\mathrm{r}}, \\
@@ -497,7 +497,7 @@ A fim de gerar um controlador $ K $ usando algoritmo genético que satisfaça tant
 	\end{array}
 \end{equation}
 
-Neste caso, queremos minimizar as funções multi-objetivo ($ \mathbf{f}_\mathrm{1} $ e $ \mathbf{f}_\mathrm{2} $) restritas a: $ \hat{k} \leq k_\mathrm{sr} $, $ PO \leq PO_{\mathrm{r}} $ e $ \bar{\lambda} \leq 1 $. A primeira restrição garante que o sistema atenda ao requisito de tempo de assentamento, já que $ k_\mathrm{sr} \geq \hat{k} $ (cf. Algoritmo~\ref{alg:settlingtime}). A segunda restrição assegura o percentual máximo de sobressinal exigido (cf. Algoritmo~\ref{alg:overshootReal}). Finalmente, a terceira restrição assegura que o controlador $ K $ mantenha o sistema estável, considerando que $ \bar{\lambda} $ é o maior valor absoluto entres os autovalores e que este sendo menor que $ 1 $ proporciona estabilidade.
+Neste caso, queremos minimizar as funções multi-objetivo ($ \mathbf{f}_\mathrm{1} $ e $ \mathbf{f}_\mathrm{2} $) restritas a: $ \hat{k} \leq k_\mathrm{sr} $, $ PO \leq PO_{\mathrm{r}} $ e $ \bar{\lambda} \leq 1 $. A primeira restrição garante que o sistema atenda ao requisito de tempo de assentamento, já que $ k_\mathrm{sr} \geq \hat{k} $ (cf. Algoritmo~\ref{alg:settlingtime}). A segunda restrição assegura o percentual máximo de sobressinal exigido (cf. Algoritmo~\ref{alg:overshootReal}). Finalmente, a terceira restrição assegura que o controlador $ \mathbf{K} $ mantenha o sistema estável, considerando que $ \bar{\lambda} $ é o maior valor absoluto entres os autovalores e que este sendo menor que $ 1 $ proporciona estabilidade.
 
 \section{Resumo}\label{chap-4-summary}
 

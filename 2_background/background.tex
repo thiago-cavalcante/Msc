@@ -4,9 +4,9 @@ Neste capítulo, são apresentados os conceitos básicos utilizados durante o desen
 
 \section{Verificação Formal}\label{sec:formal-verification}
 
-A verificação formal é o processo de verificar se um projeto satisfaz alguns requisitos ou até mesmo propriedades~\cite{jhala2009software}. Normalmente, preocupa-se com a verificação formal de projetos que podem ser especificados hierarquicamente; isso também é consistente com a forma como um ser humano faria para projetar. Comumente, para verificar formalmente um projeto, ele deve primeiro ser convertido em um formato `verificável' mais simples. O projeto é especificado como um conjunto de sistemas de interação; cada um tem um número finito de configurações, chamado estados. Estados e transição entre estados constituem máquinas de estado finito(FSMs, do inglês \textit{finite state machines})~\cite{dorofeeva2010fsm}. Todo o sistema é um FSM, que pode ser obtido compondo os FSMs associados a cada componente. Portanto, o primeiro passo na verificação consiste em obter uma descrição completa do sistema FSM. Dado um estado atual (ou configuração atual), o próximo estado (ou configuração sucessiva) de um FSM pode ser escrito como uma função de seu estado atual e entradas (função de transição ou relação de transição).
+A verificação formal é o processo de verificar se um projeto satisfaz alguns requisitos ou até mesmo propriedades~\cite{jhala2009software}. Normalmente, preocupa-se com a verificação formal de projetos que podem ser especificados hierarquicamente; isso também é consistente com a forma como um ser humano faria para projetar. Comumente, para verificar formalmente um projeto, ele deve primeiro ser convertido em um formato `verificável' mais simples. O projeto é especificado como um conjunto de sistemas de interação; cada um tem um número finito de configurações, chamado estados. Estados e transição entre estados constituem máquinas de estado finito (\textit{finite state machines} - FSMs)~\cite{dorofeeva2010fsm}. Todo o sistema é um FSM, que pode ser obtido compondo os FSMs associados a cada componente. Portanto, o primeiro passo na verificação consiste em obter uma descrição completa do sistema FSM. Dado um estado atual (ou configuração atual), o próximo estado (ou configuração sucessiva) de um FSM pode ser escrito como uma função de seu estado atual e entradas (função de transição ou relação de transição).
 
-Nota-se que todo este \textit{framework} é uma das funções discretas. Funções discretas podem ser representadas convenientemente por BDDs (diagrama de decisão binária) - uma estrutura de dados que representa funções booleanas (de 2 valores) - e seus MDDs de extensão (diagrama de decisão de múltiplos valores) - uma estrutura de dados que representa funções discretas de valor finito~\cite{cheng2010mdd}. Usa-se BDDs e MDDs para representar todas as quantidades necessárias neste espaço discreto (mais especificamente as funções de transição, as entradas, as saídas e os estados dos FSMs). Para que os BDDs e MDDs sejam representações eficientes de funções discretas, uma boa ordenação de variáveis de entrada (entradas reais, saídas, estado) das funções deve ser calculada. Em geral, os BDDs operam em conjuntos de pontos em vez de pontos individuais; isso é chamado de manipulação simbólica.
+Nota-se que todo este \textit{framework} é uma das funções discretas. Funções discretas podem ser representadas convenientemente por diagramas de decisão binária (\textit{binary decision diagrams} - BDDs) - uma estrutura de dados que representa funções booleanas (de 2 valores), e seus diagrama de decisão de múltiplos valores de extensão (\textit{multiple decision diagrams} - MDDs), uma estrutura de dados que representa funções discretas de valor finito~\cite{cheng2010mdd}. Usa-se BDDs e MDDs para representar todas as quantidades necessárias neste espaço discreto (mais especificamente as funções de transição, as entradas, as saídas e os estados dos FSMs). Para que os BDDs e MDDs sejam representações eficientes de funções discretas, uma boa ordenação de variáveis de entrada (entradas reais, saídas, estado) das funções deve ser calculada. Em geral, os BDDs operam em conjuntos de pontos em vez de pontos individuais; isso é chamado de manipulação simbólica.
 
 Os dois métodos mais populares para verificação formal automática são a contenção de linguagem~\cite{balarin1993iterative} e a verificação de modelo~\cite{jhala2009software}.
 
@@ -16,7 +16,7 @@ Um sistema de estados finitos pode ser representado por um grafo de transição de
 
 \subsubsection{Lógica da Árvore de Computação}\label{subsec:ctl}
 
-A lógica temporal expressa a ordenação de eventos no tempo por meio de operadores que especificam propriedades como ``$p$ eventualmente se manterá''. Existem várias versões da lógica temporal; uma é a lógica da árvore computacional (CTL)~\cite{del1999visual}. Árvores de computação são derivadas de grafos de transição de estado. A estrutura do grafo é desenrolada em uma árvore infinita com raiz no estado inicial. A Figura~\ref{figure:tree} mostra um exemplo de desenrolamento de um grafo em uma árvore. Os caminhos nesta árvore representam todos os cálculos possíveis do sistema que está sendo modelado. Fórmulas em CTL referem-se à árvore de cálculo derivada do modelo. O CTL é classificado como uma lógica de tempo de ramificação porque possui operadores que descrevem a estrutura de ramificação dessa árvore.
+A lógica temporal expressa a ordenação de eventos no tempo por meio de operadores que especificam propriedades como ``$p$ eventualmente se manterá''. Existem várias versões da lógica temporal; uma é a lógica da árvore computacional (\textit{computational tree logic} - CTL)~\cite{del1999visual}. Árvores de computação são derivadas de grafos de transição de estado. A estrutura do grafo é desenrolada em uma árvore infinita com raiz no estado inicial. A Figura~\ref{figure:tree} mostra um exemplo de desenrolamento de um grafo em uma árvore. Os caminhos nesta árvore representam todos os cálculos possíveis do sistema que está sendo modelado. Fórmulas em CTL referem-se à árvore de cálculo derivada do modelo. O CTL é classificado como uma lógica de tempo de ramificação porque possui operadores que descrevem a estrutura de ramificação dessa árvore.
 
 \begin{figure}[ht]
   \centering
@@ -95,7 +95,7 @@ Todo sistema linear invariante no tempo pode ser descrito por
 \end{cases},
 \end{equation}
 
-\noindent Para um sistema com $p$ entradas, $q$ saídas e $n$ variáveis de estado, $A$, $B$, $C$ e $D$ são, respectivamente, $n \times n$, $n \times p$, $q \times n$ e $q \times p$ matrizes constantes. Aplicando a transformada de Laplace em~\ref{eq:ssec} e rearranjando, temos
+\noindent Para um sistema com $p$ entradas, $q$ saídas e $n$ variáveis de estado, $\mathbf{A}$, $\mathbf{B}$, $\mathbf{C}$ e $\mathbf{D}$ são, respectivamente, $n \times n$, $n \times p$, $q \times n$ e $q \times p$ matrizes constantes. Aplicando a transformada de Laplace em~\ref{eq:ssec} e rearranjando, temos
 
 \begin{equation}\label{eq:sc}
 \hat{\mathbf{x}}(s)=~(s\mathbf{I}-\mathbf{A})^{-1}s\mathbf{x}(0)+(s\mathbf{I}-\mathbf{A})^{-1}\mathbf{B}\hat{\mathbf{u}}(s)
@@ -120,7 +120,7 @@ Um sistema de tempo discreto é linear se as propriedades de aditividade e homoge
 Resposta = resposta~ de ~estado~ zero~~ +~~ resposta ~de~ entrada~ zero
 \end{equation*}
 
-e as respostas de estado zero satisfazem a propriedade de superposição, e portanto as respostas de entrada zero também.
+\noindent e as respostas de estado zero satisfazem a propriedade de superposição, e portanto as respostas de entrada zero também.
 
 \subsubsection{Equações de Espaço de Estados}\label{subsec:sse}
 
@@ -160,9 +160,9 @@ Z[\hat{\mathbf{x}}[k+1]]=&~\sum_{k=0}^{\infty} \mathbf{x}[k+1]z^{-k} \\
 
 \subsection{Estabilidade de Sistemas Leneares Invariantes no Tempo}\label{subsec:ltis}
 
-Os sistemas são projetados para executar algumas tarefas ou para processar sinais. Se um sistema não é estável, o sistema pode  ocasionar até mesmo desastres (queimar, desintegrar ou saturar quando um sinal, não importa quão pequeno seja, for aplicado). Portanto, um sistema instável é inútil na prática e a estabilidade é um requisito básico para todos os sistemas. Além da estabilidade, os sistemas devem atender a outros requisitos, como rastrear os sinais desejados e suprimir o ruído, para serem realmente úteis na prática. A resposta de sistemas lineares sempre pode ser decomposta como a resposta de estado zero e a resposta de entrada zero. É comum na literatura mostrar a estabilidade destas duas respostas separadamente. Nesta seção, faremos uma breve introdução de estabilidade bounded-input bounded-output (BIBO) para a resposta do estado zero e estabilidades marginais e assintóticas para a resposta da entrada zero, para o caso de sistemas em tempo discreto~\cite{oppenheim1999discrete}.
+Os sistemas são projetados para executar algumas tarefas ou para processar sinais. Se um sistema não é estável, o sistema pode  ocasionar até mesmo desastres (queimar, desintegrar ou saturar quando um sinal, não importa quão pequeno seja, for aplicado). Portanto, um sistema instável é inútil na prática e a estabilidade é um requisito básico para todos os sistemas. Além da estabilidade, os sistemas devem atender a outros requisitos, como rastrear os sinais desejados e suprimir o ruído, para serem realmente úteis na prática. A resposta de sistemas lineares sempre pode ser decomposta como a resposta de estado zero e a resposta de entrada zero. É comum na literatura mostrar a estabilidade destas duas respostas separadamente. Nesta seção, faremos uma breve introdução de estabilidade com entrada limitada e saída limitada (\textit{bounded-input bounded-output} - BIBO) para a resposta do estado zero e estabilidades marginais e assintóticas para a resposta da entrada zero, para o caso de sistemas em tempo discreto~\cite{oppenheim1999discrete}.
 
-Dado o sistema em tempo discreto single-input single-output (SISO)\cite{haykin2007signals},
+Dado o sistema em tempo discreto com entra única e saída única (\textit{single-input single-output} - SISO)\cite{haykin2007signals},
 
 \begin{equation}\label{eq:bibo}
 \mathbf{y}[k]=\sum_{m=0}^{k} g[k-m]\mathbf{m}[m]= \sum_{m=0}^{k} g[m]\mathbf{u}[k-m],
@@ -274,7 +274,7 @@ A Figura~\ref{fig:output} ilustra a resposta ao degrau de um sistema discreto. V
 	\label{fig:output}
 \end{figure}
 
-\section{Técnicas de Projeto de Controle para Sistemas Discretos}\label{sec:tpcsd}
+\section{Técnicas de Projeto de Controle para Sistemas em Tempo Discreto}\label{sec:tpcsd}
 
 Quando projetamos controladores para sistemas em tempo discreto, dispomos de muitas tecnicas para realizar o projeto. Muita das vezes, precisa-se fazer uma análise minunciosa da técnica a ser emprega, devido ao teor do projeto em questão. A seguir, mostraremos algumas das técnicas utilizadas atualmente e que mais tarde será feito uma comparação das mesmas com a técnica que abordamos neste trabalho.
 
@@ -286,14 +286,14 @@ Deseja-se que o sistema tenha polos em determinada localidade, e o polinômio car
 Com o sistema sendo alcançável, existe uma realimentação linear que fornece um sistema em malha fechada com polinômio característico $\Delta_\mathrm{d}(z)$. A realimentação é dada por $\mathbf{u}[k]=-\mathbf{K}\mathbf{x}[k]$.
 
 Com isso, existe uma matrix de transformação dada por~\cite{chen1995linear}
-\begin{equation*}
+\begin{equation}\label{eq:matrixQ}
 Q:=P^{-1}=[\mathbf{B}~\mathbf{A}\mathbf{B}\dots \mathbf{A}^{n-1}\mathbf{B}]\begin{bmatrix}
 1 & \alpha_\mathrm{1} & \dots & \alpha_{n-1} \\
 0 & 1 & \dots & \alpha_{n-2} \\
 \vdots & \vdots & \ddots & \vdots \\
 0 & 0 & \dots & 1 
 \end{bmatrix}
-\end{equation*}
+\end{equation}
 
 Portanto, temos~\cite{chen1995linear}
 
@@ -354,7 +354,7 @@ Temos que $\mathbf{K}$ é o controlador que é usado para alocar os polos desejado
 
 \subsection{Regulador Quadrático Linear}\label{subsec:rql}
 
-O regulador quadrático linear (LQR) da teoria de controle ótimo pode ser usado para resolver muitos problemas de projeto do controlador em que o estado é acessível e a regulação e o esforço do atuador são medidos por um desvio médio quadrático. Uma formulação estocástica do problema LQR é conveniente; uma formulação mais usual é como um problema de controle ótimo. O sistema é descrito por~\cite{boyd1991linear}
+O regulador quadrático linear (\textit{linear quadratic regulator} - LQR) da teoria de controle ótimo pode ser usado para resolver muitos problemas de projeto do controlador em que o estado é acessível e a regulação e o esforço do atuador são medidos por um desvio médio quadrático. Uma formulação estocástica do problema LQR é conveniente; uma formulação mais usual é como um problema de controle ótimo. O sistema é descrito por~\cite{boyd1991linear}
 
 \begin{equation*}
 \dot{\mathbf{x}}=\mathbf{A}\mathbf{x}+\mathbf{B}\mathbf{u}+\mathbf{w},
@@ -407,9 +407,9 @@ T_{21} & T_{22}
 
 \subsection{Sintonia Automática}\label{subsec:auto}
 
-\subsection{Síntese Indutiva Guidada por Contra Exemplos - CEGIS}\label{subsec:cegis}
+\subsection{Síntese Indutiva Guidada por Contraexemplos - CEGIS}\label{subsec:cegis}
 
-Síntese indutiva guiada por contra exemplos (CEGIS) é um processo iterativo para a síntese de programas e atualmente está se tornando popular. Cada iteração realiza uma generalização indutiva baseada em contra exemplos fornecida por um mecanismo de verificação. Normalmente, a generalização indutiva usa informações sobre um número limitado de entradas para fazer afirmações sobre todas as possíveis entradas, na forma de soluções candidatas~\cite{abate2018counterexample}.
+Síntese indutiva guiada por contraexemplos (CEGIS) é um processo iterativo para a síntese de programas e atualmente está se tornando popular. Cada iteração realiza uma generalização indutiva baseada em contraexemplos fornecida por um mecanismo de verificação. Normalmente, a generalização indutiva usa informações sobre um número limitado de entradas para fazer afirmações sobre todas as possíveis entradas, na forma de soluções candidatas~\cite{abate2018counterexample}.
 
 \begin{figure}[ht]
 	\centering
@@ -423,17 +423,19 @@ Síntese indutiva guiada por contra exemplos (CEGIS) é um processo iterativo para
 
 A Figura~\ref{fig:cegisDiag} mostra a estrutura do CEGIS \cite{abate2018counterexample} e consiste em duas etapas principais: síntese e verificação. A etapa de verificação consiste em verificar a satisfatibilidade dos requerimentos em relação a uma determinada propriedade analisada, caso ela falhe ou seja bem-sucedida. O estágio de síntese, por sua vez, consiste em gerar um programa candidato, a fim de verificar se ele satisfaz uma propriedade analisada.
 
-No estágio de síntese, há um algoritmo de ``aprendizagem'' que aprende com contra exemplos fornecidos por um mecanismo de verificação. O algoritmo de aprendizagem procede pesquisando o espaço de candidatos conceitos para encontrar um que seja consistente com os exemplos vistos até o momento. Pode haver vários conceitos consistentes, e a estratégia de busca determina o candidato escolhido. Esse candidato é então apresentado ao mecanismo de verificação, que verifica o candidato quanto à especificação de correção. Se o candidato estiver correto, o sintetizador finaliza e produz este candidato. Caso contrário, o mecanismo de verificação gera um contra exemplo, gerando o motivo da falha. Esse contra exemplo é retornado ao algoritmo de aprendizagem, que adiciona o contra exemplo ao seu conjunto de exemplos e repete sua pesquisa. É possível que, após algum número de iterações desse \textit{loop}, o algoritmo de aprendizagem possa ser incapaz de encontrar um candidato consistente; nesse caso, a etapa de aprendizagem e, portanto, o procedimento CEGIS, falha~\cite{alur2013syntax}.
+No estágio de síntese, há um algoritmo de ``aprendizagem'' que aprende com contraexemplos fornecidos por um mecanismo de verificação. O algoritmo de aprendizagem procede pesquisando o espaço de candidatos conceitos para encontrar um que seja consistente com os exemplos vistos até o momento. Pode haver vários conceitos consistentes, e a estratégia de busca determina o candidato escolhido. Esse candidato é então apresentado ao mecanismo de verificação, que verifica o candidato quanto à especificação de correção. Se o candidato estiver correto, o sintetizador finaliza e produz este candidato. Caso contrário, o mecanismo de verificação gera um contraexemplo, gerando o motivo da falha. Esse contraexemplo é retornado ao algoritmo de aprendizagem, que adiciona o contraexemplo ao seu conjunto de exemplos e repete sua pesquisa. É possível que, após algum número de iterações desse \textit{loop}, o algoritmo de aprendizagem possa ser incapaz de encontrar um candidato consistente; nesse caso, a etapa de aprendizagem e, portanto, o procedimento CEGIS, falha~\cite{alur2013syntax}.
 
-Dada a especificação do programa desejado, $\sigma$, o procedimento de síntese indutiva gera um programa candidato $P^*$ que satisfaz $\sigma(P^*, {\vec{x}})$ para um subconjunto ${\vec{x}}_{inpts}$ de todas as entradas possíveis. O programa candidato $P^*$ é passado para o estágio de verificação, que verifica se ele satisfaz a especificação $\sigma(P^*, {\vec{x}})$ para todas as entradas possíveis. A técnica faz isso verificando se $\lnot \sigma (P^*, {\vec{x}})$ é insatisfatório. Se assim for, $\forall {\vec{x}}. \lnot \sigma (P^*, {\vec{x}})$ é válido, e nós sintetizamos com sucesso uma solução e o algoritmo é finalizado. Caso contrário, o verificador produz um contra exemplo ${\vec{c}}$ da atribuição satisfatória, que é então adicionada ao conjunto de entradas passadas para o sintetizador, e o \textit{loop} é repetido.
+Dada a especificação do programa desejado, $\sigma$, o procedimento de síntese indutiva gera um programa candidato $P^*$ que satisfaz $\sigma(P^*, {\vec{x}})$ para um subconjunto ${\vec{x}}_{inpts}$ de todas as entradas possíveis. O programa candidato $P^*$ é passado para o estágio de verificação, que verifica se ele satisfaz a especificação $\sigma(P^*, {\vec{x}})$ para todas as entradas possíveis. A técnica faz isso verificando se $\lnot \sigma (P^*, {\vec{x}})$ é insatisfatório. Se assim for, $\forall {\vec{x}}. \lnot \sigma (P^*, {\vec{x}})$ é válido, e nós sintetizamos com sucesso uma solução e o algoritmo é finalizado. Caso contrário, o verificador produz um contraexemplo ${\vec{c}}$ da atribuição satisfatória, que é então adicionada ao conjunto de entradas passadas para o sintetizador, e o \textit{loop} é repetido.
 
 O método utilizado nos blocos de síntese e verificação varia em diferentes implementações do CEGIS.
 
 \section{Implementação de Controladores Digitais}\label{subsec:icd}
 
-A implementação das leis de controle usando um computador possue alguns problemas e dificuldades. O principal problema é implementar um sistema de tempo discreto. Os princípios para fazer isso foram abordados em detalhes. É simples gerar o código do algoritmo de controle. A importância da pré-filtragem para evitar o \textit{aliasing} será mostrada. Filtragem digital não-linear sofisticada para remoção de valores discrepantes também será discutida. O atraso computacional é influenciado consideravelmente pela organização do código de computador. Dificuldades que surgem da saturação em atuadores e formas de evitar essas dificuldades são discutidas. Isso também fornece automaticamente uma solução para a troca e inicialização de modo de operação.
+A implementação das leis de controle usando um computador possue alguns problemas e dificuldades. O principal problema é implementar um sistema de tempo discreto. Os princípios para fazer isso foram abordados em detalhes. É simples gerar o código do algoritmo de controle. 
+%A importância da pré-filtragem para evitar o \textit{aliasing} será mostrada. 
+Filtragem digital não-linear sofisticada para remoção de valores discrepantes também será discutida. O atraso computacional é influenciado consideravelmente pela organização do código de computador. Dificuldades que surgem da saturação em atuadores e formas de evitar essas dificuldades são discutidas. Isso também fornece automaticamente uma solução para a troca e inicialização de modo de operação.
 
-Os métodos de projeto baseados em alocação de pólos por realimentação de estado fornecem um controlador da forma~\cite{astrom2010feedback}
+Os métodos de projeto baseados em alocação de polos por realimentação de estado fornecem um controlador da forma~\cite{astrom2010feedback}
 
 \begin{equation}\label{eq:imple}
 \begin{aligned}
@@ -448,7 +450,7 @@ A implementação de um sistema de tempo discreto descrito por (\ref{eq:imple}) us
 	\centering
 	\framebox{\parbox{5.0in}{
 			\centering
-			\includegraphics[width=0.6\textwidth]{figures/program.eps}}
+			\includegraphics[width=0.5\textwidth]{figures/program.eps}}
 	}
 	\caption{Representações gráficas de um programa usado para implementar um sistema de tempo discreto.}
 	\label{fig:program}
@@ -519,7 +521,7 @@ sempre
 
 \subsection{Efeitos de Tamanho de Palavra Finita}\label{subsec:fwl}
 
-Outra importante propriedade a se considerar na implementação em controle digital é o que a literatura chama de efeitos de palavra finita (FWL, do ingles \textit{finite word length})~\cite{chang1994finite}. Devido ao foco desse trabalho levar em conta essa propriedade que muitas vezes é deixada de lado, falaremos com um pouco mais de detalhes como segue.
+Outra importante propriedade a se considerar na implementação em controle digital é o que a literatura chama de efeitos de palavra finita (\textit{finite word length} - FWL)~\cite{chang1994finite}. Devido ao foco desse trabalho levar em conta essa propriedade que muitas vezes é deixada de lado, falaremos com um pouco mais de detalhes como segue.
 
 Ao implementar um sistema de controle digital, é necessário verificar alguns fatores,tais como: precisão dos conversores, precisão necessária nos cálculos, o método de cálculo (em aritmética de ponto fixo ou ponto flutuante), etc. Com isso, deve-se entender os efeitos das limitações e estimar suas consequências para o sistema de malha fechada. Esta não é uma questão trivial, porque a resposta depende de uma interação complexa de realimentação, do algoritmo e da taxa de amostragem. Felizmente, apenas estimativas brutas devem ser feitas. Por exemplo, a quantidade de bits de resolução (\textit{e.g.} $10$ ou $12$ bits) e o comprimento da palavra (\textit{e.g.} $24$ ou $32$ bits).
 

@@ -1,6 +1,6 @@
 \chapter{A Metodologia Proposta}\label{chap_methodology}
 
-Neste capítulo, a metodologia proposta para sintetizar controlodores digitais com realimentação de estados, considerando fragilidade e especificações de desempenho será completamente descrita. Primeiramente, mostraremos as metodologias formalizadas para verificar sistemas de controle digital, com respeito a especificações de performance, no caso máximo tempo de assentamento e máximo sobressinal. A formalização utilizada para estimar o máximo sobressinal, bem como a invariante formalizada para verificar o máximo tempo de assentamento. Também são descritos os algoritmos criados para fazer a devida verificação das mesmas. Finalmente, a descrição completa da técnica que utilizamos para realizar o processo de síntese.
+Neste capítulo, a metodologia proposta para sintetizar controlodores digitais com realimentação de estados, considerando fragilidade e especificações de desempenho será completamente descrita. Primeiramente, mostraremos as metodologias formalizadas para verificar sistemas de controle digital, com respeito a especificações de desempenho, no caso máximo tempo de assentamento e máximo sobressinal. A formalização utilizada para estimar o máximo sobressinal, bem como a invariante formalizada para verificar o máximo tempo de assentamento. Também são descritos os algoritmos criados para fazer a devida verificação das mesmas. Finalmente, a descrição completa da técnica que utilizamos para realizar o processo de síntese.
 
 %\section{Visão Geral do Método}
 %\label{sec:method-overview}
@@ -65,7 +65,7 @@ Algoritmo~\ref{alg:overshootEst} descreve um procedimento para estimar $y_{\math
   $lastGrad = grad$\;
   incrementar $k$\;
   }
-  \caption{\texttt{estimate\_maxPeak\_value} - Estimation of $y_{\mathrm{p}}$ and $k_{\mathrm{p}}$}\label{alg:overshootEst}
+  \caption{\texttt{estimate\_maxPeak\_value} - Estimação de $y_{\mathrm{p}}$ e $k_{\mathrm{p}}$}\label{alg:overshootEst}
 \end{algorithm}
 
 O procedimento basicamente procura o valor de pico máximo na resposta da saída de um sistema, usando o conceito de gradiente para verificar se há um pico. Começamos na primeira amostra do sistema de saída e comparamos as amostras subsequentes, e então continuamos a encontrar o maior pico (com o mesmo sinal de $y_\mathrm{ss}$) que é o nosso valor máximo de pico $y_\mathrm{p}$.
@@ -198,7 +198,7 @@ A verificação de máximo sobressinal consiste basicamente em verificar se a porce
 \subsection{Algoritmo de Verificação de Tempo de Assentamento}
 \label{subsec:settime-alg}
 
-Nesta seção, mostramos nosso algoritmo para verificação de tempo de assentamento, onde usamos o invariante $\hat{k}$ (veja a seção \ref{sec:modformver}). Nossa metodologia, que é ilustrada na Figura\ref{fig:diag1}, fornece verificação de tempo de assentamento em sistemas em malha aberta e fechada; no entanto, os primeiros não apresentam controladores e, consequentemente, os efeitos de FWL não são levados em conta. A primeira etapa consiste em obter os parâmetros de entrada necessários, matrizes de espaço de estados $ A $, $ B $, $ C $ e $ D $ e uma entrada do sistema $ u $, que é seguida por um controlador digital, se um sistema em malha fechada for considerado (\texttt{Step 2}). Então, o tempo de assentamento requerido $t_{\mathrm{sr}}$, a porcentagem $ p $ da região de assentamento e o tempo de amostragem $T_\mathrm{s}$ são definidos (\texttt{Step 4 }), que é seguido por uma implementação de FWL, quando em malha fechada (\texttt{Step 3}). Depois disso, os passos \texttt{A} a \texttt{E} são executados, {\it i.e.}, cálculo do controlador com FWL, se for escolhido em malha fechada (\texttt{Step A}) e valor de estado estacionário ($y_{\mathrm{ss}}$), como descrito em Eq.~\eqref{eq:yss} (\texttt{Step B}), estimativa dos maiores valores de pico da saída do sistema ($y_{\mathrm{p}}$) e a amostra $k_{\mathrm{p}}$ onde $y_{\mathrm{p}} $ está localizado (\texttt{Step C}) e, finalmente, computação de $\overline{\lambda}$ (\texttt{Step D}), $\overline{c}$ e $\hat{k}$ (\texttt{Step E}).
+Nesta seção, mostramos nosso algoritmo para verificação de tempo de assentamento, onde usamos o invariante $\hat{k}$ (veja a seção \ref{sec:modformver}). Nossa metodologia, que é ilustrada na Figura\ref{fig:diag1}, fornece verificação de tempo de assentamento em sistemas em malha aberta e fechada; no entanto, os primeiros não apresentam controladores e, consequentemente, os efeitos de FWL não são levados em conta. A primeira etapa consiste em obter os parâmetros de entrada necessários, matrizes de espaço de estados $ \mathbf{A} $, $ \mathbf{B} $, $ \mathbf{C} $ e $ \mathbf{D} $ e uma entrada do sistema $ \mathbf{u} $, que é seguida por um controlador digital, se um sistema em malha fechada for considerado (\texttt{Step 2}). Então, o tempo de assentamento requerido $t_{\mathrm{sr}}$, a porcentagem $ p $ da região de assentamento e o tempo de amostragem $T_\mathrm{s}$ são definidos (\texttt{Step 4 }), que é seguido por uma implementação de FWL, quando em malha fechada (\texttt{Step 3}). Depois disso, os passos \texttt{A} a \texttt{E} são executados, {\it i.e.}, cálculo do controlador com FWL, se for escolhido em malha fechada (\texttt{Step A}) e valor de estado estacionário ($y_{\mathrm{ss}}$), como descrito em Eq.~\eqref{eq:yss} (\texttt{Step B}), estimativa dos maiores valores de pico da saída do sistema ($y_{\mathrm{p}}$) e a amostra $k_{\mathrm{p}}$ onde $y_{\mathrm{p}} $ está localizado (\texttt{Step C}) e, finalmente, computação de $\overline{\lambda}$ (\texttt{Step D}), $\overline{c}$ e $\hat{k}$ (\texttt{Step E}).
 
 %\begin{algorithm}
 %    \caption{Procedure to find the instant $k_\mathrm{r}$}
@@ -332,7 +332,7 @@ u(k)=r(k)-Kx(k)
 
 Desta forma, \texttt{Step 1} está pronto e \texttt{Step 2} é então considerado, onde uma matriz do controlador $\mathbf{K}$ não está definida, devido à operação em malha aberta. Consequentemente, uma implementação de FWL (\texttt{Step 3}) também não é fornecida. Em seguida, os requisitos desejados são definidos, como $PO_{\mathrm{r}} = 9$, em \texttt{Step 4}, usando um arquivo de especificação \texttt{SpecsFile.ss}.
 
-Dado que a operação em malha aberta foi considerada, este sistema é avaliado com ``\texttt{dsverifier SpecsFile.ss - property OVERSHOOT}'' e, como consequência, ``\texttt{Verification FAILED}'' é retornado, porque o sistema avaliado é instável e, consequentemente, não há sobressinal. Pode-se notar que o método proposto sempre verifica se um sistema é estável.
+Dado que a operação em malha aberta foi considerada, este sistema é avaliado com ``\texttt{dsverifier SpecsFile.ss ---property OVERSHOOT}'' e, como consequência, ``\texttt{Verification FAILED}'' é retornado, porque o sistema avaliado é instável e, consequentemente, não há sobressinal. Pode-se notar que o método proposto sempre verifica se um sistema é estável.
 
 Como o sistema escolhido é instável, podemos voltar para \texttt{Step 2} e projetar um controlador, a fim de estabilizá-lo e satisfazer o percentual de sobressinal requido ($PO_{\mathrm{r}}$), usando a técnica de Lyapunov~\cite{chen1995linear}. Nesse caso, usamos um controlador $\mathbf{K} = [-0.7351 ~ -5.0045 ~ -18.5371]$ em \texttt{SpecsFile.ss}. Em seguida, executamos esse experimento novamente, mas agora com a opção ``\texttt{---closed-loop}'' e ainda sem efeitos FWL (\texttt{---no-fwl}), o que resulta em \texttt{Verification SUCCESSFUL}, desde que o DSVerifier retornou $PO = 2.6228$ que é menor que $PO_{\mathrm{r}} = 9$.
 
@@ -374,13 +374,13 @@ Pode-se notar que $ t_{\mathrm{sr}} = 10s $ é a amostra $ n = 20 $, discretizada
 
 Nesta seção, mostramos a metodologia de síntese proposta com base nos requisitos de especificação de desempenho para sistemas de controle digital. Em particular, analisamos as especificações de tempo de assentamento e máximo sobressinal, para sistemas de controle com realimentação de estado digital. A abordagem de síntese proposta, que emprega nossas metodologias de verificação para o máximo tempo de assentamento e máximo sobressinal, como explicado nas seções~\ref{subsec:overshootAlg} e \ref{subsec:settime-alg}, é baseada na técnica de síntese CEGIS, onde são dois estágios: verificação e aprendizado (onde o sintetizador está localizado) como podemos ver no diagrama da Figura~\ref{fig:cegisDiag}. No estágio de aprendizado, geramos um controlador $ \mathbf{K} $ para satisfazer nosso parâmetro requerido (tempo de assentamento e/ou sobressinal), usando algoritmos genéticos~\cite{deb2004introduction}, onde tomamos as definições do sistema e os requisitos como restrições. Depois de gerar o controlador $ \mathbf{K} $, há o estágio de verificação onde ele pega o controlador $ \mathbf{K} $ e verifica se atende aos requisitos, de acordo com nossas metodologias de verificação, e se falhar nessa etapa, ele volta ao estágio de aprendizado e se mantém nesse cciclo, até obter sucesso na verificação ou o sintetizador atingir um número máximo de tentativas.
 
-Na Figura~\ref{fig:SynthArch}, mostramos a arquitetura de síntese proposta de uma forma geral, onde as definições do sistema representam o sistema como um todo (matrizes de espaço de estados, entradas, etc), os requisitos a serem sintetizados, \texttt{total\_attempts} é o número total de tentativas de sintetizar um controlador, \texttt{tentativas} representa o número de tentativas sem alterar qualquer parâmetro de síntese (algoritmo genético), GA é o bloco que realiza a geração de um controlador candidato através de algoritmo genético (\textit{Genetic Algorithms} - GA), \texttt{verify()} é o mecanismo de verificação (Seções~\ref{subsec:overshootAlg} e \ref{subsec:settime-alg}) que dependem do que estamos sintetizando (tempo de assentamento e/ou sobressinal), \texttt{MAXATT} é o número máximo de tentativas de sintetizar um controlador (informado pelo usuário), \texttt{MAXINNERATT} representa o número máximo de tentativas sem alterar nenhum parâmetro do GA, \texttt{popsize} é o tamanho da população do algoritmo genético e \texttt{STEP} é o passo para incrementar a população GA na \textit{engine} de síntese desenvolvida neste trabalho.
+Na Figura~\ref{fig:SynthArch}, mostramos a arquitetura de síntese proposta de uma forma geral, onde as definições do sistema representam o sistema como um todo (matrizes de espaço de estados, entradas, etc), os requisitos a serem sintetizados, \texttt{total\_tentativas} é o número total de tentativas de sintetizar um controlador, \texttt{tentativas} representa o número de tentativas sem alterar qualquer parâmetro de síntese (algoritmo genético), GA é o bloco que realiza a geração de um controlador candidato através de algoritmo genético (\textit{Genetic Algorithms} - GA), \texttt{verify()} é o mecanismo de verificação (Seções~\ref{subsec:overshootAlg} e \ref{subsec:settime-alg}) que dependem do que estamos sintetizando (tempo de assentamento e/ou sobressinal), \texttt{MAXTENT} é o número máximo de tentativas de sintetizar um controlador (informado pelo usuário), \texttt{MAXTENT\_INT} representa o número máximo de tentativas sem alterar nenhum parâmetro do GA, \texttt{popsize} é o tamanho da população do algoritmo genético e \texttt{STEP} é o passo para incrementar a população GA na \textit{engine} de síntese desenvolvida neste trabalho.
 
 
 \begin{figure}[ht]
 \begin{center}
 \includegraphics[trim={0.0cm 0.0cm 0.0cm 0cm}, clip,width=0.5\textwidth]{figures/FlowchartArch.eps}
-\caption{Proposed synthesis architecture.} 
+\caption{Proposed synthesis architecture.}
 \label{fig:SynthArch}
 \end{center}
 \end{figure}
@@ -454,7 +454,7 @@ O problema de otimização consiste em minimizar $\mathbf{f}_\mathrm{1}$ e $\mathb
 	\begin{array}{ccc}
 		\min & (\mathbf{f}_\mathrm{1}(\mathbf{K}),\mathbf{f}_\mathrm{2}(\mathbf{K})),  \\
   \\
-		\textrm{ s.t. } & PO \leq PO_{\mathrm{r}}, \\
+		\textrm{ sujeito a } & PO \leq PO_{\mathrm{r}}, \\
                         & \bar{\lambda} \leq 1      
  \\
 	\end{array}
@@ -472,7 +472,7 @@ Desta vez, queremos otimizar o problema utlizando os requisitos de tempo de asse
 	\begin{array}{ccc}
 		\min & (\mathbf{f}_\mathrm{1}(\mathbf{K}),\mathbf{f}_\mathrm{2}(\mathbf{K})),  \\
   \\
-		\textrm{ s.t. } & {\hat{k}} \leq k_{\mathrm{sr}}, \\
+		\textrm{ sujeito a } & {\hat{k}} \leq k_{\mathrm{sr}}, \\
                         & \bar{\lambda} \leq 1
  \\
 	\end{array}
@@ -490,7 +490,7 @@ A fim de gerar um controlador $ \mathbf{K} $ usando algoritmo genético que satis
 	\begin{array}{ccc}
 		\min & (\mathbf{f}_\mathrm{1}(\mathbf{K}),\mathbf{f}_\mathrm{2}(\mathbf{K})),  \\
   \\
-		\textrm{ s.t. } & {\hat{k}} \leq k_{\mathrm{sr}}, \\
+		\textrm{ sujeito a } & {\hat{k}} \leq k_{\mathrm{sr}}, \\
                         & PO \leq PO_{\mathrm{r}}, \\
                         & \bar{\lambda} \leq 1
  \\
@@ -498,6 +498,115 @@ A fim de gerar um controlador $ \mathbf{K} $ usando algoritmo genético que satis
 \end{equation}
 
 Neste caso, queremos minimizar as funções multi-objetivo ($ \mathbf{f}_\mathrm{1} $ e $ \mathbf{f}_\mathrm{2} $) restritas a: $ \hat{k} \leq k_\mathrm{sr} $, $ PO \leq PO_{\mathrm{r}} $ e $ \bar{\lambda} \leq 1 $. A primeira restrição garante que o sistema atenda ao requisito de tempo de assentamento, já que $ k_\mathrm{sr} \geq \hat{k} $ (cf. Algoritmo~\ref{alg:settlingtime}). A segunda restrição assegura o percentual máximo de sobressinal exigido (cf. Algoritmo~\ref{alg:overshootReal}). Finalmente, a terceira restrição assegura que o controlador $ \mathbf{K} $ mantenha o sistema estável, considerando que $ \bar{\lambda} $ é o maior valor absoluto entres os autovalores e que este sendo menor que $ 1 $ proporciona estabilidade.
+
+%--------------------------------------------------------------
+\subsection{Implementação e Uso da Metodologia no DSVerifier}
+\label{subsec:implUso}
+%--------------------------------------------------------------
+
+A metodologia de síntese apresentada anteriormente foi implementada dentro da ferramente DSVerifier para que pudéssemos experimentar o método como uma ferramenta em diversos benchmarks. Basicamente segiu-se a arquitetura mostrada no diagrama da Figura~\ref{fig:SynthArch}.
+
+A funcionalidade de síntese foi implementada em C++, onde todas as operações matriciais que se necesita foi feito com o auxílio da biblioteca Eigen~\cite{guennebaud2010eigen} e o algoritmo genético utilizado foi implementado com a ajuda da biblioteca Galgo~\cite{mallet2017galgo}. Primeiramente implementaram-se os algoritmos de verificação de tempo de assentamento e sobressinal mostrados na Seção~\ref{sec:verification}. Em seguida implementou-se a metodologia da arquitetura mostrada na Figura~\ref{fig:SynthArch}.
+
+Para utilizar o DSVerifier com o objetivo de realizar síntese de controladores digitais, usamos o comando como segue:
+
+\noindent ``\texttt{dsverifier SpecsFile.ss ---synthesize [---st] [---os] ---maxattempts attempts}'', onde as opções ``\texttt{---st}'' e ``\texttt{---os}'' são referentes a opção de se sintetizar controlodores considerando somente tempo de assentamento e sobressinal, respectivamente. Porém, desejando-se sintetizar controladores considerando ambas as opções, ou coloca-se explicito no comando ou ignora ambas as opções (\textit{default}). Também denifimos no comando o número máximo de tentativa de sintetizar o controlador, com a opção ``\texttt{---maxattempts}'', seguido pelo valor máximo de tentativas ``\texttt{attempts}''.
+
+
+\subsubsection{Exemplo}
+\label{subsubsec:example}
+
+Para ilustrar o uso da metodologia, mostramos o seguinte exemplo:
+
+Dado o sistema abaixo, temos,
+
+\begin{equation}
+\label{eq:example}
+\Omega:\begin{cases}
+x(k+1)=\begin{bmatrix}
+1.5 & 1.0 & 0.0 \\
+0.0 & 1.5 & 1.0 \\
+0.0 & 0.0 & 1.5 
+\end{bmatrix}x(k)+\begin{bmatrix}
+-0.4 \\
+2.5 \\
+-0.8 
+\end{bmatrix}u(k)\\
+y(k)=\begin{bmatrix}
+0.0 & 2.6 & 0.0 
+\end{bmatrix}x(k)+[0]u(k)\\
+u(k)=r(k)-Kx(k)
+\end{cases},
+\end{equation}
+%
+\noindent onde $r(k)=u_{\mathrm{-1}}$ é o degrau unitário.
+
+Neste caso iremos tentar sintetizar um controlador que faça o sistema em \eqref{eq:example} obedecer ao requisito de tempo de assentamento. Agora iremos definir nosso arquivo de especificação (\texttt{SpecsFile.ss}) com todas as especificações de síntese que desejamos. Utilizamos as seguintes especificações em nosso arquivo de especificação:
+
+\begin{figure}[H]
+	\centering
+	\framebox{\parbox{3.3in}{
+			%\centering
+\texttt{implementation $\langle 4,4 \rangle $}
+
+\texttt{range [1,1]}
+
+\texttt{nStates = 4;}
+
+\texttt{nInputs = 1;}
+
+\texttt{nOutputs = 1;}
+
+\texttt{A = [-0.5,0.6,0.0,0.0;-0.6,-0.5,0.0,0.0;
+\\
+0.0,0.0,0.0,0.2;0.0,0.0,0.0,0.6]}
+
+\texttt{B = [0.0;0.0;2.5;1.0]}
+
+\texttt{C = [0.0,2.6,0.5,1.2]}
+
+\texttt{D = [0.0]}
+
+\texttt{x0 = [0.0;0.0;0.0;0.0]}
+
+\texttt{inputs = [1.0]}
+
+\texttt{tsr = 30.0;}
+
+\texttt{POr = 0.0;}
+
+\texttt{ts = 0.5;}
+
+\texttt{p = 5.0;}
+
+\texttt{bounds\_l = -10.0;}
+
+\texttt{bounds\_u = 10.0;}
+
+\texttt{popsize = 300;}
+
+\texttt{nbgen = 300;}
+
+%\texttt{K = [0.0,12.6,4.5,1.2]}
+	}
+	}
+	\caption{A digital-system specification for DSVerifier in state-space mode.}
+	\label{fig:inputfile}
+\end{figure}
+
+Primeiramente, definimos no arquivo que queremos que seja sintetizado um controlador que obedeça ao requerimento de tempo de assentamento quando submetido a efeito de FWL com $8$bits (\texttt{implementation $\langle 4,4 \rangle $}). Depois definimos o número de estados, entradas e saídas (\texttt{nStates}, \texttt{nInputs} e \texttt{nOutputs}, respectivamente). Em seguida definem-se as matrizes de estados, depois o estado inicial do sistema (\texttt{$\mathbf{x0}$}), entrada (degrau unitário), tempo de assentamento (\texttt{tsr}), no caso deixamos \texttt{POr=0.0} mesmo nao considerando esse requerimento, tempo de amostragem (\texttt{ts}), porcentagem da região de assentamento (\texttt{p}). Em seguida, definimos os parâmetros do algoritmo genético de margens superior e inferior inicial dos valores (\texttt{bounds\_u} e \texttt{bounds\_l}), o tamanho da população do algoritmo genético (\texttt{popsize}) e o número de gerações do GA (\texttt{nbgen}).
+
+Executando o comando ``\texttt{dsverifier SpecsFile.ss ---synthesize ---st ---maxattempts 200}'', obtivemos o controlador sintetizado com sucesso $K=$ após $x$ tentativas.
+
+
+\subsubsection{Implementação da Verificação no DSVerifier}
+\label{subsubsec:verDSV}
+
+Também implementamos no DSVerifier a opção de verificar controladores, já prontos projetados em outras plataformas, com respeito a parâmetros de desempenho (tempo de assentamento e sobressinal). Fazemos da seginte forma:
+
+\noindent ``\texttt{dsverifier SpecsFile.ss ---property [SETTLING\_TIME / OVERSHOOT] [---closed-loop] [---no-fwl]}''. Onde definimos a propriedade que deseja-se verificar tempo de assentamento ou sobressinal (\texttt{SETTLING\_TIME} ou \texttt{OVERSHOOT}, respectivamente). Caso queremos verificar em malha fechada, basta usar a opção ``\texttt{---closed-loop}'', em malha aberta, basta ignorar a opção. Também definimos se deseja considerar os efeitos FWL ou não na verificação, se não, basta considerar a opção ``\texttt{---no-fwl}''.
+
+Definimos nosso arquivo de especificação praticamente igual como fazemos pra síntese, porém não definindo os parâmetros relativos a síntese (\texttt{bounds\_u}, \texttt{bounds\_l}, \texttt{popsize} e \texttt{nbgen}).
 
 \section{Resumo}\label{chap-4-summary}
 

@@ -44,7 +44,7 @@ Algoritmo~\ref{alg:overshootEst} descreve um procedimento para estimar $y_{\math
   }{
     $gradient = (gradient<0)?(gradient-1):-1$\;
   }
-  \If{$(lastGrad>0) ~and~ (gradient < 0)$}{
+  \If{$(lastGrad>0) ~e~ (gradient < 0)$}{
      \uIf{$|firstGradSample| <= |k_\mathrm{p}|$}{
        increment $numBadPeaks$\;
        \eIf{$numBadPeaks > 2$}{
@@ -53,7 +53,7 @@ Algoritmo~\ref{alg:overshootEst} descreve um procedimento para estimar $y_{\math
          $y_\mathrm{p} = firstGradSample$\;
          $k_\mathrm{p} = firstGradSampleIdx$\;
        }
-     }\uElseIf{$(grad > 10) ~and~ (|(y(k+1)-yss)/yss| < 0.001)$}{
+     }\uElseIf{$(grad > 10) ~e~ (|(y(k+1)-yss)/yss| < 0.001)$}{
        \eIf{$|yss|>|y_\mathrm{p}|$}{
          $y_\mathrm{p} = yss$\;
          $k_\mathrm{p} = 0$\;
@@ -287,7 +287,7 @@ O procedimento proposto para verificar os tempos de assentamento, que é descrito
      $\hat{k} \gets k_\mathrm{r}$\;
   }{
   \Eq{$k \leq \hat{k}$}{
-    \Se{$y(k) < L_{\mathrm{low}}\ or \ y(k) > L_{\mathrm{upp}}$}{
+    \Se{$y(k) < L_{\mathrm{low}}\ ~ou~ \ y(k) > L_{\mathrm{upp}}$}{
       Verification Failed\;
     }
     increment $k$\;
@@ -380,7 +380,7 @@ Na Figura~\ref{fig:SynthArch}, mostramos a arquitetura de síntese proposta de um
 \begin{figure}[ht]
 \begin{center}
 \includegraphics[trim={0.0cm 0.0cm 0.0cm 0cm}, clip,width=0.5\textwidth]{figures/FlowchartArch.eps}
-\caption{Proposed synthesis architecture.}
+\caption{Arquitetura da metodologia de síntese proposta.}
 \label{fig:SynthArch}
 \end{center}
 \end{figure}

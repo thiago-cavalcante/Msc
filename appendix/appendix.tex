@@ -2,34 +2,32 @@
 
 \section{Referente à Pesquisa}
 
-\begin{itemize}
+%\begin{itemize}
 
-\item \textbf{Alves, E. H. S.}, Cordeiro, L. C., Lima Filho, E. B. {\it Fault Localization in Multi-Threaded C Programs using Bounded Model Checking}. Em V Simpósio Brasileiro de Engenharia de Sistemas Computacionais (SBESC), 2015. (\textbf{Publicado})~\cite{AlvesCF15}
+%\item \textbf{Alves, E. H. S.}, Cordeiro, L. C., Lima Filho, E. B. {\it Fault Localization in Multi-Threaded C Programs using Bounded Model Checking}. Em V Simpósio Brasileiro de Engenharia de Sistemas Computacionais (SBESC), 2015. (\textbf{Publicado})~\cite{AlvesCF15}
+%
+%\item \textbf{Alves, E. H. S.}, Cordeiro, L. C., Lima Filho, E. B. {\it A Method to Localize Faults in Concurrent C Programs}. Em \textit{Journal of Software and Systems}, 2017. (\textbf{Publicado})~\cite{AlvesCF17}
 
-\item \textbf{Alves, E. H. S.}, Cordeiro, L. C., Lima Filho, E. B. {\it A Method to Localize Faults in Concurrent C Programs}. Em \textit{Journal of Software and Systems}, 2017. (\textbf{Publicado})~\cite{AlvesCF17}
-
-\end{itemize}
+%\end{itemize}
 
 \section{Contribuições em outras Pesquisas}
 
 \begin{itemize}
-\item Cavalcante, T. R. F., \textbf{Alves, E. H. S.}, Carvalho, C. B. \textit{Radio Communication to Control and Run an Autonomous Mission for UAVs via a Mobile Application}. Em IV Escola Regional de Informática (ERIN), 2017. (\textbf{Publicado})
-\item Monteiro, F. R. M., \textbf{Alves, E. H. S.}, Silva, I. S., Ismail, H. I., Cordeiro, L. C., Lima Filho, E. B. \textit{ESBMC-GPU A Context-Bounded Model Checking Tool to Verify CUDA Programs}. Em \textit{Science of Computer Programming}, 2018. (\textbf{Publicado})~\cite{MonteiroASICF18}
+\item \textbf{Cavalcante, T. R. F.}, Alves, E. H. S., Carvalho, C. B. \textit{Radio Communication to Control and Run an Autonomous Mission for UAVs via a Mobile Application}. Em IV Escola Regional de Informática (ERIN), 2017. (\textbf{Publicado})
+\item \textbf{Cavalcante, T. R. F.}, de Bessa, I. V., Cordeiro, L. C. \textit{Planning and Evaluation of UAV Mission Planner for Intralogistics Problems}. Em VII Simpósio Brasileiro de Engenharia de Sistemas Computacionais (SBESC), 2017. (pp. 9-16). IEEE. (\textbf{Publicado})~\cite{cavalcante2017planning}
 \end{itemize}
 
 \chapter{\textit{Benchmarks} Utilizados}\label{appendix:bench}
 
 \begin{table}[ht]
 \centering
-%\centering
 \caption{Descrição dos \textit{benchmarks} usados nos experimentos do trabalho.}
 \label{table:bench}
 \footnotesize
 \resizebox{0.9\textwidth}{!}{%
-\begin{tabular}{l|ccccc|c}
+\begin{tabular}{|c|c|c|c|c|c|}
 \hline
-\textbf{ID} & \textbf{$A$}                                                                                                                                                         & \textbf{$B$}                                                                 & \textbf{$C$}                                                              & \textbf{$K$}                                                                            & \textbf{$t_{\mathrm{sr}}$ (s)}
-& \textbf{$PO_{\mathrm{r}}$} \\ \hline
+\textbf{ID} & \textbf{$A$} & \textbf{$B$} & \textbf{$C$} & \textbf{$t_{\mathrm{sr}}$ (s)} & \textbf{$PO_{\mathrm{r}}$} \\ \hline
 1           & $ \begin{bmatrix}
 -0.5 & 1.0 \\
 0.0 & -0.5 
@@ -38,52 +36,44 @@
 2.5 
 \end{bmatrix} $                                                              & $ \begin{bmatrix}
 0.0 & 2.6 
-\end{bmatrix} $                                                                                                                        & $ \begin{bmatrix}
-0.3641 & -0.7161 
-\end{bmatrix} $                                                                     & 2.5 & 5              \\
-2           & \begin{tabular}[c]{@{}c@{}}$ \begin{bmatrix}
+\end{bmatrix} $                                                                                                                        & 2.5 & 5              \\
+2           & $ \begin{bmatrix}
 -0.5 & 1.0 & 0.0 \\
 0.0 & -0.5 & 1.0 \\
 0.0 & 0.0 & -0.5 
-\end{bmatrix}  $\end{tabular}                                                                              & \begin{tabular}[c]{@{}c@{}}$ \begin{bmatrix}
+\end{bmatrix}  $ & $ \begin{bmatrix}
 -0.4 \\
 2.5 \\
 -0.8 
-\end{bmatrix} $                                                             \end{tabular}             & \begin{tabular}[c]{@{}c@{}}$ \begin{bmatrix}
+\end{bmatrix} $ & $ \begin{bmatrix}
 0.0 & 2.6 & 0.0 
-\end{bmatrix} $                                                             \end{tabular}            & \begin{tabular}[c]{@{}c@{}}$ \begin{bmatrix}
-1.0706 \\ -0.0277 \\ 2.8996 
-\end{bmatrix} ^ T $\end{tabular}                & 3.5     & 5          \\
-3           & \begin{tabular}[c]{@{}c@{}}$ \begin{bmatrix}
+\end{bmatrix} $ & 3.5     & 5          \\
+3           & $ \begin{bmatrix}
 -0.5 & 1.0 & 0.0 & 0.0 \\
 0.0 & -0.5 & 1.0 & 0.0 \\
 0.0 & 0.0 & -0.5 & 1.0 \\
 0.0 & 0.0 & 0.0 & -0.5 
-\end{bmatrix}  $\end{tabular}                                         & \begin{tabular}[c]{@{}c@{}}$ \begin{bmatrix}
+\end{bmatrix}  $ & $ \begin{bmatrix}
 1.0 \\
 2.5 \\
 1.0 \\
 1.0 
-\end{bmatrix} $                                                             \end{tabular}           & \begin{tabular}[c]{@{}c@{}}$ \begin{bmatrix}
-0.0 & 2.6 & 1.2 & 0.0 \end{bmatrix} $                                                             \end{tabular}        & \begin{tabular}[c]{@{}c@{}}$ \begin{bmatrix}
-0.444 \\ -2.6941 \\ 5.7609 \\ -2.8354 
-\end{bmatrix} ^ T $\end{tabular}        & 4.5      & 30         \\
-4           & \begin{tabular}[c]{@{}c@{}}$ \begin{bmatrix}
+\end{bmatrix} $ & $ \begin{bmatrix}
+0.0 & 2.6 & 1.2 & 0.0 \end{bmatrix} $ & 4.5      & 30         \\
+4           & $ \begin{bmatrix}
 -0.5 & 1.0 & 0.0 & 0.0 & 0.0 \\
 0.0 & -0.5 & 1.0 & 0.0 & 0.0 \\
 0.0 & 0.0 & -0.5 & 1.0 & 0.0 \\
 0.0 & 0.0 & 0.0 & -0.5 & 1.0 \\
 0.0 & 0.0 & 0.0 & 0.0 & -0.5 
-\end{bmatrix}  $\end{tabular} & \begin{tabular}[c]{@{}c@{}}$ \begin{bmatrix}
+\end{bmatrix}  $ & $ \begin{bmatrix}
 -0.4 \\
 -0.6 \\
 5.5 \\
 1.0 \\
 -0.3 
-\end{bmatrix} $                                                             \end{tabular} & \begin{tabular}[c]{@{}c@{}}$ \begin{bmatrix}
-0.0 & 2.6 & 0.5 & 1.2 & 0.0 \end{bmatrix} $                                                             \end{tabular} & \begin{tabular}[c]{@{}c@{}}$ \begin{bmatrix}
-0.5811 \\ -2.5168 \\ 15.458 \\ -14.5328 \\ 251.9519 
-\end{bmatrix} ^ T $\end{tabular} & 5.5          & 20     \\
+\end{bmatrix} $ & $ \begin{bmatrix}
+0.0 & 2.6 & 0.5 & 1.2 & 0.0 \end{bmatrix} $ & 5.5          & 20     \\
 5           & $ \begin{bmatrix}
 -0.5 & 0.4 \\
 -0.4 & -0.5 
@@ -91,37 +81,31 @@
 0.0 \\
 2.5 
 \end{bmatrix} $                                                                                                                           & $ \begin{bmatrix}
-0.0 & 2.6 \end{bmatrix} $                                                                                                                        & $ \begin{bmatrix}
-0.8725 & -0.7848 
-\end{bmatrix} $                                                                       & 3.0    & 5           \\
-6           & \begin{tabular}[c]{@{}c@{}}$ \begin{bmatrix}
+0.0 & 2.6 \end{bmatrix} $                                                                                                                        & 3.0    & 5           \\
+6           & $ \begin{bmatrix}
 -0.5 & 0.4 & 1.0 & 0.0 \\
 -0.4 & -0.5 & 0.0 & 1.0 \\
 0.0 & 0.0 & -0.5 & 0.4 \\
 0.0 & 0.0 & -0.4 & -0.5 
-\end{bmatrix}  $\end{tabular}                                       & \begin{tabular}[c]{@{}c@{}}$ \begin{bmatrix}
+\end{bmatrix}  $ & $ \begin{bmatrix}
 0.0 \\
 0.0 \\
 2.5 \\
 1.6 
-\end{bmatrix} $                                                             \end{tabular}           & \begin{tabular}[c]{@{}c@{}}$ \begin{bmatrix}
-0.0 & 2.6 & 0.0 & 2.0 \end{bmatrix} $                                                             \end{tabular}        & \begin{tabular}[c]{@{}c@{}}$ \begin{bmatrix}
--0.3248 \\ 0.804 \\ 0.694 \\ -3.2113 
-\end{bmatrix} ^ T $\end{tabular}         & 5.0    & 30           \\
-7           & \begin{tabular}[c]{@{}c@{}}$ \begin{bmatrix}
+\end{bmatrix} $ & $ \begin{bmatrix}
+0.0 & 2.6 & 0.0 & 2.0 \end{bmatrix} $ & 5.0    & 30           \\
+7           & $ \begin{bmatrix}
 -0.5 & 0.4 & 0.0 & 0.0 \\
 -0.4 & -0.5 & 0.0 & 0.0 \\
 0.0 & 0.0 & -0.8 & 0.4 \\
 0.0 & 0.0 & -0.4 & -0.8 
-\end{bmatrix}  $\end{tabular}                                       & \begin{tabular}[c]{@{}c@{}}$ \begin{bmatrix}
+\end{bmatrix}  $ & $ \begin{bmatrix}
 -0.4 \\
 -0.6 \\
 2.5 \\
 1.6 
-\end{bmatrix} $                                                             \end{tabular}         & \begin{tabular}[c]{@{}c@{}}$ \begin{bmatrix}
-0.0 & 2.6 & 0.0 & 2.0 \end{bmatrix} $                                                             \end{tabular}        & \begin{tabular}[c]{@{}c@{}}$ \begin{bmatrix}
-14.8068 \\ -5.2354 \\ 4.9214 \\ -8.8323 
-\end{bmatrix}  ^ T $\end{tabular}         & 10.0          & 4    \\
+\end{bmatrix} $ & $ \begin{bmatrix}
+0.0 & 2.6 & 0.0 & 2.0 \end{bmatrix} $ & 10.0          & 4    \\
 8           & $ \begin{bmatrix}
 -0.2 & 0.0 \\
 0.0 & -0.3 
@@ -130,60 +114,43 @@
 2.5 
 \end{bmatrix} $                                                                                                                          & $ \begin{bmatrix}
 0.0 & 2.6 
-\end{bmatrix} $                                                                                                                        & $ \begin{bmatrix}
--2.5516 & -0.873 
-\end{bmatrix} $                                                                                                                                    & 1.5         & 8      \\
-9           & \begin{tabular}[c]{@{}c@{}}$ \begin{bmatrix}
+\end{bmatrix} $                                                                                                                        & 1.5         & 8      \\
+9           & $ \begin{bmatrix}
 -0.2 & 0.0 & 0.0 \\
 0.0 & -0.3 & 0.0 \\
 0.0 & 0.0 & -0.7 
-\end{bmatrix}  $\end{tabular}                                                                            & \begin{tabular}[c]{@{}c@{}}$ \begin{bmatrix}
+\end{bmatrix}  $ & $ \begin{bmatrix}
 -0.8 \\
 -0.7 \\
 -0.5 
-\end{bmatrix} $                                                             \end{tabular}            & \begin{tabular}[c]{@{}c@{}}$ \begin{bmatrix}
-0.0 & 2.6 & 0.0 \end{bmatrix} $                                                             \end{tabular}            & \begin{tabular}[c]{@{}c@{}}$ \begin{bmatrix}
-3.5127 \\
--8.0225 \\
-9.4041 
-\end{bmatrix} ^ T $\end{tabular}                    & 2.0       & 8        \\
-10          & \begin{tabular}[c]{@{}c@{}}$ \begin{bmatrix}
+\end{bmatrix} $ & $ \begin{bmatrix}
+0.0 & 2.6 & 0.0 \end{bmatrix} $ & 2.0       & 8        \\
+10          & $ \begin{bmatrix}
 -0.2 & 0.0 & 0.0 & 0.0 \\
 0.0 & -0.3 & 0.0 & 0.0 \\
 0.0 & 0.0 & -0.7 & 0.0 \\
 0.0 & 0.0 & 0.0 & -0.9 
-\end{bmatrix}  $\end{tabular}                                         & \begin{tabular}[c]{@{}c@{}}$ \begin{bmatrix}
+\end{bmatrix}  $ & $ \begin{bmatrix}
 -0.4 \\
 2.5 \\
 1.0 \\
 -0.7
-\end{bmatrix} $                                                             \end{tabular}         & \begin{tabular}[c]{@{}c@{}}$ \begin{bmatrix}
-0.0 & 2.6 & 1.2 & 0.0 \end{bmatrix} $                                                             \end{tabular}        & \begin{tabular}[c]{@{}c@{}}$ \begin{bmatrix}
--8.6418 \\
--3.8839 \\
-37.21 \\
-49.6053 
-\end{bmatrix} ^ T $\end{tabular}               & 5.0       & 30        \\
-11          & \begin{tabular}[c]{@{}c@{}}$ \begin{bmatrix}
+\end{bmatrix} $ & $ \begin{bmatrix}
+0.0 & 2.6 & 1.2 & 0.0 \end{bmatrix} $ & 5.0       & 30        \\
+11          & $ \begin{bmatrix}
 -0.2 & 0.0 & 0.0 & 0.0 & 0.0 \\
 0.0 & -0.3 & 0.0 & 0.0 & 0.0 \\
 0.0 & 0.0 & -0.7 & 0.0 & 0.0 \\
 0.0 & 0.0 & 0.0 & -0.9 & 0.0 \\
 0.0 & 0.0 & 0.0 & 0.0 & -0.5 
-\end{bmatrix}  $\end{tabular} & \begin{tabular}[c]{@{}c@{}}$ \begin{bmatrix}
+\end{bmatrix}  $ & $ \begin{bmatrix}
 -0.5 \\
 -0.2 \\
 2.5 \\
 2.0 \\
 -0.8
-\end{bmatrix} $                                                             \end{tabular} & \begin{tabular}[c]{@{}c@{}}$ \begin{bmatrix}
-0.0 & 2.6 & 0.5 & 1.2 & 0.0 \end{bmatrix} $                                                             \end{tabular} & \begin{tabular}[c]{@{}c@{}}$ \begin{bmatrix}
-34.4436 \\
--382.0806 \\
-143.6879 \\
--91.9969 \\
-299.8048 
-\end{bmatrix} ^ T $\end{tabular}   & 10.0    & 18          \\
+\end{bmatrix} $ & $ \begin{bmatrix}
+0.0 & 2.6 & 0.5 & 1.2 & 0.0 \end{bmatrix} $ & 10.0    & 18          \\
 12          & $ \begin{bmatrix}
 4.5 & 1.0 \\
 0.0 & 4.5 
@@ -192,72 +159,54 @@
 2.5 
 \end{bmatrix} $                                                                                                                           & $ \begin{bmatrix}
 0.0 & 2.6 
-\end{bmatrix} $                                                                                                                        & $ \begin{bmatrix}
-5.5182 & 2.9698 
-\end{bmatrix} $                                                                                                                                   & 8.0         & 10      \\
-13          & \begin{tabular}[c]{@{}c@{}}$ \begin{bmatrix}
+\end{bmatrix} $                                                                                                                        & 8.0         & 10      \\
+13          & $ \begin{bmatrix}
 1.5 & 1.0 & 0.0 \\
 0.0 & 1.5 & 1.0 \\
 0.0 & 0.0 & 1.5 
-\end{bmatrix}  $\end{tabular}                                                                                 & \begin{tabular}[c]{@{}c@{}}$ \begin{bmatrix}
+\end{bmatrix}  $ & $ \begin{bmatrix}
 -0.4 \\
 2.5 \\
 -0.8
-\end{bmatrix} $                                                             \end{tabular}             & \begin{tabular}[c]{@{}c@{}}$ \begin{bmatrix}
-0.0 & 2.6 & 0.0 \end{bmatrix} $                                                             \end{tabular}            & \begin{tabular}[c]{@{}c@{}}$ \begin{bmatrix}
--0.7351 \\
--5.0045 \\
--18.5371 
-\end{bmatrix} ^ T $\end{tabular}            & 10.0 & 9
+\end{bmatrix} $ & $ \begin{bmatrix}
+0.0 & 2.6 & 0.0 \end{bmatrix} $ & 10.0 & 9
 \\
-14          & \begin{tabular}[c]{@{}c@{}}$ \begin{bmatrix}
+14          & $ \begin{bmatrix}
 -0.5 & 0.4 & 0.0 & 0.0 \\
 -0.4 & -0.5 & 0.0 & 0.0 \\
 0.0 & 0.0 & -0.8 & 0.4 \\
 0.0 & 0.0 & -0.4 & -0.8 
-\end{bmatrix}  $\end{tabular}                                                                                 & \begin{tabular}[c]{@{}c@{}}$ \begin{bmatrix}
+\end{bmatrix}  $ & $ \begin{bmatrix}
 -0.4 \\
 -0.6 \\
 -0.4 \\
 -0.6
-\end{bmatrix} $                                                             \end{tabular}             & \begin{tabular}[c]{@{}c@{}}$ \begin{bmatrix}
-0.0 & 2.6 & 0.0 & 2.0 \end{bmatrix} $                                                             \end{tabular}            & \begin{tabular}[c]{@{}c@{}}$ \begin{bmatrix}
-12.348 \\
--5.7826 \\
-3.9751 \\
--8.0988 
-\end{bmatrix} ^ T $\end{tabular}            & 10.0     & 2          
+\end{bmatrix} $ & $ \begin{bmatrix}
+0.0 & 2.6 & 0.0 & 2.0 \end{bmatrix} $ & 10.0     & 2          
 \\
-15          & \begin{tabular}[c]{@{}c@{}}$ \begin{bmatrix}
+15          & $ \begin{bmatrix}
 -0.6386 & 0.4151 \\
 -0.0098 & 0.8266
-\end{bmatrix}  $\end{tabular}                                                                                 & \begin{tabular}[c]{@{}c@{}}$ \begin{bmatrix}
+\end{bmatrix}  $ & $ \begin{bmatrix}
 0.2442 \\
 1.0745 
-\end{bmatrix} $                                                             \end{tabular}             & \begin{tabular}[c]{@{}c@{}}$ \begin{bmatrix}
+\end{bmatrix} $ & $ \begin{bmatrix}
 0.1807 & 0.2076 
-\end{bmatrix} $                                                             \end{tabular}            & \begin{tabular}[c]{@{}c@{}}$ \begin{bmatrix}
-21.8774 \\
--6.1877 
-\end{bmatrix} ^ T $\end{tabular}            & 6.5      & 5         \\
-16          & \begin{tabular}[c]{@{}c@{}}$ \begin{bmatrix}
+\end{bmatrix} $ & 6.5      & 5         \\
+16          & $ \begin{bmatrix}
 -1.0003 & -0.0002 & 0.0 \\
 -8.0007 & -1.0003 & 0.0001 \\
 0.0 & 0.0 & -0.9216 
-\end{bmatrix}  $\end{tabular}                                                                                 & \begin{tabular}[c]{@{}c@{}}$ \begin{bmatrix}
+\end{bmatrix}  $ & $ \begin{bmatrix}
 0.0008 \\
 0.0016 \\
 1.9608 
-\end{bmatrix} $                                                             \end{tabular}             & \begin{tabular}[c]{@{}c@{}}$ \begin{bmatrix}
+\end{bmatrix} $ & $ \begin{bmatrix}
 -0.00016 & -0.0000831 & 0.000016 
-\end{bmatrix} $                                                             \end{tabular}            & \begin{tabular}[c]{@{}c@{}}$ \begin{bmatrix}
--3911249 \\
--910.6 \\
-1593.2
-\end{bmatrix} ^ T $\end{tabular}            & 10.5  & 8             \\
-17          & $\mathcal{A}$                                                                      & $\mathcal{B}$                                                                         & $\mathcal{C}$                                                                         & $\mathcal{K}$ & 27.0  & 1                                
+\end{bmatrix} $ & 10.5  & 8             \\
+17          & $\mathcal{A}$ & $\mathcal{B}$ & $\mathcal{C}$ & 27.0  & 1                                
 \\ \hline
-\multicolumn{7}{l}{\textit{See matrices $\mathcal{A}$, $\mathcal{B}$, $\mathcal{C}$ and $\mathcal{K}$ at} \texttt{https://goo.gl/fSwVVb}}
+\multicolumn{6}{|l|}{\textit{Veja as matrizes $\mathcal{A}$, $\mathcal{B}$ e $\mathcal{C}$ em} \texttt{https://goo.gl/fSwVVb}}
 %\multicolumn{14}{l}{\textit{See matrices $\mathcal{A}$, $\mathcal{B}$, $\mathcal{C}$ and $\mathcal{K}$ at} \texttt{http://dsverifier.org}}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         \\ 
 \\ \hline
 \end{tabular}}
